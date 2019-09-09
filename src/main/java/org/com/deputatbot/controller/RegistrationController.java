@@ -1,8 +1,9 @@
 package org.com.deputatbot.controller;
 
-import com.boot.lions.domain.Role;
-import com.boot.lions.domain.User;
-import com.boot.lions.repos.UserRepo;
+
+import org.com.deputatbot.domain.Role;
+import org.com.deputatbot.domain.User;
+import org.com.deputatbot.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 @Controller
 public class RegistrationController {
+
     @Autowired
     private UserRepo userRepo;
 

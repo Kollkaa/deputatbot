@@ -1,17 +1,17 @@
 package org.com.deputatbot.controller;
 
 
-import com.boot.lions.bot.Bot;
-import com.boot.lions.domain.Message;
-import com.boot.lions.domain.User;
-import com.boot.lions.repos.MessageRepo;
-import com.boot.lions.repos.UserRepo;
+
+import org.com.deputatbot.bot.Bot;
+
+import org.com.deputatbot.domain.Message;
+import org.com.deputatbot.domain.User;
+import org.com.deputatbot.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
@@ -27,14 +27,24 @@ public class MainController {
 
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private DeputatRepo deputatRepo;
+    @Autowired
+    private OkrugNduRepo okrugNduRepo;
+    @Autowired
+    private DilniziaRepo dilniziaRepo;
 
     @GetMapping("/")
-    public String greeting(Map<String, Object> model) {
+    public String greeting(Map<String, Object> model) throws IOException {
+
+
         return "app";
     }
 
     @GetMapping("/main")
-    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
+    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) throws IOException {
+
+
         Iterable<Message> messages = messageRepo.findAll();
 
         if (filter != null && !filter.isEmpty()) {
@@ -61,15 +71,15 @@ public class MainController {
     ) throws IOException, TelegramApiException {
         Message message = new Message(text, tag, user);
 
-        for (User us:userRepo.findAll())
+       /* for (User us:userRepo.findAll())
         {
-            if (!us.isAdmin())
+            if (us.isAdmin())
             {
                 bot.execute(new SendMessage().setChatId(us.getChat_id()).setText(text));
                 System.out.println(us.getUsername());
             }
         }
-
+*/
 
         messageRepo.save(message);
 

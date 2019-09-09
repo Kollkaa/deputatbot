@@ -1,7 +1,9 @@
 package org.com.deputatbot.config;
 
 
-import com.boot.lions.service.UserService;
+
+
+import org.com.deputatbot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

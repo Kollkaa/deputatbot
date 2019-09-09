@@ -15,7 +15,7 @@ public class Message {
     @JoinColumn(name = "user_id")
     private User author;
 
-    public  Message(){}
+    public Message(){}
 
     public Message(String text, String tag, User author) {
         this.author=author;
@@ -37,13 +37,7 @@ public class Message {
         return author !=null ? author.getUsername(): "<none>";
     }
 
-    public User getAuthor() {
-        return author;
-    }
 
-    public void setAuthor(User author) {
-        this.author = author;
-    }
 
     public Long getId() {
         return id;
