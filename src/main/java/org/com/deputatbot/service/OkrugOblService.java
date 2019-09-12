@@ -5,7 +5,7 @@ import org.com.deputatbot.domain.OkrugNdu;
 
 import java.util.List;
 
-public interface OkrugService {
+public interface OkrugOblService {
     OkrugNdu addOkrug(OkrugNdu okrugNdu);
     void delete(long id);
     OkrugNdu getByNumber(Integer number);

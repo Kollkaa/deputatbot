@@ -7,11 +7,11 @@ import java.util.Set;
 public class OkrugNdu {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
 
     private Integer number;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

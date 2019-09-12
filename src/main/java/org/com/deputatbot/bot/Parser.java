@@ -95,7 +95,7 @@ public class Parser {
     }
 
     public void ParserExelMer(CityRepo cityRepo, MerRepo merRepo) throws IOException {
-        File myFile = new File("B:/Education/projectJava/deputatbot/src/main/resources/testfile.xls");
+        File myFile = new File("src/main/resources/testfile.xls");
         FileInputStream fis = new FileInputStream(myFile);
 
         // Finds the workbook instance for XLSX file
@@ -118,67 +118,7 @@ public class Parser {
 
             // For each row, iterate through each columns
             Iterator<Cell> cellIterator = row.cellIterator();
-        if (row.getCell(9).getCellType()==Cell.CELL_TYPE_STRING)
-        {count++;
-            String str=row.getCell(9).getStringCellValue();
-            String str1=row.getCell(11).getStringCellValue();
-            City city=new City();
-            if (str.indexOf("м. ")>=0) {
 
-                System.out.println(cityRepo.findByName(str.split("м. ")[1]));
-                if (cityRepo.findByName(str.split("м. ")[1]) == null)
-                {
-                    city.setName(str.split("м. ")[1].toLowerCase());
-                    city.setTypeCity(TypeCity.city);
-                    cityRepo.save(city);
-                    Mer mer=new Mer();
-                    mer.setCity(city);
-                    mer.setSurname(str1.split(" ")[0]);
-                    mer.setName(str1.split(" ")[1]);
-                    mer.setPartion(str1.split(" ")[2]);
-                    merRepo.save(mer);
-                }
-            }
-            else
-            {
-                if (cityRepo.findByName(str.split(" ")[0]) == null) {
-                    city.setName(str.split(" ")[0].toLowerCase());
-                    if (str.indexOf("сільська") > 1) {
-                        city.setTypeCity(TypeCity.country);
-                        cityRepo.save(city);
-                        Mer mer=new Mer();
-                        mer.setCity(city);
-                        mer.setSurname(str1.split(" ")[0]);
-                        mer.setName(str1.split(" ")[1]);
-                        mer.setPartion(str1.split(" ")[2]);
-                        merRepo.save(mer);
-                    }
-                    if (str.indexOf("селищна") > 1) {
-                        city.setTypeCity(TypeCity.city_country);
-                        cityRepo.save(city);
-                        Mer mer=new Mer();
-                        mer.setCity(city);
-                        mer.setSurname(str1.split(" ")[0]);
-                        mer.setName(str1.split(" ")[1]);
-                        mer.setPartion(str1.split(" ")[2]);
-                        merRepo.save(mer);
-                    }
-                    if (str.indexOf("міська") > 1) {
-                        city.setTypeCity(TypeCity.city_all);
-                        cityRepo.save(city);
-                        Mer mer=new Mer();
-                        mer.setCity(city);
-                        mer.setSurname(str1.split(" ")[0]);
-                        mer.setName(str1.split(" ")[1]);
-                        mer.setPartion(str1.split(" ")[2]);
-                        merRepo.save(mer);
-                    }
-                }
-
-
-            }
-
-        }
 
         }
         System.out.println(cityRepo.findAll().size());
@@ -186,7 +126,7 @@ public class Parser {
     }
     public  void ParserExelNDU(OkrugNduRepo okrugNduRepo,DeputatRepo deputatRepo) throws IOException {
 
-        File myFile = new File("B:/Education/projectJava/deputatbot/src/main/resources/testfile.xls");
+        File myFile = new File("src/main/resources/testfile.xls");
         FileInputStream fis = new FileInputStream(myFile);
 
         // Finds the workbook instance for XLSX file
@@ -314,7 +254,7 @@ public class Parser {
         System.out.println("______________________________");
         return p;
     }
-    public  void ParserExelCITY(CityRepo cityRepo,OkrugCityRepo okrugCityRepo,DeputatRepo deputatRepo) throws IOException {
+    public  void ParserExelCITY(CityRepo cityRepo,OkrugCityRepo okrugCityRepo,DeputatRepo deputatRepo,MerRepo merRepo) throws IOException {
         File myFile = new File("src/main/resources/testfile.xls");
         FileInputStream fis = new FileInputStream(myFile);
 
@@ -335,30 +275,103 @@ public class Parser {
         Row rowy = rowIterator.next();
         Map<Integer,String>  okrugobl=new HashMap<Integer, String>();
         String city="";
+        City citys=new City();
         while (rowIterator.hasNext()) {
             Row row = rowIterator.next();
 
             // For each row, iterate through each columns
             Iterator<Cell> cellIterator = row.cellIterator();
+            if (row.getCell(9).getCellType()==Cell.CELL_TYPE_STRING
+                    && !row.getCell(9).getStringCellValue().equals("")
+                    && !row.getCell(9).getStringCellValue().equals(null))
+            {
+                citys=new City();
+                int count = 0;
+                count++;
+                String str=row.getCell(9).getStringCellValue();
+                String str1=row.getCell(11).getStringCellValue();
 
-            if (!row.getCell(17).getStringCellValue().equals("")&&row.getCell(17).getStringCellValue()!=null) {
-                city=row.getCell(17).getStringCellValue();
+                if (str.indexOf("м. ")>=0) {
+
+                    System.out.println(cityRepo.findByName(str.split("м. ")[1]));
+                    if (cityRepo.findByName(str.split("м. ")[1]) == null)
+                    {
+                        citys.setName(str.split("м. ")[1].toLowerCase());
+                        citys.setTypeCity(TypeCity.city);
+                        cityRepo.save(citys);
+                        Mer mer=new Mer();
+                        mer.setCity(citys);
+                        mer.setSurname(str1.split(" ")[0]);
+                        mer.setName(str1.split(" ")[1]);
+                        mer.setPartion(str1.split(" ")[2]);
+                        merRepo.save(mer);
+                    }
+                }
+                else
+                {
+                    if (cityRepo.findByName(str.split(" ")[0]) == null) {
+                        citys.setName(str.split(" ")[0].toLowerCase());
+                        if (str.indexOf("сільська") > 1) {
+                            citys.setTypeCity(TypeCity.country);
+                            cityRepo.save(citys);
+                            Mer mer=new Mer();
+                            mer.setCity(citys);
+                            mer.setSurname(str1.split(" ")[0]);
+                            mer.setName(str1.split(" ")[1]);
+                            mer.setPartion(str1.split(" ")[2]);
+                            merRepo.save(mer);
+                        }
+                        if (str.indexOf("селищна") > 1) {
+                            citys.setTypeCity(TypeCity.city_country);
+                            cityRepo.save(citys);
+                            Mer mer=new Mer();
+                            mer.setCity(citys);
+                            mer.setSurname(str1.split(" ")[0]);
+                            mer.setName(str1.split(" ")[1]);
+                            mer.setPartion(str1.split(" ")[2]);
+                            merRepo.save(mer);
+                        }
+                        if (str.indexOf("міська") > 1) {
+                            citys.setTypeCity(TypeCity.city_all);
+                            cityRepo.save(citys);
+                            Mer mer=new Mer();
+                            mer.setCity(citys);
+                            mer.setSurname(str1.split(" ")[0]);
+                            mer.setName(str1.split(" ")[1]);
+                            mer.setPartion(str1.split(" ")[2]);
+                            merRepo.save(mer);
+                        }
+                    }
+
+
+                }
+
             }
+
             if (row.getCell(18).getCellType() == Cell.CELL_TYPE_NUMERIC
                     &&row.getCell(20).getCellType()==Cell.CELL_TYPE_STRING) {
 
                     OkrugCity okrugCity = new OkrugCity();
+
                     okrugCity.setNumber(Integer
                                     .valueOf(String
                                     .valueOf(row.getCell(18)
                                     .getNumericCellValue())
                                     .split("\\.")[0]));
                     if (city.contains("м. ")) {
-                       okrugCity.setCity(cityRepo.findByName(city.split("м. ")[1]));
+                       okrugCity.setCity(citys);
+                      try {
+                          System.out.println(citys.getName());
+                      }catch (Exception e)
+                      {}
                     }
                     else
                     {
-                     okrugCity.setCity(cityRepo.findByName(city.split(" ")[0].toLowerCase()));
+                     okrugCity.setCity(citys);
+                        try {
+                            System.out.println(citys.getName());
+                        }catch (Exception e)
+                        {}
                     }
                        if (!row.getCell(20).getStringCellValue().equals(null) &&
                            !row.getCell(20).getStringCellValue().equals("")   &&
@@ -382,6 +395,7 @@ public class Parser {
                                okrugCity.setRegion(String.valueOf(row.getCell(37).getNumericCellValue()).split("\\.")[0]);
                                System.out.println(city + "|||||||||" + Integer.valueOf(String.valueOf(row.getCell(18).getNumericCellValue()).split("\\.")[0])
                                        + "__________" + row.getCell(20).getStringCellValue() + "||" + row.getCell(37).getNumericCellValue());
+
                            } else {
                                String str =String.valueOf(row.getCell(37).getStringCellValue());
                                okrugCity.setRegion(WriteDilnizia(str));

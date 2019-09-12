@@ -26,7 +26,7 @@
                             <h1>${dilnizia.okrugNdu.number}</h1>
                             <form method="get" action="/editorndu" class="form-inline">
                                 <button type="submit" class="btn btn-primary ml-2">Изменить</button>
-                                <input  type="hidden"  name="filter" class="form-control" value="${dilnizia.okrugNdu.getId()}" placeholder="Search by name">
+                                <input  type="hidden"  name="id" class="form-control" value="${dilnizia.okrugNdu.getId()}" placeholder="Search by name">
                             </form>
                             <#recover>
                                 okrug haven`t choose
@@ -36,7 +36,7 @@
                             <h1>${dilnizia.okrugObl.number}</h1>
                             <form method="get" action="/editorsobl" class="form-inline">
                                 <button type="submit" class="btn btn-primary ml-2">Изменить</button>
-                                <input  type="hidden"  name="filter" class="form-control" value="${dilnizia.okrugObl.getId()}" placeholder="Search by name">
+                                <input  type="hidden"  name="id" class="form-control" value="${dilnizia.okrugObl.getId()}" placeholder="Search by name">
                             </form>
                             <#recover>
                                 okrug haven`t choose
@@ -46,7 +46,7 @@
                             <h1>${dilnizia.okrugCity.number}</h1>
                             <form method="get" action="/editorscity" class="form-inline">
                                 <button type="submit" class="btn btn-primary ml-2">Изменить</button>
-                                <input  type="hidden"  name="filter" class="form-control" value="${dilnizia.okrugCity.getId()}" placeholder="Search by name">
+                                <input  type="hidden"  name="id" class="form-control" value="${dilnizia.okrugCity.getId()}" placeholder="Search by name">
                             </form>
                             <#recover>
                                 okrug haven`t choose
@@ -57,7 +57,7 @@
                         </div>
                         <form method="get" action="/editors" class="form-inline">
                             <button type="submit" class="btn btn-primary ml-2">Изменить</button>
-                            <input  type="hidden"  name="filter" class="form-control" value="${dilnizia.number}" placeholder="Search by name">
+                            <input  type="hidden"  name="number" class="form-control" value="${dilnizia.number}" placeholder="Search by name">
                         </form>
                     </div>
 

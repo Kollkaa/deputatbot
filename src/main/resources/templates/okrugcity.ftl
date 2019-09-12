@@ -3,27 +3,22 @@
 <@c.page>
 
     <div class="big-banner">
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <form method="get" action="/okrugs" class="form-inline">
-                    <input type="text" name="filter" class="form-control" value="${filter?ifExists}" placeholder="Search by name">
-                    <button type="submit" class="btn btn-primary ml-2">Искать</button>
-                </form>
-            </div>
-        </div>
-
-
-
-
         <div class="card-columns " >
             <#list okrugs as okrug>
                 <div class="card my-3 " >
                     <div class="m-2">
                         <a>${okrug.number}</a>
-                        <a>${okrug.deputat.surname?ifExists}</a>
-                        <span>${okrug.city.name}</span>
-                        <div class="card-footer text-muted">
-                            ${okrug.region}
+                        <a>${okrug.deputat.name}</a>
+                        <a>${okrug.deputat.surname}</a>
+                        <a>${okrug.deputat.partion}</a>
+                        <div>
+                            <#attempt>
+                                <h1>${okrug.number}</h1>
+                                <td><a href="/okrugcity/${okrug.getId()}">edit</a></td>
+
+                                <#recover>
+                                    okrug haven`t choose
+                            </#attempt>
                         </div>
                     </div>
 

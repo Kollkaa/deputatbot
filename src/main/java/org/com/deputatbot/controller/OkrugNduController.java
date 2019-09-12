@@ -1,39 +1,66 @@
 package org.com.deputatbot.controller;
 
+import org.com.deputatbot.domain.Deputat;
 import org.com.deputatbot.domain.OkrugNdu;
+import org.com.deputatbot.domain.Partia;
 import org.com.deputatbot.repos.DeputatRepo;
 import org.com.deputatbot.repos.DilniziaRepo;
 import org.com.deputatbot.repos.OkrugNduRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/okrugndu")
 public class OkrugNduController {
 
     @Autowired
-    OkrugNduRepo okrugNduRepo;
+    private DeputatRepo deputatRepo;
     @Autowired
-    DilniziaRepo dilniziaRepo;
+    private DilniziaRepo dilniziaRepo;
     @Autowired
-    DeputatRepo deputatRepo;
-    @GetMapping("/okrugndu")
-    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
+    private OkrugNduRepo okrugNduRepo;
 
-
-        Iterable<OkrugNdu> okrugs = okrugNduRepo.findAll();
-
-        if (filter != null && !filter.isEmpty()) {
-            okrugs = okrugNduRepo.findAll();
-        } else {
-            okrugs = okrugNduRepo.findAll();
-        }
-
-        model.addAttribute("okrugs", okrugs);
-        model.addAttribute("filter", filter);
-
+    @GetMapping
+    public String main( Model model) {
+        model.addAttribute("okrugs", okrugNduRepo.findAll());
         return "okrugndu";
     }
+
+
+
+
+    @GetMapping("{okrugndu}")
+    public String editorndu(@PathVariable OkrugNdu okrugndu, Model model) {
+
+        model.addAttribute("okrugndu", okrugndu);
+        model.addAttribute("partias", Partia.values());
+        return "editorndu";
+    }
+
+
+    @PostMapping
+    public String SaveNdu(   @RequestParam String deputatname,
+                             @RequestParam String deputatsurname,
+                             @RequestParam String deputatpartional,
+                             @RequestParam("okrugId") OkrugNdu okrugNdu ) {
+        Deputat deputat=new Deputat();
+        deputat= deputatRepo.findById(okrugNdu.getDeputat().getId()).get();
+        deputat.setName(deputatname);
+        deputat.setSurname(deputatsurname);
+        deputat.setPartion(deputatpartional);
+        deputatRepo.saveAndFlush(deputat);
+        okrugNdu.setDeputat(deputat);
+        okrugNduRepo.saveAndFlush(okrugNdu);
+        Iterable<OkrugNdu> okrugs = okrugNduRepo.findAll();
+
+
+
+
+        return "redirect:/okrugndu";
+    }
+
+
 }

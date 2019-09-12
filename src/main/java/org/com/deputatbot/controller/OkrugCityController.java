@@ -1,30 +1,66 @@
 package org.com.deputatbot.controller;
 
+import org.com.deputatbot.domain.Deputat;
 import org.com.deputatbot.domain.OkrugCity;
+import org.com.deputatbot.domain.OkrugNdu;
+import org.com.deputatbot.domain.Partia;
+import org.com.deputatbot.repos.DeputatRepo;
+import org.com.deputatbot.repos.DilniziaRepo;
 import org.com.deputatbot.repos.OkrugCityRepo;
+import org.com.deputatbot.repos.OkrugNduRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/okrugcity")
 public class OkrugCityController {
     @Autowired
     OkrugCityRepo okrugCityRepo;
-    @GetMapping("/okrugcity")
-    public String okrugcity(@RequestParam(defaultValue = "",required = false)String filter, Model model)
-    {
-        Iterable<OkrugCity> okrugCities=okrugCityRepo.findAll();
-        if (!filter.isEmpty()&&filter!=null)
-        {
-            okrugCities=okrugCityRepo.findAllByCity_Name(filter);
-        }else
-        {
-            okrugCities=okrugCityRepo.findAll();
-        }
-        model.addAttribute("okrugs",okrugCities);
-        model.addAttribute("filter",filter);
+
+    @Autowired
+    private DeputatRepo deputatRepo;
+
+    @GetMapping
+    public String main( Model model) {
+        model.addAttribute("okrugs", okrugCityRepo.findAll());
         return "okrugcity";
     }
+
+
+
+
+    @GetMapping("{okrugcity}")
+    public String editorndu(@PathVariable OkrugCity okrugCity, Model model) {
+
+        model.addAttribute("okrugcity", okrugCity);
+        model.addAttribute("partias", Partia.values());
+        return "editorcity";
+    }
+
+
+    @PostMapping
+    public String SaveNdu(   @RequestParam String deputatname,
+                             @RequestParam String deputatsurname,
+                             @RequestParam String deputatpartional,
+                             @RequestParam("okrugId") OkrugCity okrugCity ) {
+        Deputat deputat=new Deputat();
+        deputat= deputatRepo.findById(okrugCity.getDeputat().getId()).get();
+        deputat.setName(deputatname);
+        deputat.setSurname(deputatsurname);
+        deputat.setPartion(deputatpartional);
+        deputatRepo.saveAndFlush(deputat);
+        okrugCity.setDeputat(deputat);
+        okrugCityRepo.saveAndFlush(okrugCity);
+
+
+
+
+
+        return "redirect:/okrugcity";
+    }
+
+
 }
+
