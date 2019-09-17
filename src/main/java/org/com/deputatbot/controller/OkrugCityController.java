@@ -32,19 +32,20 @@ public class OkrugCityController {
 
 
     @GetMapping("{okrugcity}")
-    public String editorndu(@PathVariable OkrugCity okrugCity, Model model) {
+    public String editorcity(@PathVariable  OkrugCity okrugcity, Model model) {
 
-        model.addAttribute("okrugcity", okrugCity);
+        model.addAttribute("okrugcity", okrugcity);
         model.addAttribute("partias", Partia.values());
+
         return "editorcity";
     }
 
 
     @PostMapping
-    public String SaveNdu(   @RequestParam String deputatname,
+    public String SaveCity(   @RequestParam String deputatname,
                              @RequestParam String deputatsurname,
                              @RequestParam String deputatpartional,
-                             @RequestParam("okrugId") OkrugCity okrugCity ) {
+                             @RequestParam("okrugcityId") OkrugCity okrugCity ) {
         Deputat deputat=new Deputat();
         deputat= deputatRepo.findById(okrugCity.getDeputat().getId()).get();
         deputat.setName(deputatname);

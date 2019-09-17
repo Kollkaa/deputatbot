@@ -33,7 +33,7 @@ public class OkrugOblController {
 
 
     @GetMapping("{okrugobl}")
-    public String editorndu(@PathVariable OkrugObl okrugobl, Model model) {
+    public String editorobl(@PathVariable OkrugObl okrugobl, Model model) {
 
         model.addAttribute("okrugobl", okrugobl);
         model.addAttribute("partias", Partia.values());
@@ -42,7 +42,7 @@ public class OkrugOblController {
 
 
     @PostMapping
-    public String SaveNdu(   @RequestParam String deputatname,
+    public String SaveObl(   @RequestParam String deputatname,
                              @RequestParam String deputatsurname,
                              @RequestParam String deputatpartional,
                              @RequestParam("okrugId") OkrugObl okrugObl ) {

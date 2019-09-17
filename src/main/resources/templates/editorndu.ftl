@@ -16,7 +16,7 @@
                     <label><input type="checkbox" name="${partia}" ${okrugndu.getDeputat().getPartia()}>${partia}</label>
                 </div>
             </#list>
-            <input type="hidden" value="${okrugndu.getId()}" name="okrugId">
+            <input type="hidden" value="${okrugndu.getId()?c}" name="okrugId">
             <input type="hidden" value="${_csrf.token}" name="_csrf">
             <button type="submit">Сохранить</button>
         </form>

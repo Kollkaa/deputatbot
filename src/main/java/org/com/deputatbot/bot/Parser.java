@@ -298,13 +298,15 @@ public class Parser {
                     {
                         citys.setName(str.split("м. ")[1].toLowerCase());
                         citys.setTypeCity(TypeCity.city);
-                        cityRepo.save(citys);
+
                         Mer mer=new Mer();
-                        mer.setCity(citys);
+
                         mer.setSurname(str1.split(" ")[0]);
                         mer.setName(str1.split(" ")[1]);
                         mer.setPartion(str1.split(" ")[2]);
                         merRepo.save(mer);
+                        citys.setMer(mer);
+                        cityRepo.save(citys);
                     }
                 }
                 else
@@ -313,33 +315,40 @@ public class Parser {
                         citys.setName(str.split(" ")[0].toLowerCase());
                         if (str.indexOf("сільська") > 1) {
                             citys.setTypeCity(TypeCity.country);
-                            cityRepo.save(citys);
+
                             Mer mer=new Mer();
-                            mer.setCity(citys);
+
                             mer.setSurname(str1.split(" ")[0]);
                             mer.setName(str1.split(" ")[1]);
                             mer.setPartion(str1.split(" ")[2]);
                             merRepo.save(mer);
+
+                            citys.setMer(mer);
+                            cityRepo.save(citys);
                         }
                         if (str.indexOf("селищна") > 1) {
                             citys.setTypeCity(TypeCity.city_country);
                             cityRepo.save(citys);
                             Mer mer=new Mer();
-                            mer.setCity(citys);
+
                             mer.setSurname(str1.split(" ")[0]);
                             mer.setName(str1.split(" ")[1]);
                             mer.setPartion(str1.split(" ")[2]);
                             merRepo.save(mer);
+                            citys.setMer(mer);
+                            cityRepo.save(citys);
                         }
                         if (str.indexOf("міська") > 1) {
                             citys.setTypeCity(TypeCity.city_all);
-                            cityRepo.save(citys);
+
                             Mer mer=new Mer();
-                            mer.setCity(citys);
+
                             mer.setSurname(str1.split(" ")[0]);
                             mer.setName(str1.split(" ")[1]);
                             mer.setPartion(str1.split(" ")[2]);
                             merRepo.save(mer);
+                            citys.setMer(mer);
+                            cityRepo.save(citys);
                         }
                     }
 

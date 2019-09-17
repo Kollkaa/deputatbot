@@ -27,7 +27,7 @@ public class MerController {
          Iterable<Mer> mers =merRepo.findAll();
          if (!filter.isEmpty()&&filter!=null)
          {
-             mers=merRepo.findAllByCity_Name(filter);
+             mers=merRepo.findAllByName(filter);
          }else
          {
              mers=merRepo.findAll();

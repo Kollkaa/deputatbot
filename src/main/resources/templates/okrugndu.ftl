@@ -14,10 +14,11 @@
                         <div>
                         <#attempt>
                             <h1>${okrug.number}</h1>
-                            <td><a href="/okrugndu/${okrug.getId()}">edit</a></td>
+                            <td><a href="/okrugndu/${okrug.getId()?c}">edit</a></td>
 
                             <#recover>
-                                okrug haven`t choose
+                                <h1>${okrug.number}</h1>
+                                <td><a href="/okrugndu/${okrug.getId()}">edit</a></td>
                         </#attempt>
                         </div>
                     </div>

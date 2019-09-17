@@ -4,6 +4,7 @@ package org.com.deputatbot.bot;
 
 import org.com.deputatbot.domain.Dilnizia;
 import org.com.deputatbot.domain.Mer;
+import org.com.deputatbot.domain.TypeCity;
 import org.com.deputatbot.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ private String info="Якщо ти хочеш побачити всіх депу
         "депутата обласної ради, міської ради або отг, а також мера або голову отг в твоєму окрузі ти ";
 private String start="Привіт, я бот для показу всіх депутатів в твоєму регіоні";
 
-
+String sorry="Напевно ви мали на увазі :";
 
     @Autowired
      private UserRepo userRepo;
@@ -107,78 +108,177 @@ private String start="Привіт, я бот для показу всіх де�
                     }
                     break;
                     default:
+
+                       if (update.getMessage().getText().indexOf("/id_")>=0)
+                       {
+                            try {
+                                sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText("в розробці"));
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
+                       }
+                       try {
+                            ArrayList<Dilnizia> dilnizias=new ArrayList<>();
+                            Map<Integer, List<Dilnizia>> er=new HashMap<>();
                         int count=0;
                         String stre=update.getMessage().getText();
                         stre=stre.toLowerCase();
-                        String [] arr1=stre.split(",");
-                        ArrayList<Dilnizia> dilnizias=new ArrayList<>();
-                        Map<Integer, List<Dilnizia>> er=new HashMap<>();
-
-
-                            er.put(count++,dilniziaRepo.findAllByRegionContaining(arr1[0].trim()));
-                            er.put(count++,dilniziaRepo.findAllByRegionContaining(arr1[1].split("-")[0].trim()));
-                           String three=arr1[1].split("-")[1].trim();
-                            System.out.println(arr1[1].split("-")[1].trim());
-                        System.out.println(er.get(0).size());
-                        System.out.println(er.get(1).size());
-                        List<Dilnizia> list= intersectArrays(er.get(1),er.get(0));
-                        Dilnizia str=list.get(0);
-                        if (list.size()>1)
-                        {
-                            for (Dilnizia d: list)
+                        String arr11="";
+                        String arr22="";
+                       try {
+                            String [] arr1=stre.split(",");
+                            arr11=arr1[0];
+                            arr22=arr1[1];
+                            er.put(count++,dilniziaRepo.findAllByRegionContaining(arr11.trim()));
+                            try {
+                                er.put(count++,dilniziaRepo.findAllByRegionContaining(arr22.trim().split("-")[0].trim()));
+                            }catch (Exception e)
                             {
-                                for (String r:d.getRegion().split(";"))
-                                {
-                                    if (r.indexOf(arr1[1].split("-")[0].trim())>0 && r.indexOf(three)>0)
-                                    {
+                                er.put(count++,dilniziaRepo.findAllByRegionContaining(arr22.trim()));
+                                System.out.println("11111111");
+                            }
 
-                                        str=d;
+
+                        }
+                        catch (Exception r)
+                        {
+                            arr11=stre.trim();
+
+                            er.put(count,dilniziaRepo.findAllByRegionContaining(arr11));
+                            System.out.println("one");
+                        }
+                       Dilnizia str=new Dilnizia();
+                       try {
+                           if (er.get(1).size()==1) {
+                               str=er.get(1).get(0);
+                           }
+                           else {
+                               List<Dilnizia> list = intersectArrays(er.get(1), er.get(0));
+
+                               str = list.get(0);
+
+                               if (list.size() > 1) {
+                                   System.out.println("############");
+                                   for (Dilnizia d : list) {
+                                       System.out.println("$$$$$$$$$$$$$$$$");
+                                       for (String r : d.getRegion().split(";")) {
+                                           System.out.println("!!!!!!!!!!!");
+                                           try {
+                                               String three = arr22.split("-")[1].trim();
+
+                                               if (r.indexOf(arr22.split("-")[0].trim()) > 0 && r.indexOf(three) > 0) {
+
+                                                   str = d;
+                                               }
+                                               System.out.println("@@@@@@@@@@@@@@@@");
+                                           } catch (Exception w) {
+                                               System.out.println("222222222");
+
+                                           }
+                                       }
+                                   }
+                               }
+                           }
+                       }
+                        catch (Exception t)
+                            {
+
+                            try {
+                                System.out.println("two");
+                              str=er.get(0).get(0);
+                                }
+                                catch (Exception y)
+                                {System.out.println("four");}
+                            System.out.println("three");
+                            }
+                           String info="";
+                           info+="Твій регіон НДУ - ";
+                           try {
+                                info+=str.getOkrugNdu().getNumber()
+                                        +"\n"+"Депутат : \n"
+                                   +str.getOkrugNdu().getDeputat().getSurname().toUpperCase()+" "
+                                   +str.getOkrugNdu().getDeputat().getName().toUpperCase()+ " "
+                                   +str.getOkrugNdu().getDeputat().getPartion().toUpperCase()+" /id_"
+                                   +str.getOkrugNdu().getDeputat().getId()
+                                   +"\n-------------------------------------------------\n";
+                           }
+                           catch (Exception e)
+                           {
+                               info+="згідно .....";
+                           }
+                           info+="Твій регіон Обласної ради - ";
+                           try {
+                                   info+=str.getOkrugObl().getNumber()
+                                           +"\n"+"Депутат : \n "
+                                   +str.getOkrugObl().getDeputat().getSurname().toUpperCase()+" "
+                                   +str.getOkrugObl().getDeputat().getName().toUpperCase()+" "
+                                   +str.getOkrugObl().getDeputat().getPartion().toUpperCase()+" /id_"
+                                   +str.getOkrugObl().getDeputat().getId()
+                                   +"\n-------------------------------------------------\n";
+                           }
+                           catch (Exception e)
+                           {
+                               info+="згідно .....";
+                           }
+                          try {
+                              if (str.getOkrugCity().getCity().getTypeCity()== TypeCity.city.GetTitle())
+                                  info += "Твій регіон Міської ради - ";
+                              else
+                                  info+="Твій регіон Окремої територіальної громади ради - ";
+                          }
+                          catch (Exception m)
+                          {info += "Твій регіон Міської ради - ";
+                              System.out.println("fife");}
+                           try {
+                                   info+=str.getOkrugCity().getNumber()
+                                           +"\n"+"Депутат : \n";
+                               try {
+                                   info+=str.getOkrugCity().getDeputat().getSurname().toUpperCase() + " "
+                                           + str.getOkrugCity().getDeputat().getName().toUpperCase() + " "
+                                           + str.getOkrugCity().getDeputat().getPartion().toUpperCase()+" /id_"
+                                           +str.getOkrugCity().getDeputat().getId()
+                                           + "\n-------------------------------------------------\n";
+                               }catch (Exception ee)
+                               {
+
+                               }
+                               info+=str.getOkrugCity().getCity().getTypeCity()
+                               + " " + str.getOkrugCity().getCity().getName();
+
+
+                           }
+                           catch (Exception e)
+                           {
+                               info+="згідно .....";
+                           }
+                            try {
+                                if (str.getOkrugCity().getCity().getTypeCity() == TypeCity.city.GetTitle()) {
+                                    info += "\nМер твого міста : \n";
+                                    try {
+                                        Mer mer = str.getOkrugCity().getCity().getMer();
+                                        info += mer.getSurname().toUpperCase()
+                                                + " " + mer.getName().toUpperCase()
+                                                + " " + mer.getPartion().toUpperCase() + " /id_" + mer.getId();
+                                    } catch (Exception d) {
+                                    }
+                                } else {
+                                    info += "\nГолова товєї об'єднаної територіальної громади : \n";
+                                    try {
+                                        Mer mer = str.getOkrugCity().getCity().getMer();
+                                        info += mer.getSurname().toUpperCase()
+                                                + " " + mer.getName().toUpperCase()
+                                                + " " + mer.getPartion().toUpperCase() + " /id_" + mer.getId();
+                                    } catch (Exception d) {
                                     }
                                 }
                             }
-                        }
+                            catch (Exception c)
+                            {
+                                info += "\nМер твого міста : \n";
+                                System.out.println("er");
+                            }
 
-                           String info="";
-                           try {
-                               Mer mer = merRepo.findByCity_Name(str.getOkrugCity().getCity().getName());
-                               info+="Мер : " + mer.getSurname() +" "+ mer.getName() +" "+ mer.getPartion()+"\n";
-                           }
-                           catch (Exception e)
-                           {}
-                           try {
-                           info+="Твій регіон НДУ - "+str.getOkrugNdu().getNumber()+"\n"
-                                   +"Депутат : "+str.getOkrugNdu().getDeputat().getSurname()+" "
-                                   +str.getOkrugNdu().getDeputat().getName()
-                                   +str.getOkrugNdu().getDeputat().getPartion()+"\n";
-                           }
-                           catch (Exception e)
-                           {}
-                           try {
-                           info+="Твій регіон Обласної ради - "+str.getOkrugObl().getNumber()+"\n"
-                                   +"Депутат : "+str.getOkrugObl().getDeputat().getSurname()+" "
-                                   +str.getOkrugObl().getDeputat().getName()
-                                   +str.getOkrugObl().getDeputat().getPartion()+"\n";
-                           }
-                           catch (Exception e)
-                           {}
-                           try {
-                           info+="Твій регіон Районної ради - "+str.getOkrugCity().getNumber()+"\n"
-                                   +"Депутат : "+str.getOkrugCity().getDeputat().getSurname()+" "
-                                   +str.getOkrugCity().getDeputat().getName()
-                                   +str.getOkrugCity().getDeputat().getPartion()+"\n"
-                                   +str.getOkrugCity().getCity().getTypeCity()
-                                   +" "+str.getOkrugCity().getCity().getName();
-                           }
-                           catch (Exception e)
-                           {}
 
-                           try {
-                               Mer mer=merRepo.findByCity(str.getOkrugCity().getCity());
-
-                           info+="Мер твого міста - "+mer.getSurname()+" "+mer.getName()+" "+mer.getPartion();
-                           }
-                           catch (Exception e)
-                           {}
 
                            System.out.println(info);
                            try {
@@ -186,11 +286,39 @@ private String start="Привіт, я бот для показу всіх де�
                            } catch (TelegramApiException e) {
                                e.printStackTrace();
                            }
+                       }
+                       catch (Exception e)
+                        {
                            try {
-                               sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText(str.getNumber().toString()));
-                           } catch (TelegramApiException e) {
-                               e.printStackTrace();
+                            System.out.println("3333333333333");
+                            String stre=update.getMessage().getText();
+                            String [] arr1=stre.split(",");
+                            List<Dilnizia> dilnizias1= dilniziaRepo.findAllByRegionContaining(arr1[1].split("-")[0]);
+                            for (Dilnizia d:dilnizias1)
+                            {
+                                for(String s:d.getRegion().split(","))
+                                {
+                                    if(s.contains(arr1[1].split("-")[0]))
+                                    {
+                                        sorry+=s+"\n";
+                                    }
+                                }
+                            }
+                            if("Напевно ви мали на увазі :".equals(sorry))
+                            {}
+                            else {
+                                try {
+                                    sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText(sorry));
+                                } catch (TelegramApiException ee) {
+                                    ee.printStackTrace();
+                                }
+                            }
+                           }catch (Exception i)
+                           {
+
                            }
+                        }
+
                         break;
 
             }

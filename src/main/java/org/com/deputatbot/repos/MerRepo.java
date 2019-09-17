@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface MerRepo extends JpaRepository<Mer, Long> {
-    List<Mer> findAllByCity_Name(String name);
-    Mer findByCity_Name(String name);
-    Mer findByCity(City city);
+
+    List<Mer>findAllByName(String name);
+
 }

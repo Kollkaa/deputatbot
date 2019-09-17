@@ -2,7 +2,7 @@
 <#include "parts/security.ftl">
 <@c.page>
     <div>
-        <form action="/okrugndu" method="post">
+        <form action="/okrugobl" method="post">
             <#attempt>
                 <div><a>-- Номер округа НДУ ${okrugobl.getNumber()}</a></div><
                 <#recover>
@@ -16,7 +16,7 @@
                     <label><input type="checkbox" name="${partia}" ${okrugobl.getDeputat().getPartia()}>${partia}</label>
                 </div>
             </#list>
-            <input type="hidden" value="${okrugobl.getId()}" name="okrugId">
+            <input type="hidden" value="${okrugobl.getId()?c}" name="okrugId">
             <input type="hidden" value="${_csrf.token}" name="_csrf">
             <button type="submit">Сохранить</button>
         </form>

@@ -14,7 +14,7 @@
                         <div>
                             <#attempt>
                                 <h1>${okrug.number}</h1>
-                                <td><a href="/okrugcity/${okrug.getId()}">edit</a></td>
+                                <td><a href="/okrugcity/${okrug.getId()?c}">edit</a></td>
 
                                 <#recover>
                                     okrug haven`t choose

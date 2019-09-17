@@ -12,17 +12,13 @@ public class Mer {
     private String surname;
     private String partion;
 
-    @OneToOne
-    @JoinColumn(name = "city_id")
-    private City city;
-
-    public City getCity() {
-        return city;
+    public Long getId() {
+        return id;
     }
 
-    public void setCity(City city) {
-        this.city = city;
-    }
+
+
+
 
     public String getName() {
         return name;

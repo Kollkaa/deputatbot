@@ -10,8 +10,25 @@ public class City {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @OneToOne
+    @JoinColumn(name = "mer_id")
+    private Mer mer;
+
+    public Long getId() {
+        return id;
+    }
+
+    public Mer getMer() {
+        return mer;
+    }
+
+    public void setMer(Mer mer) {
+        this.mer = mer;
+    }
+
     @Enumerated(EnumType.STRING)
     private TypeCity typeCity;
+
     private String name;
 
     public String getTypeCity() {

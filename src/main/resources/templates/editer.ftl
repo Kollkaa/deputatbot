@@ -34,7 +34,7 @@
 
                         <#attempt>
                             <h1>${dilnizia.okrugObl.number}</h1>
-                            <form method="get" action="/editorsobl" class="form-inline">
+                            <form method="get" action="/editorobl" class="form-inline">
                                 <button type="submit" class="btn btn-primary ml-2">Изменить</button>
                                 <input  type="hidden"  name="id" class="form-control" value="${dilnizia.okrugObl.getId()}" placeholder="Search by name">
                             </form>
