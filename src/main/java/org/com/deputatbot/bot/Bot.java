@@ -200,21 +200,21 @@ String sorry="Напевно ви мали на увазі :";
                                    +str.getOkrugNdu().getDeputat().getName().toUpperCase()+ " "
                                    +str.getOkrugNdu().getDeputat().getPartion().toUpperCase()+" /id_"
                                    +str.getOkrugNdu().getDeputat().getId()
-                                   +"\n-------------------------------------------------\n";
+                                   +"\n\n";
                            }
                            catch (Exception e)
                            {
                                info+="згідно .....";
                            }
-                           info+="Твій регіон Обласної ради - ";
+                           info+="Твій регіон Обласної ради - " +"\n";
                            try {
                                    info+=str.getOkrugObl().getNumber()
-                                           +"\n"+"Депутат : \n "
+                                          +"Депутат : \n "
                                    +str.getOkrugObl().getDeputat().getSurname().toUpperCase()+" "
                                    +str.getOkrugObl().getDeputat().getName().toUpperCase()+" "
                                    +str.getOkrugObl().getDeputat().getPartion().toUpperCase()+" /id_"
                                    +str.getOkrugObl().getDeputat().getId()
-                                   +"\n-------------------------------------------------\n";
+                                   +"\n\n";
                            }
                            catch (Exception e)
                            {
@@ -222,22 +222,22 @@ String sorry="Напевно ви мали на увазі :";
                            }
                           try {
                               if (str.getOkrugCity().getCity().getTypeCity()== TypeCity.city.GetTitle())
-                                  info += "Твій регіон Міської ради - ";
+                                  info += "Твій регіон Міської ради - "+"\n";
                               else
-                                  info+="Твій регіон Окремої територіальної громади ради - ";
+                                  info+="Твій регіон Окремої територіальної громади ради - "+"\n";
                           }
                           catch (Exception m)
-                          {info += "Твій регіон Міської ради - ";
+                          {info += "Твій регіон Міської ради - "+"\n";
                               System.out.println("fife");}
                            try {
                                    info+=str.getOkrugCity().getNumber()
-                                           +"\n"+"Депутат : \n";
+                                           +"Депутат : \n";
                                try {
                                    info+=str.getOkrugCity().getDeputat().getSurname().toUpperCase() + " "
                                            + str.getOkrugCity().getDeputat().getName().toUpperCase() + " "
                                            + str.getOkrugCity().getDeputat().getPartion().toUpperCase()+" /id_"
                                            +str.getOkrugCity().getDeputat().getId()
-                                           + "\n-------------------------------------------------\n";
+                                           + "\n\n";
                                }catch (Exception ee)
                                {
 

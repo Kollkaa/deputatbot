@@ -11,40 +11,40 @@ create table message (
     tag varchar(255),
     text varchar(255),
     user_id int8,
-    primary key (id))
+    primary key (id));
 create table oblast (
     id int8 not null,
     name varchar(255),
     person_id int8,
-    primary key (id))
+    primary key (id));
 create table person (
     id int8 not null,
     name varchar(255),
     partion varchar(255),
     surname varchar(255),
     type_person int4,
-    primary key (id))
+    primary key (id));
 create table region (
     id int8 not null,
     name varchar(255),
     oblast_id int8,
     person_id int8,
-    primary key (id))
+    primary key (id));
 create table street (
     id int8 not null,
     name varchar(255),
     city_id int8,
-    primary key (id))
+    primary key (id));
 create table user_role (
     user_id int8 not null,
-    roles varchar(255))
+    roles varchar(255));
 create table usr (
     id int8 not null,
     active boolean not null,
     chat_id int8,
     password varchar(255),
     support_admin boolean not null,
-    username varchar(255), primary key (id))
+    username varchar(255), primary key (id));
 
 
 
