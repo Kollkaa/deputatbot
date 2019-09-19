@@ -20,7 +20,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="/mer">Мери по містам</a>
+                <a class="nav-link" href="/cities">Міста</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/okrugndu">Округа НДУ</a>
@@ -34,9 +34,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="/dilniziaf">Дільниці</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/editer">Дільниці</a>
-            </li>
+
 
             <#if isAdmin>
                 <li class="nav-item">
