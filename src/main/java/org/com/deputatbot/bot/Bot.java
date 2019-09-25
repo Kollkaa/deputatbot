@@ -8,6 +8,7 @@ import org.com.deputatbot.domain.Mer;
 import org.com.deputatbot.domain.TypeCity;
 import org.com.deputatbot.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -29,6 +30,10 @@ import java.util.stream.Collectors;
 @Service
 public class Bot extends TelegramLongPollingBot {
 
+    @Value("${token.bot}")
+    private String tokenBot;
+    @Value(("${tokenname.bot}"))
+    private String tokenNameBot;
 private String info="Щоб з’ясувати, які депутати представляють \n" +
         "твій населений пункт в Верховній Раді, а \n" +
         "також в місцевих радах - міській, обласній, \n" +
@@ -361,11 +366,11 @@ String sorry="Напевно ви мали на увазі :";
     */
     @Override
     public String getBotUsername() {
-        return "@PolllandBot";///""@Documents_in_Poland_bot;@warsaww_bot
+        return tokenNameBot;///""@Documents_in_Poland_bot;@warsaww_bot
     }
 
     @Override
     public String getBotToken() {
-        return "943271793:AAE7x-ZWsV54FouKFSqjEN06N1f7vj6OL_k";// 808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo|||827804459:AAEhCYbx6DhbZDsoUroynFmqf2f57yDqzaw
+        return tokenBot;// 808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo|||827804459:AAEhCYbx6DhbZDsoUroynFmqf2f57yDqzaw
     }
 }
