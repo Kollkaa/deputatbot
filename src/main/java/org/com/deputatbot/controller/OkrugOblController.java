@@ -47,12 +47,14 @@ public class OkrugOblController {
     public String SaveObl(   @RequestParam String deputatname,
                              @RequestParam String deputatsurname,
                              @RequestParam String deputatpartional,
+                             @RequestParam Partia partis,
                              @RequestParam("okrugId") OkrugObl okrugObl ) {
         Deputat deputat=new Deputat();
         deputat= deputatRepo.findById(okrugObl.getDeputat().getId()).get();
         deputat.setName(deputatname);
         deputat.setSurname(deputatsurname);
         deputat.setPartion(deputatpartional);
+        deputat.setPartia(partis);
         deputatRepo.saveAndFlush(deputat);
         okrugObl.setDeputat(deputat);
         okrugOblRepo.saveAndFlush(okrugObl);

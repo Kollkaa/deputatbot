@@ -13,10 +13,10 @@
             <input type="text" name="deputatpartional" value="${okrugndu.getDeputat().getPartion()}">
             <div>
                 <h6>Виберіть Партію</h6>
-                <select  name="partis">
+                <select  name="partais">
                     Виберіть потрібний партію
                     <#list partias as partia >
-                        <#if partia.GetPartiaName()==deputat.getPartia()>
+                        <#if partia.GetPartiaName()==okrugndu.getDeputat().getPartia()>
                             <option value="${partia}" selected="selected">${partia.GetPartiaName()}</option>
 
                         <#else>

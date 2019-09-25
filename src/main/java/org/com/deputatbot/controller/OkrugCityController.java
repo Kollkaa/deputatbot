@@ -55,12 +55,14 @@ public class OkrugCityController {
     public String SaveCity(   @RequestParam String deputatname,
                              @RequestParam String deputatsurname,
                              @RequestParam String deputatpartional,
+                             @RequestParam Partia partis,
                              @RequestParam("okrugcityId") OkrugCity okrugCity ) {
         Deputat deputat=new Deputat();
         deputat= deputatRepo.findById(okrugCity.getDeputat().getId()).get();
         deputat.setName(deputatname);
         deputat.setSurname(deputatsurname);
         deputat.setPartion(deputatpartional);
+        deputat.setPartia(partis);
         deputatRepo.saveAndFlush(deputat);
         okrugCity.setDeputat(deputat);
         okrugCityRepo.saveAndFlush(okrugCity);

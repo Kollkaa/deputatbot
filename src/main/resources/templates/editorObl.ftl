@@ -16,7 +16,7 @@
                 <select  name="partis">
                     Виберіть потрібний партію
                     <#list partias as partia >
-                        <#if partia.GetPartiaName()==deputat.getPartia()>
+                        <#if partia.GetPartiaName()==okrugobl.getDeputat().getPartia()>
                             <option value="${partia}" selected="selected">${partia.GetPartiaName()}</option>
 
                         <#else>

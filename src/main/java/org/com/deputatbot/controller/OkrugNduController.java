@@ -50,12 +50,15 @@ public class OkrugNduController {
     public String SaveNdu(   @RequestParam String deputatname,
                              @RequestParam String deputatsurname,
                              @RequestParam String deputatpartional,
+                             @RequestParam Partia partis,
+
                              @RequestParam("okrugId") OkrugNdu okrugNdu ) {
         Deputat deputat=new Deputat();
         deputat= deputatRepo.findById(okrugNdu.getDeputat().getId()).get();
         deputat.setName(deputatname);
         deputat.setSurname(deputatsurname);
         deputat.setPartion(deputatpartional);
+        deputat.setPartia(partis);
         deputatRepo.saveAndFlush(deputat);
         okrugNdu.setDeputat(deputat);
         okrugNduRepo.saveAndFlush(okrugNdu);
