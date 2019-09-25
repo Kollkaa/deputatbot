@@ -29,7 +29,7 @@
                 <div>
                     <h6>Виберіть Партію</h6>
                     <select  name="partis">
-                        Виберіть потрібний тип
+                        Виберіть потрібний партію
                         <#list partias as partia >
                             <#if partia.GetPartiaName()==deputat.getPartia()>
                                 <option value="${partia}" selected="selected">${partia.GetPartiaName()}</option>
@@ -42,9 +42,7 @@
                 </div>
 
 
-            <div>
-                <img src="/photos/partias.png" class="card-img-top">
-            </div>
+
             <input type="hidden" value="${deputat.getId()?c}" name="deputatId">
             <input type="hidden" value="${_csrf.token}" name="_csrf">
             <button type="submit">Сохранить</button>

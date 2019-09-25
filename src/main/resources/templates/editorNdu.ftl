@@ -14,7 +14,7 @@
             <div>
                 <h6>Виберіть Партію</h6>
                 <select  name="partis">
-                    Виберіть потрібний тип
+                    Виберіть потрібний партію
                     <#list partias as partia >
                         <#if partia.GetPartiaName()==deputat.getPartia()>
                             <option value="${partia}" selected="selected">${partia.GetPartiaName()}</option>
