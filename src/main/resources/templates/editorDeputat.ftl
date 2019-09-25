@@ -27,7 +27,7 @@
                     </select>
                 </div>
                 <div>
-                    <h6>Виберіть тип округа</h6>
+                    <h6>Виберіть Партію</h6>
                     <select  name="partis">
                         Виберіть потрібний тип
                         <#list partias as partia >

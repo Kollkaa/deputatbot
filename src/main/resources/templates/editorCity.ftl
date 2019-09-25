@@ -11,11 +11,21 @@
             <input type="text" name="deputatname" value="${okrugcity.getDeputat().getName()}">
             <input type="text" name="deputatsurname" value="${okrugcity.getDeputat().getSurname()}">
             <input type="text" name="deputatpartional" value="${okrugcity.getDeputat().getPartion()}">
-            <#list partias as partia>
-                <div>
-                    <label><input type="checkbox" name="${partia}" ${okrugcity.getDeputat().getPartia()}>${partia}</label>
-                </div>
-            </#list>
+            <div>
+                <h6>Виберіть Партію</h6>
+                <select  name="partis">
+                    Виберіть потрібний тип
+                    <#list partias as partia >
+                        <#if partia.GetPartiaName()==deputat.getPartia()>
+                            <option value="${partia}" selected="selected">${partia.GetPartiaName()}</option>
+
+                        <#else>
+                            <option value="${partia}">${partia.GetPartiaName()}</option>
+                        </#if>
+                    </#list>
+                </select>
+            </div>
+
             <input type="hidden" value="${okrugcity.getId()?c}" name="okrugcityId">
             <input type="hidden" value="${_csrf.token}" name="_csrf">
             <button type="submit">Сохранить</button>
