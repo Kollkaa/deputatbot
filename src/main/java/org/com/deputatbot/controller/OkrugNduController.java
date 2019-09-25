@@ -11,6 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/okrugndu")
 public class OkrugNduController {
@@ -34,8 +37,11 @@ public class OkrugNduController {
     @GetMapping("{okrugndu}")
     public String editorndu(@PathVariable OkrugNdu okrugndu, Model model) {
 
+        List<Partia> partias=new ArrayList<>();
+        for (Partia r:Partia.values())
+        {partias.add(r);}
         model.addAttribute("okrugndu", okrugndu);
-        model.addAttribute("partias", Partia.values());
+        model.addAttribute("partias", partias);
         return "editorNdu";
     }
 

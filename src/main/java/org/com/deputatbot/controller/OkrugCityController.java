@@ -8,6 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/okrugcity")
 public class OkrugCityController {
@@ -38,8 +41,11 @@ public class OkrugCityController {
     @GetMapping("{okrugcity}")
     public String editorcity(@PathVariable  OkrugCity okrugcity, Model model) {
 
+        List<Partia> partias=new ArrayList<>();
+        for (Partia r:Partia.values())
+        {partias.add(r);}
         model.addAttribute("okrugcity", okrugcity);
-        model.addAttribute("partias", Partia.values());
+        model.addAttribute("partias", partias);
 
         return "editorCity";
     }
