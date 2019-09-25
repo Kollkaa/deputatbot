@@ -11,6 +11,6 @@ import java.util.List;
 public interface DeputatRepo extends JpaRepository<Deputat, Long> {
     List<Deputat> findAllByPartia(Partia partia);
     List<Deputat> findAllByName(String name);
-
+    List<Deputat> findAllBySurnameContaining(String surname);
     Deputat findBySurname(String surname);
 }

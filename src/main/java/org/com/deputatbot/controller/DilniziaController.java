@@ -1,19 +1,36 @@
 package org.com.deputatbot.controller;
 
 import org.com.deputatbot.domain.Dilnizia;
+import org.com.deputatbot.domain.OkrugCity;
+import org.com.deputatbot.domain.OkrugNdu;
+import org.com.deputatbot.domain.OkrugObl;
 import org.com.deputatbot.repos.DilniziaRepo;
+import org.com.deputatbot.repos.OkrugCityRepo;
+import org.com.deputatbot.repos.OkrugNduRepo;
+import org.com.deputatbot.repos.OkrugOblRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/dilnizias")
 public class DilniziaController {
 
     @Autowired
     private   DilniziaRepo dilniziaRepo;
-
+    @Autowired
+    private OkrugNduRepo okrugNduRepo;
+    @Autowired
+    private OkrugOblRepo okrugOblRepo;
+    @Autowired
+    private OkrugCityRepo okrugCityRepo;
+    @GetMapping
+    public String dil(Model model)
+    {
+        model.addAttribute("dilnizias",dilniziaRepo.findAll());
+        return "dilnizias";
+    }
     @GetMapping("/dilniziar")
     public String dilniziar(@RequestParam(required = false, defaultValue = "") String regions,Model model)
     {
@@ -26,7 +43,7 @@ public class DilniziaController {
         }
         model.addAttribute("dilnizias", dilnizias);
         model.addAttribute("regions", regions);
-        return "dilniziaf";
+        return "dilnizias";
     }
     @GetMapping("/dilniziaf")
     public String dilniziaf(@RequestParam(required = false, defaultValue = "") Long number,
@@ -45,7 +62,27 @@ public class DilniziaController {
 
 
 
-        return "dilniziaf";
+        return "dilnizias";
 
+    }
+    @GetMapping("{dilnizia}")
+    public String getDelnizia(@PathVariable Dilnizia dilnizia,Model model)
+    {
+        model.addAttribute("dilnizias",dilnizia);
+        return "editorDilnizia";
+    }
+    @PostMapping
+    public String editDilnizia(@RequestParam Integer ndunumber,
+                               @RequestParam Integer oblnumber,
+                               @RequestParam Integer citynumber,
+                               @RequestParam String region,
+                               @RequestParam("dilniziaId")Dilnizia dilnizia)
+    {
+        OkrugNdu okrugNdu=okrugNduRepo.findByNumber(ndunumber);
+        OkrugObl okrugObl=okrugOblRepo.findByNumber(oblnumber);
+        OkrugCity okrugCity=okrugCityRepo.findByNumber(citynumber);
+        dilnizia.setRegion(region);
+
+        return "redirect:/dilnizias";
     }
 }

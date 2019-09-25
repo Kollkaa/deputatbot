@@ -1,5 +1,8 @@
 package org.com.deputatbot.domain;
 
+import javax.persistence.Entity;
+
+
 public enum TypeOk {
     OBLAST("депутат обласної ради"),
     NDY("народний депутат України"),

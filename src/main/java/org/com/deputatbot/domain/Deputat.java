@@ -25,6 +25,7 @@ public class Deputat {
         this.partion = partion;
     }
 
+
     public TypeOk getTypeOk() {
         return typeOk;
     }

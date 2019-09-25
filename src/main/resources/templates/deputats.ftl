@@ -24,8 +24,23 @@
                         <span>${deputat.partion}</span>
                         <i class="m-1">${deputat.getPartia()}</i>
                         <div class="card-footer text-muted">
-                                            ${deputat.typeOk}
-                                        </div>
+                            <a>${deputat.typeOk}
+                                <#attempt>
+                                    <a>Номер округа - ${okrugNduRepo.findByDeputat(deputat).getNumber()}</a>
+                                    <#recover>
+                                        <#attempt>
+                                            <a>Номер округа - ${okrugOblRepo.findByDeputat(deputat).getNumber()}</a>
+                                            <#recover>
+                                                <#attempt>
+                                                    <a>Номер округа - ${okrugCityRepo.findByDeputat(deputat).getNumber()}</a>
+                                                    <#recover>
+                                                        okrug haven`t choose
+                                                </#attempt>
+                                        </#attempt>
+                                </#attempt>
+
+                            <div><a href="/deputats/${deputat.getId()?c}">edit</a></div>
+                        </div>
                     </div>
 
 

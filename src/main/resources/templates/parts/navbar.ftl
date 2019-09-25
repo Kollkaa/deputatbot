@@ -9,30 +9,25 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/">Главная</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/main">Сообщения</a>
-            </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="/deputats">Депутати по округам</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="/cities">Міста</a>
+                <a class="nav-link" href="/cities">Мери міст та голови ОТГ</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/okrugndu">Округа НДУ</a>
+                <a class="nav-link" href="/okrugndu">НДУ</a>
             </li>
              <li class="nav-item">
-               <a class="nav-link" href="/okrugcity">Округа Міських рад</a>
+               <a class="nav-link" href="/okrugcity">Міськради та ради ОТГ</a>
              </li>
              <li class="nav-item">
-                <a class="nav-link" href="/okrugobl">Округа обласної ради</a>
+                <a class="nav-link" href="/okrugobl">Обласні ради</a>
              </li>
             <li class="nav-item">
-                <a class="nav-link" href="/dilniziaf">Дільниці</a>
+                <a class="nav-link" href="/dilnizias">Дільниці</a>
             </li>
 
 

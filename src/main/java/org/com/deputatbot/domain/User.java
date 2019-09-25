@@ -11,7 +11,7 @@ import java.util.Set;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
     private String username;
     private String password;
     private boolean active;
@@ -34,12 +34,8 @@ public class User implements UserDetails {
         this.support_admin = support_admin;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getUsername() {

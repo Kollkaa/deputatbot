@@ -7,7 +7,6 @@ import org.com.deputatbot.repos.DeputatRepo;
 import org.com.deputatbot.repos.DilniziaRepo;
 import org.com.deputatbot.repos.OkrugNduRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,7 @@ public class OkrugNduController {
     @GetMapping
     public String main( Model model) {
         model.addAttribute("okrugs", okrugNduRepo.findAll());
-        return "okrugndu";
+        return "okrugNdu";
     }
 
 
@@ -37,7 +36,7 @@ public class OkrugNduController {
 
         model.addAttribute("okrugndu", okrugndu);
         model.addAttribute("partias", Partia.values());
-        return "editorndu";
+        return "editorNdu";
     }
 
 
@@ -54,7 +53,7 @@ public class OkrugNduController {
         deputatRepo.saveAndFlush(deputat);
         okrugNdu.setDeputat(deputat);
         okrugNduRepo.saveAndFlush(okrugNdu);
-        Iterable<OkrugNdu> okrugs = okrugNduRepo.findAll();
+
 
 
 

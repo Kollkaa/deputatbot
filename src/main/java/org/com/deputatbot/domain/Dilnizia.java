@@ -31,6 +31,10 @@ public class Dilnizia {
         this.region=region;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public OkrugObl getOkrugObl() {
         return okrugObl;
     }

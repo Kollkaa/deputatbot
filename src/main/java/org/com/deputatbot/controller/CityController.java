@@ -33,7 +33,7 @@ public class CityController {
 
             model.addAttribute("city", cities);
 
-            return "editorcities";
+            return "editorCities";
         }
 
 

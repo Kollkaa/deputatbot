@@ -12,15 +12,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 @Service
 public class Parser {
-
-
 
     public void allNduOkrug(OkrugNduRepo okrugNduRepo, DilniziaRepo dilniziaRepo, DeputatRepo  deputatRepo)
     {
@@ -36,7 +32,7 @@ public class Parser {
         OkrugNdu okrugNdu =new OkrugNdu();
         okrugNdu.setNumber(number_nduokrug);
 
-        okrugNduRepo.saveAndFlush(okrugNdu);
+
 
         Set<Dilnizia> dilniziaArrayList=new HashSet<>();
         Connection connection = Jsoup.connect(mylink);
@@ -82,14 +78,24 @@ public class Parser {
         }
 
         int con=0;
-        OkrugNdu ok= okrugNduRepo.findByNumber(number_nduokrug);
+
+        String str="";
+        int count=0;
+        for (Long l:num)
+        {
+
+            str+=l+",";
+        }
+        okrugNdu.setRegion(str.substring(0,str.length()-2));
+
+        okrugNduRepo.saveAndFlush(okrugNdu);
         for (Long l:num)
         {Dilnizia dilnizia=new Dilnizia();
             dilnizia.setNumber(l);
             dilnizia.setRegion(reg.get(con++).toLowerCase());
-            dilnizia.setOkrugNdu(ok);
+            dilnizia.setOkrugNdu(okrugNdu);
             dilniziaRepo.saveAndFlush(dilnizia);
-                   }
+        }
 
 
     }
@@ -150,16 +156,18 @@ public class Parser {
             Iterator<Cell> cellIterator = row.cellIterator();
 
             if (row.getCell(2).getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                okrugNdu=okrugNduRepo.findByNumber(Integer.valueOf(String.valueOf(row.getCell(2).getNumericCellValue()).split("\\.")[0]));
+                try {
+                 okrugNdu=okrugNduRepo.findByNumber(Integer.valueOf(String.valueOf(row.getCell(2).getNumericCellValue()).split("\\.")[0]));
 
-                if (row.getCell(4).getCellType() == Cell.CELL_TYPE_STRING) {
+                if (row.getCell(8).getCellType() == Cell.CELL_TYPE_STRING) {
                     System.out.println(row.getCell(2));
-                    System.out.println(row.getCell(4));
+                    System.out.println(row.getCell(8));
+
                     Deputat deputat = new Deputat();
-                    deputat.setName(row.getCell(4).toString().split(" ")[1]);
-                    deputat.setSurname(row.getCell(4).toString().split(" ")[0]);
-                    deputat.setPartion(row.getCell(4).toString().split(" ")[2]);
-                    String []arr= row.getCell(4).toString().split(" ");
+                    deputat.setName(row.getCell(8).toString().split(" ")[1]);
+                    deputat.setSurname(row.getCell(8).toString().split(" ")[0]);
+                    deputat.setPartion(row.getCell(8).toString().split(" ")[2]);
+                    String []arr= row.getCell(8).toString().split(" ");
                     if (arr.length>3&&arr.length<5) {
                         deputat.setPartia(setPartiaSearch(arr[3]
                                 .split("\\(")[1]
@@ -174,6 +182,7 @@ public class Parser {
 
                 }
                 okrugNduRepo.saveAndFlush(okrugNdu);
+                }catch (Exception e){}
             }
 
         }
@@ -377,10 +386,7 @@ public class Parser {
                     else
                     {
                      okrugCity.setCity(citys);
-                        try {
-                            System.out.println(citys.getName());
-                        }catch (Exception e)
-                        {}
+
                     }
                        if (!row.getCell(20).getStringCellValue().equals(null) &&
                            !row.getCell(20).getStringCellValue().equals("")   &&

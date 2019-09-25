@@ -1,15 +1,11 @@
 package org.com.deputatbot.controller;
 
 import org.com.deputatbot.domain.Deputat;
-import org.com.deputatbot.domain.OkrugNdu;
 import org.com.deputatbot.domain.OkrugObl;
 import org.com.deputatbot.domain.Partia;
 import org.com.deputatbot.repos.DeputatRepo;
-import org.com.deputatbot.repos.DilniziaRepo;
-import org.com.deputatbot.repos.OkrugNduRepo;
 import org.com.deputatbot.repos.OkrugOblRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +22,7 @@ public class OkrugOblController {
     @GetMapping
     public String main( Model model) {
         model.addAttribute("okrugs", okrugOblRepo.findAll());
-        return "okrugobl";
+        return "okrugObl";
     }
 
 
@@ -37,7 +33,7 @@ public class OkrugOblController {
 
         model.addAttribute("okrugobl", okrugobl);
         model.addAttribute("partias", Partia.values());
-        return "editorobl";
+        return "editorObl";
     }
 
 

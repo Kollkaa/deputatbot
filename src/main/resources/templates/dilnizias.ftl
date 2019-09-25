@@ -6,13 +6,13 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <form method="get" action="/dilniziar" class="form-inline">
-                    <input type="text" name="regions" class="form-control" value="${regions?ifExists}" placeholder="Search by name">
-                    <button type="submit" class="btn btn-primary ml-2">Искать по региону</button>
+                    <input type="text" name="regions" class="form-control" value="${regions?ifExists}" placeholder="Пошук по адресі">
+                    <button type="submit" class="btn btn-primary ml-2">Знайти по адресі</button>
                 </form>
                 fefe
                 <form method="get" action="/dilniziaf" class="form-inline">
-                    <input type="text" name="number" class="form-control" value="${number?ifExists}" placeholder="Search by name">
-                    <button type="submit" class="btn btn-primary ml-2">Искать по номеру дільниці</button>
+                    <input type="text" name="number" class="form-control" value="${number?ifExists}" placeholder="Пошук по номеру дільниці">
+                    <button type="submit" class="btn btn-primary ml-2">Знайти по номеру дільниці</button>
                 </form>
             </div>
         </div>
@@ -43,12 +43,15 @@
                           </#attempt>
                           <div class="card-footer text-muted">
                             <span>Район дільниці >>> ${dilnizia.getRegion()} </span>
+
                           </div>
+                        <div>
+                            <a href="/dilnizias/${dilnizia.getId()?c}">Edit</a>
+                        </div>
                     </div>
 
 
                 </div>
-
             <#else>
                 No message
             </#list>

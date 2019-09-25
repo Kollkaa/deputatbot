@@ -10,16 +10,18 @@ public class OkrugNdu {
     private Integer id;
 
     private Integer number;
+    @OneToOne
+    @JoinColumn(name = "okrug_id")
+    private Deputat deputat;
+
+    @Column( length = 1000000 )
+    private String region;
+
 
     public Integer getId() {
         return id;
     }
 
-    @OneToOne
-   @JoinColumn(name = "okrug_id")
-    private Deputat deputat;
-
-   private String region;
 
     public String getRegion() {
         return region;

@@ -1,13 +1,8 @@
 package org.com.deputatbot.controller;
 
-import org.com.deputatbot.domain.Deputat;
-import org.com.deputatbot.domain.OkrugCity;
-import org.com.deputatbot.domain.OkrugNdu;
-import org.com.deputatbot.domain.Partia;
+import org.com.deputatbot.domain.*;
 import org.com.deputatbot.repos.DeputatRepo;
-import org.com.deputatbot.repos.DilniziaRepo;
 import org.com.deputatbot.repos.OkrugCityRepo;
-import org.com.deputatbot.repos.OkrugNduRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,9 +18,18 @@ public class OkrugCityController {
     private DeputatRepo deputatRepo;
 
     @GetMapping
-    public String main( Model model) {
+    public String main( Model model,Integer number) {
+        Iterable<OkrugCity> messages = okrugCityRepo.findAll();
+
+        if (number != null ) {
+            messages = okrugCityRepo.findAllByNumber(number);
+        } else {
+            messages = okrugCityRepo.findAll();
+        }
+
         model.addAttribute("okrugs", okrugCityRepo.findAll());
-        return "okrugcity";
+        model.addAttribute("number",number);
+        return "okrugCity";
     }
 
 
@@ -37,7 +41,7 @@ public class OkrugCityController {
         model.addAttribute("okrugcity", okrugcity);
         model.addAttribute("partias", Partia.values());
 
-        return "editorcity";
+        return "editorCity";
     }
 
 
