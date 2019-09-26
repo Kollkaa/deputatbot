@@ -5,7 +5,7 @@
     <div class="big-banner">
         <div class="form-row">
             <div class="form-group col-md-6">
-                <form method="get" action="/dilniziar" class="form-inline">
+                <div><form method="get" action="/dilniziar" class="form-inline">
                     <input type="text" name="regions" class="form-control" value="${regions?ifExists}" placeholder="Пошук по адресі">
                     <button type="submit" class="btn btn-primary ml-2">Знайти по адресі</button>
                 </form>
@@ -14,6 +14,21 @@
                     <input type="text" name="number" class="form-control" value="${number?ifExists}" placeholder="Пошук по номеру дільниці">
                     <button type="submit" class="btn btn-primary ml-2">Знайти по номеру дільниці</button>
                 </form>
+                </div>
+                <div>
+                <form method="get" action="/dilniziaNdu" class="form-inline">
+                    <input type="text" name="number" class="form-control" value="${number?ifExists}" placeholder="Пошук по номеру дільниці">
+                    <button type="submit" class="btn btn-primary ml-2">Знайти по номеру дільниці</button>
+                </form>
+                <form method="get" action="/dilniziaObl" class="form-inline">
+                    <input type="text" name="number" class="form-control" value="${number?ifExists}" placeholder="Пошук по номеру дільниці">
+                    <button type="submit" class="btn btn-primary ml-2">Знайти по номеру дільниці</button>
+                </form>
+                <form method="get" action="/dilniziaCity" class="form-inline">
+                    <input type="text" name="number" class="form-control" value="${number?ifExists}" placeholder="Пошук по номеру дільниці">
+                    <button type="submit" class="btn btn-primary ml-2">Знайти по номеру дільниці</button>
+                </form>
+                </div>
             </div>
         </div>
 

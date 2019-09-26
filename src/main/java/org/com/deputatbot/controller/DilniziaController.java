@@ -81,8 +81,19 @@ public class DilniziaController {
         OkrugNdu okrugNdu=okrugNduRepo.findByNumber(ndunumber);
         OkrugObl okrugObl=okrugOblRepo.findByNumber(oblnumber);
         OkrugCity okrugCity=okrugCityRepo.findByNumber(citynumber);
-        dilnizia.setRegion(region);
-
+        try {
+            dilnizia.setRegion(region);
+        }catch (Exception e){}
+        try {
+            dilnizia.setOkrugNdu(okrugNdu);
+        }catch (Exception e){}
+        try {
+            dilnizia.setOkrugObl(okrugObl);
+        }catch (Exception e){}
+        try {
+            dilnizia.setOkrugCity(okrugCity);
+        }catch (Exception e){}
+        dilniziaRepo.save(dilnizia);
         return "redirect:/dilnizias";
     }
 }
