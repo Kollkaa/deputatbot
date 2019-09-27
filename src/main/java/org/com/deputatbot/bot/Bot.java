@@ -137,7 +137,7 @@ String sorry="Напевно ви мали на увазі :";
                             }
                        }else
                        try {
-                           String query="Можливо ви мали на увазі:";
+
                             Dilnizia str=new Dilnizia();
                             str=searchDilnizia(update.getMessage().getText());
                            String name="";
@@ -146,99 +146,168 @@ String sorry="Напевно ви мали на увазі :";
                             if (str==null)
                             {String [] arrs=update.getMessage().getText().split(",");
                                 String city=arrs[0];
-
+                                System.out.println("Можливо ви мали на увазі");
                                List<Dilnizia>dilnizias= dilniziaRepo.findAllByRegionContaining(city);
                                if (dilnizias.size()>1)
                                {
-                                   query+=city+": ";
+
+                                   sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText("Можливо ви мали на увазі:"+city+"-\n"));
                                    for (Dilnizia dilnizia:dilnizias)
                                    {
                                        try {
                                            String [] street=arrs[1].split("-");
-                                           name=street[0];
-                                           number = street[1];
+                                           name=street[0].trim();
+                                           number = street[1].trim();
                                            if (dilnizia.getRegion().indexOf(name)>0)
                                            {
-                                               query+="вул.";
-                                               query+=name+", ";
+                                               for (String sre:dilnizia.getRegion().split(";")) {
+
+                                                   if (sre.indexOf(name)>0) {
+                                                       System.out.println("111");
+                                                       sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText(sre+" "));
+                                                   }
+                                               }
                                            }
 
                                        }catch (Exception e)
                                        {
-                                           name=arrs[1];
+                                           name=arrs[1].trim();
+                                           if (dilnizia.getRegion().indexOf(name)>0)
+                                           {
+                                               for (String sre:dilnizia.getRegion().split(";")) {
 
+                                                   if (sre.indexOf(name)>0) {
+                                                       System.out.println("111");
+                                                       sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText(sre+" "));
+                                                   }
+                                                   }
+                                           }
 
                                        }
                                    }
+                                   System.out.println("Можливо ви мали на увазі finish");
                                }
-                               sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText(query));
+
                             }else {
                                 String info = "";
-                                if (str.getOkrugCity().getCity().getTypeCity() == TypeCity.city.GetTitle()) {
-                                    System.out.println("City");
-                                    info += "Твій депутат Верховної Ради\n" +
-                                            "Округ № - ";
-                                    try {
-                                        info += str.getOkrugNdu().getNumber() + "\n";
+                                try {
+                                    if (str.getOkrugCity().getCity().getTypeCity() == TypeCity.city.GetTitle()) {
+                                        System.out.println("City");
+                                        info += "Твій депутат Верховної Ради\n" +
+                                                "Округ № - ";
                                         try {
-                                            info += str.getOkrugNdu().getDeputat().getSurname().toUpperCase() + " "
-                                                    + str.getOkrugNdu().getDeputat().getName().toUpperCase() + " "
-                                                    + str.getOkrugNdu().getDeputat().getPartion().toUpperCase() +
-                                                    "\n /id_" + str.getOkrugNdu().getDeputat().getId() + "\n";
+                                            info += str.getOkrugNdu().getNumber() + "\n";
+                                            try {
+                                                info += str.getOkrugNdu().getDeputat().getSurname().toUpperCase() + " "
+                                                        + str.getOkrugNdu().getDeputat().getName().toUpperCase() + " "
+                                                        + str.getOkrugNdu().getDeputat().getPartion().toUpperCase() +
+                                                        "\n /id_" + str.getOkrugNdu().getDeputat().getId() + "\n";
 
+                                            } catch (Exception e) {
+                                                info += "Депутата не обрано \uD83D\uDE22 \n" +
+                                                        "/ссылка на Закон України «Про місцеві вибори» \n" +
+                                                        "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
+                                            }
                                         } catch (Exception e) {
-                                            info += "Депутата не обрано \uD83D\uDE22 \n" +
-                                                    "/ссылка на Закон України «Про місцеві вибори» \n" +
-                                                    "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
                                         }
-                                    } catch (Exception e) {
-                                    }
-                                    info += "Твій мер " +
-                                            "м." + str.getOkrugCity().getCity().getName() + "\n";
-                                    try {
-                                        City city = str.getOkrugCity().getCity();
-                                        info += city.getMer().getSurname().toUpperCase() + " "
-                                                + city.getMer().getName().toUpperCase() + " "
-                                                + city.getMer().getPartion().toUpperCase() +
-                                                "\n /id_" + city.getMer().getId() + "\n";
-                                        ;
-                                    } catch (Exception e) {
-                                    }
-                                    info += "Твій депутат обласної ради\n" +
-                                            "Округ № - ";
-                                    try {
-                                        info += str.getOkrugObl().getNumber() + "\n";
+                                        info += "Твій мер " +
+                                                "м." + str.getOkrugCity().getCity().getName() + "\n";
                                         try {
-                                            info += str.getOkrugObl().getDeputat().getSurname().toUpperCase() + " "
-                                                    + str.getOkrugObl().getDeputat().getName().toUpperCase() + " "
-                                                    + str.getOkrugObl().getDeputat().getPartion().toUpperCase() +
-                                                    "\n /id_" + str.getOkrugObl().getDeputat().getId() + "\n";
-
+                                            City city = str.getOkrugCity().getCity();
+                                            info += city.getMer().getSurname().toUpperCase() + " "
+                                                    + city.getMer().getName().toUpperCase() + " "
+                                                    + city.getMer().getPartion().toUpperCase() +
+                                                    "\n /id_" + city.getMer().getId() + "\n";
+                                            ;
                                         } catch (Exception e) {
-                                            info += "Депутата не обрано \uD83D\uDE22 \n" +
-                                                    "/ссылка на Закон України «Про місцеві вибори» \n" +
-                                                    "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
                                         }
-                                    } catch (Exception e) {
-                                    }
-                                    info += "Твій депутат міської ради\n" +
-                                            "Округ № - ";
-                                    try {
-                                        info += str.getOkrugCity().getNumber() + "\n";
+                                        info += "Твій депутат обласної ради\n" +
+                                                "Округ № - ";
                                         try {
-                                            info += str.getOkrugCity().getDeputat().getSurname().toUpperCase() + " "
-                                                    + str.getOkrugCity().getDeputat().getName().toUpperCase() + " "
-                                                    + str.getOkrugCity().getDeputat().getPartion().toUpperCase() +
-                                                    "\n /id_" + str.getOkrugCity().getDeputat().getId() + "\n";
+                                            info += str.getOkrugObl().getNumber() + "\n";
+                                            try {
+                                                info += str.getOkrugObl().getDeputat().getSurname().toUpperCase() + " "
+                                                        + str.getOkrugObl().getDeputat().getName().toUpperCase() + " "
+                                                        + str.getOkrugObl().getDeputat().getPartion().toUpperCase() +
+                                                        "\n /id_" + str.getOkrugObl().getDeputat().getId() + "\n";
 
+                                            } catch (Exception e) {
+                                                info += "Депутата не обрано \uD83D\uDE22 \n" +
+                                                        "/ссылка на Закон України «Про місцеві вибори» \n" +
+                                                        "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
+                                            }
                                         } catch (Exception e) {
-                                            info += "Депутата не обрано \uD83D\uDE22 \n" +
-                                                    "/ссылка на Закон України «Про місцеві вибори» \n" +
-                                                    "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
                                         }
-                                    } catch (Exception e) {
+                                        info += "Твій депутат міської ради\n" +
+                                                "Округ № - ";
+                                        try {
+                                            info += str.getOkrugCity().getNumber() + "\n";
+                                            try {
+                                                info += str.getOkrugCity().getDeputat().getSurname().toUpperCase() + " "
+                                                        + str.getOkrugCity().getDeputat().getName().toUpperCase() + " "
+                                                        + str.getOkrugCity().getDeputat().getPartion().toUpperCase() +
+                                                        "\n /id_" + str.getOkrugCity().getDeputat().getId() + "\n";
+
+                                            } catch (Exception e) {
+                                                info += "Депутата не обрано \uD83D\uDE22 \n" +
+                                                        "/ссылка на Закон України «Про місцеві вибори» \n" +
+                                                        "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
+                                            }
+                                        } catch (Exception e) {
+                                        }
+                                    } else {
+                                        System.out.println("Country");
+                                        info += "Твій депутат Верховної Ради\n" +
+                                                "Округ № - ";
+                                        try {
+                                            info += str.getOkrugNdu().getNumber() + "\n";
+                                            try {
+                                                info += str.getOkrugNdu().getDeputat().getSurname().toUpperCase() + " "
+                                                        + str.getOkrugNdu().getDeputat().getName().toUpperCase() + " "
+                                                        + str.getOkrugNdu().getDeputat().getPartion().toUpperCase() +
+                                                        "\n /id_" + str.getOkrugNdu().getDeputat().getId() + "\n";
+
+                                            } catch (Exception e) {
+                                                info += "Депутата не обрано \uD83D\uDE22 \n" +
+                                                        "/ссылка на Закон України «Про місцеві вибори» \n" +
+                                                        "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
+                                            }
+                                        } catch (Exception e) {
+                                        }
+                                        info += "Твій голова селищної ради\n"
+                                                + str.getOkrugCity().getCity().getName() + " " + str.getOkrugCity().getCity().getTypeCity() + "\n";
+                                        try {
+                                            City city = str.getOkrugCity().getCity();
+                                            info += city.getMer().getSurname().toUpperCase() + " "
+                                                    + city.getMer().getName().toUpperCase() + " "
+                                                    + city.getMer().getPartion().toUpperCase() +
+                                                    "\n /id_" + city.getMer().getId() + "\n";
+                                        } catch (Exception e) {
+                                        }
+                                        info += "Твій депутат обласної ради\n" +
+                                                "Округ № - ";
+                                        try {
+                                            info += str.getOkrugObl().getNumber() + "\n";
+                                            try {
+                                                info += str.getOkrugObl().getDeputat().getSurname().toUpperCase() + " "
+                                                        + str.getOkrugObl().getDeputat().getName().toUpperCase() + " "
+                                                        + str.getOkrugObl().getDeputat().getPartion().toUpperCase() +
+                                                        "\n /id_" + str.getOkrugObl().getDeputat().getId() + "\n";
+
+                                            } catch (Exception e) {
+                                                info += "Депутата не обрано \uD83D\uDE22 \n" +
+                                                        "/ссылка на Закон України «Про місцеві вибори» \n" +
+                                                        "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
+                                            }
+                                        } catch (Exception e) {
+                                        }
+                                        info += "Твій депутат селищної ради\n" +
+                                                "Округ № -в розробці-\n" +
+                                                "ФІО -в розробці-";
+                                        sendApiMethod(new SendMessage().setText(info).setChatId(update.getMessage().getChatId()));
                                     }
-                                } else {
+                                }catch (Exception er)
+                                {
                                     System.out.println("Country");
                                     info += "Твій депутат Верховної Ради\n" +
                                             "Округ № - ";
@@ -254,11 +323,14 @@ String sorry="Напевно ви мали на увазі :";
                                             info += "Депутата не обрано \uD83D\uDE22 \n" +
                                                     "/ссылка на Закон України «Про місцеві вибори» \n" +
                                                     "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
+                                        info="";
                                         }
                                     } catch (Exception e) {
                                     }
-                                    info += "Твій голова селищної ради\n"
-                                            + str.getOkrugCity().getCity().getName() + " " + str.getOkrugCity().getCity().getTypeCity() + "\n";
+                                    try {
+                                        info += "Твій голова селищної ради\n"
+                                                + str.getOkrugCity().getCity().getName() + " " + str.getOkrugCity().getCity().getTypeCity() + "\n";
+                                    }catch (Exception e){}
                                     try {
                                         City city = str.getOkrugCity().getCity();
                                         info += city.getMer().getSurname().toUpperCase() + " "
@@ -276,7 +348,10 @@ String sorry="Напевно ви мали на увазі :";
                                                     + str.getOkrugObl().getDeputat().getName().toUpperCase() + " "
                                                     + str.getOkrugObl().getDeputat().getPartion().toUpperCase() +
                                                     "\n /id_" + str.getOkrugObl().getDeputat().getId() + "\n";
-
+                                            info += "Твій депутат селищної ради\n" +
+                                                    "Округ № -в розробці-\n" +
+                                                    "ФІО -в розробці-";
+                                            sendApiMethod(new SendMessage().setText(info).setChatId(update.getMessage().getChatId()));
                                         } catch (Exception e) {
                                             info += "Депутата не обрано \uD83D\uDE22 \n" +
                                                     "/ссылка на Закон України «Про місцеві вибори» \n" +
@@ -284,16 +359,12 @@ String sorry="Напевно ви мали на увазі :";
                                         }
                                     } catch (Exception e) {
                                     }
-                                    info += "Твій депутат селищної ради\n" +
-                                            "Округ № -в розробці-\n" +
-                                            "ФІО -в розробці-";
 
                                 }
-                                sendApiMethod(new SendMessage().setText(info).setChatId(update.getMessage().getChatId()));
                             }
 
                        }catch (Exception e)
-                                {}
+                       {e.printStackTrace();}
                                break;
 
 
@@ -327,7 +398,7 @@ String sorry="Напевно ви мали на увазі :";
     public Dilnizia searchDilnizia(String str)
     {
         String [] arr=str.split(",");
-        String city=arr[0];
+        String city=arr[0].trim().toLowerCase();
         String name="";
         String number="";
         List<Dilnizia>cities=new ArrayList<>();
@@ -336,11 +407,11 @@ String sorry="Напевно ви мали на увазі :";
         String address="";
         try {
             String [] street=arr[1].split("-");
-            name=street[0];
-            number=street[1];
+            name=street[0].trim().toLowerCase();
+            number=street[1].trim().toLowerCase();
         }catch (Exception e)
         {
-            name=arr[1];
+            name=arr[1].trim().toLowerCase();
         }
         cities=dilniziaRepo.findAllByRegionContaining(city);
         if (cities.size()==1)
@@ -350,6 +421,9 @@ String sorry="Напевно ви мали на увазі :";
         }
         if (cities.size()==0)
         {
+            System.out.println("null1");
+            System.out.println("null1");
+            System.out.println("null1");
             return null;
         }
         for (Dilnizia dilnizia:cities)
@@ -361,6 +435,18 @@ String sorry="Напевно ви мали на увазі :";
         }
         if (names.size()==1)
         {
+            System.out.println("names==1");
+            System.out.println("names==1");
+            System.out.println("names==1");
+            System.out.println(names.get(0).getNumber());
+            numbers=names.get(0);
+            return numbers;
+        }
+        if (names.size()==0)
+        {
+            System.out.println("names==0");
+            System.out.println("names==0");
+            System.out.println("names==0");
             numbers=names.get(0);
             return numbers;
         }
@@ -373,17 +459,31 @@ String sorry="Напевно ви мали на увазі :";
                 {
                     if (ad.indexOf(name)>0)
                     {
+                        System.out.println(ad);
+                        System.out.println(ad);
+                        System.out.println(ad);
+                        System.out.println("ad.indexof(name)>0");
+                        System.out.println("ad.indexof(name)>0");
+                        System.out.println("ad.indexof(name)>0");
                        address=ad;
                        address=address.split(":")[1];
                         try {
 
                             for (String rty:address.split(","))
                             {
+                                System.out.println(rty);
+                                System.out.println(rty);
+                                System.out.println(rty);
                                 try {
-                                    String[]ert=address.split("-");
+                                    System.out.println("??????????????");
+                                    System.out.println("??????????????");
+                                    System.out.println("??????????????");
+                                    String[]ert=rty.trim().split("–");
+                                    System.out.println(number+" "+ert[0]+" "+ert[1]);
                                     int num=Integer.valueOf(number.trim());
                                     int num1=Integer.valueOf(ert[0].trim());
                                     int num2=Integer.valueOf(ert[1].trim());
+                                    System.out.println(num+" "+num1+" "+num2);
                                     if(num<num2&&num>num1)
                                     {
                                         numbers=dilnizia;
@@ -431,7 +531,10 @@ String sorry="Напевно ви мали на увазі :";
                         }
                     }
                     else {
-                        return null;
+                        System.out.println("null2");
+                        System.out.println("null2");
+                        System.out.println("null2");
+
                     }
                 }
 
@@ -441,7 +544,8 @@ String sorry="Напевно ви мали на увазі :";
                 return numbers;
             }
         }
-        return numbers;
+        return null;
+
     }
 
     @Override

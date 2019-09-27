@@ -290,9 +290,9 @@ public class Parser {
 
             // For each row, iterate through each columns
             Iterator<Cell> cellIterator = row.cellIterator();
-            if (row.getCell(9).getCellType()==Cell.CELL_TYPE_STRING
-                    && !row.getCell(9).getStringCellValue().equals("")
-                    && !row.getCell(9).getStringCellValue().equals(null))
+            if (row.getCell(17).getCellType()==Cell.CELL_TYPE_STRING
+                    && !row.getCell(17).getStringCellValue().equals("")
+                    && !row.getCell(17).getStringCellValue().equals(null))
             {
                 citys=new City();
                 int count = 0;
@@ -365,7 +365,6 @@ public class Parser {
                 }
 
             }
-
             if (row.getCell(18).getCellType() == Cell.CELL_TYPE_NUMERIC
                     &&row.getCell(20).getCellType()==Cell.CELL_TYPE_STRING) {
 
@@ -386,7 +385,6 @@ public class Parser {
                     else
                     {
                      okrugCity.setCity(citys);
-
                     }
                        if (!row.getCell(20).getStringCellValue().equals(null) &&
                            !row.getCell(20).getStringCellValue().equals("")   &&
