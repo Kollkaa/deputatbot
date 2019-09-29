@@ -25,7 +25,11 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
-
+/*
+* postgres://scimigdnkpbyzr:3a3320c57b1d16ca45b49f5a6f0bdd8cfe8daf92577544b1cd689620e04d6331@ec2-54-228-243-238.eu-west-1.compute.amazonaws.com:5432/dcku3g1n2qlfrp
+*scimigdnkpbyzr
+* 3a3320c57b1d16ca45b49f5a6f0bdd8cfe8daf92577544b1cd689620e04d6331
+ * */
 
 @Service
 public class Bot extends TelegramLongPollingBot {
@@ -210,7 +214,7 @@ String sorry="Напевно ви мали на увазі :";
                                             }
                                         } catch (Exception e) {
                                         }
-                                        info += "Твій мер " +
+                                        info += "\nТвій мер " +
                                                 "м." + str.getOkrugCity().getCity().getName() + "\n";
                                         try {
                                             City city = str.getOkrugCity().getCity();
@@ -221,7 +225,7 @@ String sorry="Напевно ви мали на увазі :";
                                             ;
                                         } catch (Exception e) {
                                         }
-                                        info += "Твій депутат обласної ради\n" +
+                                        info += "\nТвій депутат обласної ради\n" +
                                                 "Округ № - ";
                                         try {
                                             info += str.getOkrugObl().getNumber() + "\n";
@@ -238,7 +242,7 @@ String sorry="Напевно ви мали на увазі :";
                                             }
                                         } catch (Exception e) {
                                         }
-                                        info += "Твій депутат міської ради\n" +
+                                        info += "\nТвій депутат міської ради\n" +
                                                 "Округ № - ";
                                         try {
                                             info += str.getOkrugCity().getNumber() + "\n";
@@ -257,7 +261,7 @@ String sorry="Напевно ви мали на увазі :";
                                         }
                                     } else {
                                         System.out.println("Country");
-                                        info += "Твій депутат Верховної Ради\n" +
+                                        info += "\nТвій депутат Верховної Ради\n" +
                                                 "Округ № - ";
                                         try {
                                             info += str.getOkrugNdu().getNumber() + "\n";
@@ -274,7 +278,7 @@ String sorry="Напевно ви мали на увазі :";
                                             }
                                         } catch (Exception e) {
                                         }
-                                        info += "Твій голова селищної ради\n"
+                                        info += "\nТвій голова селищної ради\n"
                                                 + str.getOkrugCity().getCity().getName() + " " + str.getOkrugCity().getCity().getTypeCity() + "\n";
                                         try {
                                             City city = str.getOkrugCity().getCity();
@@ -284,7 +288,7 @@ String sorry="Напевно ви мали на увазі :";
                                                     "\n /id_" + city.getMer().getId() + "\n";
                                         } catch (Exception e) {
                                         }
-                                        info += "Твій депутат обласної ради\n" +
+                                        info += "\nТвій депутат обласної ради\n" +
                                                 "Округ № - ";
                                         try {
                                             info += str.getOkrugObl().getNumber() + "\n";
@@ -301,15 +305,13 @@ String sorry="Напевно ви мали на увазі :";
                                             }
                                         } catch (Exception e) {
                                         }
-                                        info += "Твій депутат селищної ради\n" +
+                                        info += "\nТвій депутат селищної ради\n" +
                                                 "Округ № -в розробці-\n" +
                                                 "ФІО -в розробці-";
-                                        sendApiMethod(new SendMessage().setText(info).setChatId(update.getMessage().getChatId()));
                                     }
                                 }catch (Exception er)
                                 {
-                                    System.out.println("Country");
-                                    info += "Твій депутат Верховної Ради\n" +
+                                    info += "\nТвій депутат Верховної Ради\n" +
                                             "Округ № - ";
                                     try {
                                         info += str.getOkrugNdu().getNumber() + "\n";
@@ -328,7 +330,7 @@ String sorry="Напевно ви мали на увазі :";
                                     } catch (Exception e) {
                                     }
                                     try {
-                                        info += "Твій голова селищної ради\n"
+                                        info += "\nТвій голова селищної ради\n"
                                                 + str.getOkrugCity().getCity().getName() + " " + str.getOkrugCity().getCity().getTypeCity() + "\n";
                                     }catch (Exception e){}
                                     try {
@@ -339,7 +341,7 @@ String sorry="Напевно ви мали на увазі :";
                                                 "\n /id_" + city.getMer().getId() + "\n";
                                     } catch (Exception e) {
                                     }
-                                    info += "Твій депутат обласної ради\n" +
+                                    info += "\nТвій депутат обласної ради\n" +
                                             "Округ № - ";
                                     try {
                                         info += str.getOkrugObl().getNumber() + "\n";
@@ -348,10 +350,9 @@ String sorry="Напевно ви мали на увазі :";
                                                     + str.getOkrugObl().getDeputat().getName().toUpperCase() + " "
                                                     + str.getOkrugObl().getDeputat().getPartion().toUpperCase() +
                                                     "\n /id_" + str.getOkrugObl().getDeputat().getId() + "\n";
-                                            info += "Твій депутат селищної ради\n" +
+                                            info += "\nТвій депутат селищної ради\n" +
                                                     "Округ № -в розробці-\n" +
                                                     "ФІО -в розробці-";
-                                            sendApiMethod(new SendMessage().setText(info).setChatId(update.getMessage().getChatId()));
                                         } catch (Exception e) {
                                             info += "Депутата не обрано \uD83D\uDE22 \n" +
                                                     "/ссылка на Закон України «Про місцеві вибори» \n" +
@@ -361,11 +362,13 @@ String sorry="Напевно ви мали на увазі :";
                                     }
 
                                 }
+                                sendApiMethod(new SendMessage().setText(info).setChatId(update.getMessage().getChatId()));
                             }
 
                        }catch (Exception e)
-                       {e.printStackTrace();}
-                               break;
+                       {e.printStackTrace();
+                       }
+                       break;
 
 
 
