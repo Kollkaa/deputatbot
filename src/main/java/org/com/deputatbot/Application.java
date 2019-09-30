@@ -68,7 +68,7 @@ public class Application {
         // JSoup Example 2 - Reading HTML page from URL
         Document doc;
         try {
-            doc = Jsoup.connect("https://dtputatbot.herokuapp.com/login").get();
+            doc = Jsoup.connect("https://deputatbot.herokuapp.com/login").get();
             title = doc.title();
         } catch (IOException e) {
             e.printStackTrace();
