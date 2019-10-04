@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface DilniziaRepo extends JpaRepository<Dilnizia,Long> {
-    List<Dilnizia> findAllByRegionContaining(String name);
-    List<Dilnizia> findAllByNumber(Long name);
+    List<Dilnizia> findAllByRegionContaining(String region);
+    List<Dilnizia> findAllByNumber(Long number);
+    Dilnizia findByRegionContaining(String region);
 }

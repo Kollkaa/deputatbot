@@ -41,7 +41,7 @@ public class OkrugNduController {
         for (Partia r:Partia.values())
         {partias.add(r);}
         model.addAttribute("okrugndu", okrugndu);
-        model.addAttribute("partias", partias);
+        model.addAttribute("partis", partias);
         return "editorNdu";
     }
 
@@ -50,7 +50,7 @@ public class OkrugNduController {
     public String SaveNdu(   @RequestParam String deputatname,
                              @RequestParam String deputatsurname,
                              @RequestParam String deputatpartional,
-                             @RequestParam Partia partis,
+                             @RequestParam Partia partias,
 
                              @RequestParam("okrugId") OkrugNdu okrugNdu ) {
         Deputat deputat=new Deputat();
@@ -58,7 +58,7 @@ public class OkrugNduController {
         deputat.setName(deputatname);
         deputat.setSurname(deputatsurname);
         deputat.setPartion(deputatpartional);
-        deputat.setPartia(partis);
+        deputat.setPartia(partias);
         deputatRepo.saveAndFlush(deputat);
         okrugNdu.setDeputat(deputat);
         okrugNduRepo.saveAndFlush(okrugNdu);

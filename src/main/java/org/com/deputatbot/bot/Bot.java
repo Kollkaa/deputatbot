@@ -43,8 +43,8 @@ private String info="Щоб з’ясувати, які депутати пре�
         "також в місцевих радах - міській, обласній, " +
         "сільській або селищній раді, потрібно " +
         "вказати свою адресу за формою: місто, село " +
-        "або ж смт, а також вулицю. Наприклад, " +
-        "Верхньодніпровськ, Дніпровська-1" +
+        "або ж смт, а також вулицю. **Наприклад, " +
+        "Верхньодніпровськ, Дніпровська-1**" +
         "\n" +
         "Після цього я надішлю ФІО народного " +
         "депутата України від твого округу, а також " +
@@ -143,57 +143,14 @@ String sorry="Напевно ви мали на увазі :";
                        try {
 
                             Dilnizia str=new Dilnizia();
-                            str=searchDilnizia(update.getMessage().getText());
+                            str=searchDilnizia(update.getMessage().getText(),update.getMessage().getChatId().toString());
                            String name="";
                            String number="";
+                           if(str==null){
 
-                            if (str==null)
-                            {String [] arrs=update.getMessage().getText().split(",");
-                                String city=arrs[0];
-                                System.out.println("Можливо ви мали на увазі");
-                               List<Dilnizia>dilnizias= dilniziaRepo.findAllByRegionContaining(city);
-                               if (dilnizias.size()>1)
-                               {
-
-                                   sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText("Можливо ви мали на увазі:"+city+"-\n"));
-                                   for (Dilnizia dilnizia:dilnizias)
-                                   {
-                                       try {
-                                           String [] street=arrs[1].split("-");
-                                           name=street[0].trim();
-                                           number = street[1].trim();
-                                           if (dilnizia.getRegion().indexOf(name)>0)
-                                           {
-                                               for (String sre:dilnizia.getRegion().split(";")) {
-
-                                                   if (sre.indexOf(name)>0) {
-                                                       System.out.println("111");
-                                                       sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText(sre+" "));
-                                                   }
-                                               }
-                                           }
-
-                                       }catch (Exception e)
-                                       {
-                                           name=arrs[1].trim();
-                                           if (dilnizia.getRegion().indexOf(name)>0)
-                                           {
-                                               for (String sre:dilnizia.getRegion().split(";")) {
-
-                                                   if (sre.indexOf(name)>0) {
-                                                       System.out.println("111");
-                                                       sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText(sre+" "));
-                                                   }
-                                                   }
-                                           }
-
-                                       }
-                                   }
-                                   System.out.println("Можливо ви мали на увазі finish");
-                               }
-
-                            }else {
-                                String info = "";
+                           }
+                           else{
+                           String info = "";
                                 try {
                                     if (str.getOkrugCity().getCity().getTypeCity() == TypeCity.city.GetTitle()) {
                                         System.out.println("City");
@@ -400,15 +357,35 @@ String sorry="Напевно ви мали на увазі :";
 
         return er;
     }
-    public Dilnizia searchDilnizia(String str)
+    public Dilnizia searchDilnizia(String str,String chat)
     {
+        Dilnizia numbers;
+        str=str.toLowerCase();
         String [] arr=str.split(",");
+        System.out.println(arr[0]);
+        System.out.println(arr.length);
+        if (arr.length==1)
+        {
+            System.out.println(arr.length);
+           numbers = dilniziaRepo.findByRegionContaining(arr[0]);
+           if (numbers!=null)
+               return numbers;
+           else {
+               try {
+                   sendApiMethod(new SendMessage().setChatId(chat).setText("Ваша адреса не знайдена, введіть за прикладом:**Верхнеднпровск, Днипровстка-1**\n"+
+                           "Якщо ви проживаєте в селі або в селищі, скористайтесть таким записом: **Терни**"));
+               } catch (TelegramApiException e) {
+                   e.printStackTrace();
+               }
+               return null;
+           }
+        }
         String city=arr[0].trim().toLowerCase();
         String name="";
         String number="";
         List<Dilnizia>cities=new ArrayList<>();
         List<Dilnizia>names=new ArrayList<>();
-        Dilnizia numbers=new Dilnizia();
+
         String address="";
         try {
             String [] street=arr[1].split("-");
