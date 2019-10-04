@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/duputatbot.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/deputatbot.jar

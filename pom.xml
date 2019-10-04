@@ -85,7 +85,7 @@
 
 
     <build>
-        <finalName>duputatbot</finalName>
+        <finalName>deputatbot</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
