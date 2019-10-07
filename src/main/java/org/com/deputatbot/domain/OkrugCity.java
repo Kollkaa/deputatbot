@@ -17,10 +17,6 @@ public class OkrugCity {
     @JoinColumn(name = "city_id")
     private City city;
 
-    @OneToOne
-    @JoinColumn(name = "okrug_id")
-    private Deputat deputat;
-
     private String region;
 
     public String getRegion() {
@@ -39,13 +35,7 @@ public class OkrugCity {
         this.city = city;
     }
 
-    public Deputat getDeputat() {
-        return deputat;
-    }
 
-    public void setDeputat(Deputat deputat) {
-        this.deputat=deputat;
-    }
 
 
     public void setNumber(Integer number) {

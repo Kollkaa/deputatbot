@@ -17,6 +17,15 @@ public class Deputat {
     @Enumerated(EnumType.STRING)
     private Partia partia;
 
+    @OneToOne
+    @JoinColumn(name = "deputat_id")
+    private OkrugCity okrugCity;
+
+    @OneToOne
+    @JoinColumn(name = "deputat_id")
+    private OkrugObl OkrugObl;
+
+
     public Deputat(){}
 
     public Deputat(String name, String surname, String partion) {
@@ -25,6 +34,21 @@ public class Deputat {
         this.partion = partion;
     }
 
+    public org.com.deputatbot.domain.OkrugObl getOkrugObl() {
+        return OkrugObl;
+    }
+
+    public void setOkrugObl(org.com.deputatbot.domain.OkrugObl okrugObl) {
+        OkrugObl = okrugObl;
+    }
+
+    public OkrugCity getOkrugCity() {
+        return okrugCity;
+    }
+
+    public void setOkrugCity(OkrugCity okrugCity) {
+        this.okrugCity = okrugCity;
+    }
 
     public TypeOk getTypeOk() {
         return typeOk;

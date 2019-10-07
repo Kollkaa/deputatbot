@@ -31,8 +31,8 @@ public class City {
 
     private String name;
 
-    public String getTypeCity() {
-        return typeCity.GetTitle();
+    public TypeCity getTypeCity() {
+        return typeCity;
     }
 
     public void setTypeCity(TypeCity typeCity) {

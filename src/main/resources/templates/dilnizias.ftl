@@ -11,21 +11,21 @@
                 </form>
                 fefe
                 <form method="get" action="/dilniziaf" class="form-inline">
-                    <input type="text" name="number" class="form-control" value="${number?ifExists}" placeholder="Пошук по номеру дільниці">
+                    <input type="number" name="number" class="form-control" value="${number?ifExists}" placeholder="Пошук по номеру дільниці">
                     <button type="submit" class="btn btn-primary ml-2">Знайти по номеру дільниці</button>
                 </form>
                 </div>
                 <div>
                 <form method="get" action="/dilniziaNdu" class="form-inline">
-                    <input type="text" name="number" class="form-control" value="${number?ifExists}" placeholder="Пошук по номеру дільниці">
+                    <input type="number" name="number" class="form-control"  placeholder="Пошук по номеру дільниці">
                     <button type="submit" class="btn btn-primary ml-2">Знайти по номеру дільниці</button>
                 </form>
                 <form method="get" action="/dilniziaObl" class="form-inline">
-                    <input type="text" name="number" class="form-control" value="${number?ifExists}" placeholder="Пошук по номеру дільниці">
+                    <input type="number" name="number" class="form-control"  placeholder="Пошук по номеру дільниці">
                     <button type="submit" class="btn btn-primary ml-2">Знайти по номеру дільниці</button>
                 </form>
                 <form method="get" action="/dilniziaCity" class="form-inline">
-                    <input type="text" name="number" class="form-control" value="${number?ifExists}" placeholder="Пошук по номеру дільниці">
+                    <input type="number" name="number" class="form-control" placeholder="Пошук по номеру дільниці">
                     <button type="submit" class="btn btn-primary ml-2">Знайти по номеру дільниці</button>
                 </form>
                 </div>

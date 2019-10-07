@@ -65,6 +65,68 @@ public class DilniziaController {
         return "dilnizias";
 
     }
+    @GetMapping("/dilniziaNdu")
+    public String dilniziaNDu(@RequestParam(required = false, defaultValue = "") Integer number,
+                            Model model)
+    {
+        Iterable<Dilnizia> dilnizias = dilniziaRepo.findAll();
+
+        if (number != null ) {
+            dilnizias = dilniziaRepo.findAllByOkrugNdu(okrugNduRepo.findByNumber(number));
+
+
+        } else {
+            dilnizias = dilniziaRepo.findAll();
+        }
+
+        model.addAttribute("dilnizias", dilnizias);
+        model.addAttribute("number", number);
+
+
+
+        return "dilnizias";
+
+    }
+    @GetMapping("/dilniziaObl")
+    public String dilniziaObl(@RequestParam(required = false, defaultValue = "") Integer number,
+                            Model model)
+    {
+        Iterable<Dilnizia> dilnizias = dilniziaRepo.findAll();
+
+        if (number != null ) {
+            dilnizias = dilniziaRepo.findAllByOkrugObl(okrugOblRepo.findByNumber(number));
+        } else {
+            dilnizias = dilniziaRepo.findAll();
+        }
+
+        model.addAttribute("dilnizias", dilnizias);
+        model.addAttribute("number", number);
+
+
+
+        return "dilnizias";
+
+    }
+    @GetMapping("/dilniziaCity")
+    public String dilniziaCity(@RequestParam(required = false, defaultValue = "") Integer number,
+                            Model model)
+    {
+        Iterable<Dilnizia> dilnizias = dilniziaRepo.findAll();
+
+        if (number != null ) {
+            dilnizias = dilniziaRepo.findAllByOkrugCity(okrugCityRepo.findByNumber(number));
+        } else {
+            dilnizias = dilniziaRepo.findAll();
+        }
+
+        model.addAttribute("dilnizias", dilnizias);
+        model.addAttribute("number", number);
+
+
+
+        return "dilnizias";
+
+    }
     @GetMapping("{dilnizia}")
     public String getDelnizia(@PathVariable Dilnizia dilnizia,Model model)
     {

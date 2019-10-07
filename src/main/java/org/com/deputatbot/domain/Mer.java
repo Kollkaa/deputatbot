@@ -16,9 +16,14 @@ public class Mer {
         return id;
     }
 
+    public Mer() {
+    }
 
-
-
+    public Mer(String name, String surname, String partion) {
+        this.name = name;
+        this.surname = surname;
+        this.partion = partion;
+    }
 
     public String getName() {
         return name;

@@ -15,9 +15,7 @@ public class OkrugObl {
 
     private String region;
 
-    @OneToOne
-    @JoinColumn(name = "okrug_id")
-    private Deputat deputat;
+
 
     public String getRegion() {
         return region;

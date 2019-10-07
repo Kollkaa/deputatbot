@@ -14,12 +14,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.*;
-
 @Service
 public class Parser {
 
-    public void allNduOkrug(OkrugNduRepo okrugNduRepo, DilniziaRepo dilniziaRepo, DeputatRepo  deputatRepo)
-    {
+    public void allNduOkrug(OkrugNduRepo okrugNduRepo, DilniziaRepo dilniziaRepo, DeputatRepo  deputatRepo)  {
 
         for (Integer i=24;i<41;i++)
         {
@@ -100,7 +98,8 @@ public class Parser {
 
     }
 
-    public void ParserExelMer(CityRepo cityRepo, MerRepo merRepo) throws IOException {
+    public  void ParserExelNDU(OkrugNduRepo okrugNduRepo,DeputatRepo deputatRepo) throws IOException {
+
         File myFile = new File("src/main/resources/testfile.xls");
         FileInputStream fis = new FileInputStream(myFile);
 
@@ -118,37 +117,6 @@ public class Parser {
         Row rows = rowIterator.next();
         Row rowe = rowIterator.next();
         Row rowr = rowIterator.next();
-        int count=0;
-        while (rowIterator.hasNext()) {
-            Row row = rowIterator.next();
-
-            // For each row, iterate through each columns
-            Iterator<Cell> cellIterator = row.cellIterator();
-
-
-        }
-        System.out.println(cityRepo.findAll().size());
-        System.out.println(count);
-    }
-    public  void ParserExelNDU(OkrugNduRepo okrugNduRepo,DeputatRepo deputatRepo) throws IOException {
-
-        File myFile = new File("src/main/resources/testfile.xls");
-        FileInputStream fis = new FileInputStream(myFile);
-
-        // Finds the workbook instance for XLSX file
-        HSSFWorkbook myWorkBook = new HSSFWorkbook (fis);
-
-        // Return first sheet from the XLSX workbook
-        HSSFSheet mySheet = myWorkBook.getSheetAt(0);
-
-        // Get iterator to all the rows in current sheet
-        Iterator<Row> rowIterator = mySheet.iterator();
-
-         // Traversi ng over each row of XLSX file
-        OkrugNdu okrugNdu = new OkrugNdu();
-        Row rows = rowIterator.next();
-        Row rowe = rowIterator.next();
-        Row rowr = rowIterator.next();
         while (rowIterator.hasNext()) {
             Row row = rowIterator.next();
 
@@ -157,38 +125,40 @@ public class Parser {
 
             if (row.getCell(2).getCellType() == Cell.CELL_TYPE_NUMERIC) {
                 try {
-                 okrugNdu=okrugNduRepo.findByNumber(Integer.valueOf(String.valueOf(row.getCell(2).getNumericCellValue()).split("\\.")[0]));
+                    okrugNdu=okrugNduRepo.findByNumber(Integer.valueOf(String.valueOf(row.getCell(2).getNumericCellValue()).split("\\.")[0]));
 
-                if (row.getCell(8).getCellType() == Cell.CELL_TYPE_STRING) {
-                    System.out.println(row.getCell(2));
-                    System.out.println(row.getCell(8));
+                    if (row.getCell(8).getCellType() == Cell.CELL_TYPE_STRING) {
+                        System.out.println(row.getCell(2));
+                        System.out.println(row.getCell(8));
 
-                    Deputat deputat = new Deputat();
-                    deputat.setName(row.getCell(8).toString().split(" ")[1]);
-                    deputat.setSurname(row.getCell(8).toString().split(" ")[0]);
-                    deputat.setPartion(row.getCell(8).toString().split(" ")[2]);
-                    String []arr= row.getCell(8).toString().split(" ");
-                    if (arr.length>3&&arr.length<5) {
-                        deputat.setPartia(setPartiaSearch(arr[3]
-                                .split("\\(")[1]
-                                .split("\\)")[0]));
-                    }else
-                    {
-                        deputat.setPartia(setPartiaSearch(" "));
+                        Deputat deputat = new Deputat();
+                        deputat.setName(row.getCell(8).toString().split(" ")[1]);
+                        deputat.setSurname(row.getCell(8).toString().split(" ")[0]);
+                        deputat.setPartion(row.getCell(8).toString().split(" ")[2]);
+                        String []arr= row.getCell(8).toString().split(" ");
+                        if (arr.length>3&&arr.length<5) {
+                            deputat.setPartia(setPartiaSearch(arr[3]
+                                    .split("\\(")[1]
+                                    .split("\\)")[0]));
+                        }else
+                        {
+                            deputat.setPartia(setPartiaSearch(" "));
+                        }
+                        deputat.setTypeOk(TypeOk.NDY);
+                        deputatRepo.saveAndFlush(deputat);
+                        okrugNdu.setDeputat(deputat);
+
                     }
-                   deputat.setTypeOk(TypeOk.NDY);
-                    deputatRepo.saveAndFlush(deputat);
-                    okrugNdu.setDeputat(deputat);
-
-                }
-                okrugNduRepo.saveAndFlush(okrugNdu);
+                    okrugNduRepo.saveAndFlush(okrugNdu);
                 }catch (Exception e){}
             }
 
         }
     }
-    public Partia setPartiaSearch(String str)
-    {Partia p= Partia.GP;
+
+    public Partia setPartiaSearch(String str){Partia p= Partia.GP;
+      str=str.split("\\(")[1]
+             .split("\\)")[0];
         switch (str)
         {
             case"БПП":
@@ -263,7 +233,8 @@ public class Parser {
         System.out.println("______________________________");
         return p;
     }
-    public  void ParserExelCITY(CityRepo cityRepo,OkrugCityRepo okrugCityRepo,DeputatRepo deputatRepo,MerRepo merRepo) throws IOException {
+
+    public  void ParserExelOBL(OkrugOblRepo okrugOblRepo,DeputatRepo deputatRepo, DilniziaRepo dilniziaRepo) throws IOException  {
         File myFile = new File("src/main/resources/testfile.xls");
         FileInputStream fis = new FileInputStream(myFile);
 
@@ -278,233 +249,313 @@ public class Parser {
 
         // Traversi ng over each row of XLSX file
 
-        Row rows = rowIterator.next();
-        Row rowe = rowIterator.next();
-        Row rowr = rowIterator.next();
-        Row rowy = rowIterator.next();
-        Map<Integer,String>  okrugobl=new HashMap<Integer, String>();
-        String city="";
-        City citys=new City();
+
+        OkrugObl okrug=new OkrugObl();
+        double long_okrug;
+        String str_deputat="";
+        String str_dilnizia="";
+        Row row = rowIterator.next();
+        row = rowIterator.next();
+        row = rowIterator.next();
+        row = rowIterator.next();;
+
         while (rowIterator.hasNext()) {
-            Row row = rowIterator.next();
+            row = rowIterator.next();
 
-            // For each row, iterate through each columns
-            Iterator<Cell> cellIterator = row.cellIterator();
-            if (row.getCell(17).getCellType()==Cell.CELL_TYPE_STRING
-                    && !row.getCell(17).getStringCellValue().equals("")
-                    && !row.getCell(17).getStringCellValue().equals(null))
-            {
-                citys=new City();
-                int count = 0;
-                count++;
-                String str=row.getCell(9).getStringCellValue();
-                String str1=row.getCell(11).getStringCellValue();
+            Cell okruge = row.getCell(13);
+            Cell deputats = row.getCell(14);
+            Cell dilnizia = row.getCell(34);
 
-                if (str.indexOf("м. ")>=0) {
 
-                    System.out.println(cityRepo.findByName(str.split("м. ")[1]));
-                    if (cityRepo.findByName(str.split("м. ")[1]) == null)
+
+
+            if (!deputats.getStringCellValue().equals(null)) {
+                Deputat deputat=new Deputat();
+
+                if (dilnizia.getCellType() == Cell.CELL_TYPE_STRING) {
+
+                    str_dilnizia = dilnizia.getStringCellValue();
+
+                    long_okrug = okruge.getNumericCellValue();
+
+                    okrug=new OkrugObl();
+
+                    okrug.setRegion(str_dilnizia);
+
+                    okrug.setNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
+
+                    okrugOblRepo.save(okrug);
+
+                    System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug);
+
+                    str_dilnizia = WriteDilnizia(str_dilnizia);
+
+                    for (String str:str_dilnizia.split(" "))
                     {
-                        citys.setName(str.split("м. ")[1].toLowerCase());
-                        citys.setTypeCity(TypeCity.city);
+                        Dilnizia dilnizia1=new Dilnizia();
+                        try {
+                            Long number=Long.valueOf(str.trim());
 
-                        Mer mer=new Mer();
+                            dilnizia1= dilniziaRepo.findByNumber(number);
 
-                        mer.setSurname(str1.split(" ")[0]);
-                        mer.setName(str1.split(" ")[1]);
-                        mer.setPartion(str1.split(" ")[2]);
-                        merRepo.save(mer);
-                        citys.setMer(mer);
-                        cityRepo.save(citys);
+                            dilnizia1.setOkrugObl(okrug);
+
+                            dilniziaRepo.saveAndFlush(dilnizia1);
+
+                        }catch (Exception e){}
+
+
                     }
+
                 }
-                else
-                {
-                    if (cityRepo.findByName(str.split(" ")[0]) == null) {
-                        citys.setName(str.split(" ")[0].toLowerCase());
-                        if (str.indexOf("сільська") > 1) {
-                            citys.setTypeCity(TypeCity.country);
+                if (dilnizia.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 
-                            Mer mer=new Mer();
+                    long_okrug = okruge.getNumericCellValue();
 
-                            mer.setSurname(str1.split(" ")[0]);
-                            mer.setName(str1.split(" ")[1]);
-                            mer.setPartion(str1.split(" ")[2]);
-                            merRepo.save(mer);
+                    okrug=new OkrugObl();
 
-                            citys.setMer(mer);
-                            cityRepo.save(citys);
-                        }
-                        if (str.indexOf("селищна") > 1) {
-                            citys.setTypeCity(TypeCity.city_country);
-                            cityRepo.save(citys);
-                            Mer mer=new Mer();
+                    okrug.setRegion(str_dilnizia);
 
-                            mer.setSurname(str1.split(" ")[0]);
-                            mer.setName(str1.split(" ")[1]);
-                            mer.setPartion(str1.split(" ")[2]);
-                            merRepo.save(mer);
-                            citys.setMer(mer);
-                            cityRepo.save(citys);
-                        }
-                        if (str.indexOf("міська") > 1) {
-                            citys.setTypeCity(TypeCity.city_all);
+                    okrug.setNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
 
-                            Mer mer=new Mer();
+                    okrugOblRepo.save(okrug);
 
-                            mer.setSurname(str1.split(" ")[0]);
-                            mer.setName(str1.split(" ")[1]);
-                            mer.setPartion(str1.split(" ")[2]);
-                            merRepo.save(mer);
-                            citys.setMer(mer);
-                            cityRepo.save(citys);
-                        }
-                    }
+                    str_dilnizia = String.valueOf(dilnizia.getNumericCellValue()).split("\\.")[0];
+
+                    Dilnizia dilnizia1=new Dilnizia();
+
+                    dilnizia1=dilniziaRepo.findByNumber(Long.valueOf(str_dilnizia.trim()));
+
+                    dilnizia1.setOkrugObl(okrug);
+
+                    dilniziaRepo.saveAndFlush(dilnizia1);
+
+                    System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug);
 
 
                 }
+                if (!str_dilnizia.equals("") && !str_dilnizia.equals(null)) {
+                    str_deputat = deputats.getStringCellValue();
+                    String [] array_deputat=str_deputat.split(" ");
+                    if (array_deputat.length>2)
+                    {
+                        deputat.setSurname(array_deputat[0]);
+
+                        deputat.setName(array_deputat[1]);
+
+                        deputat.setPartion(array_deputat[2]);
+
+                        deputat.setTypeOk(TypeOk.OBLAST);
+
+                        if (array_deputat.length>3&array_deputat.length<5)
+                            deputat.setPartia(setPartiaSearch(array_deputat[3]));
+                        else deputat.setPartia((setPartiaSearch(" ")));
+
+                        System.out.println("deputat: " + array_deputat[0] + " " + array_deputat[1] + " " + array_deputat[2]);
+
+                        deputat.setOkrugObl(okrug);
+
+                        deputatRepo.save(deputat);
+
+                    }
+
+
+                }
+
+
 
             }
-            if (row.getCell(18).getCellType() == Cell.CELL_TYPE_NUMERIC
-                    &&row.getCell(20).getCellType()==Cell.CELL_TYPE_STRING) {
+        }
 
-                    OkrugCity okrugCity = new OkrugCity();
+    }
 
-                    okrugCity.setNumber(Integer
-                                    .valueOf(String
-                                    .valueOf(row.getCell(18)
-                                    .getNumericCellValue())
-                                    .split("\\.")[0]));
-                    if (city.contains("м. ")) {
-                       okrugCity.setCity(citys);
-                      try {
-                          System.out.println(citys.getName());
-                      }catch (Exception e)
-                      {}
+    public  void ParserExelCITY(CityRepo cityRepo,OkrugCityRepo okrugCityRepo,DeputatRepo deputatRepo,MerRepo merRepo, DilniziaRepo dilniziaRepo) throws IOException {
+        File myFile = new File("src/main/resources/testfile.xls");
+        FileInputStream fis = new FileInputStream(myFile);
+
+        HSSFWorkbook myWorkBook = new HSSFWorkbook (fis);
+        HSSFSheet mySheet = myWorkBook.getSheetAt(0);
+        Iterator<Row> rowIterator = mySheet.iterator();
+
+
+
+
+
+        City city=new City();
+        OkrugCity okrug=new OkrugCity();
+        Mer mer=new Mer();
+        int count=0;
+        String str_mer="";
+        String str_city="";
+        double long_okrug;
+        String str_deputat="";
+        String str_dilnizia="";
+        Row row = rowIterator.next();
+        row = rowIterator.next();
+        row = rowIterator.next();
+        row = rowIterator.next();;
+
+        while (rowIterator.hasNext()) {
+            row = rowIterator.next();
+            Cell mere = row.getCell(11);
+            Cell cities = row.getCell(17);
+            Cell okruge = row.getCell(18);
+            Cell deputats = row.getCell(20);
+            Cell dilnizia = row.getCell(37);
+
+
+            if (!cities.getStringCellValue().equals("") && !cities.getStringCellValue().equals(null)) {
+
+                System.out.println("#################################");
+
+                count++;
+
+                str_city = cities.getStringCellValue();
+
+                str_mer = mere.getStringCellValue();
+
+                String[] array_city = str_city.split(" ");
+
+                String[] array_mer = str_mer.split(" ");
+
+                mer=new Mer(array_mer[1],array_mer[0],array_mer[2]);
+
+                merRepo.save(mer);
+
+                System.out.println("mer: " + array_mer[0] + " " + array_mer[1] + " " + array_mer[2] + "!!!!!!!!!!");
+
+                if (str_city.indexOf("громада") > 0) {
+                    System.out.println("city: " + array_city[0] + " " + array_city[1] + " " + array_city[2] + "!!!!!!!!!!");
+
+                    city.setName(array_city[0]);
+
+                    if (str_city.indexOf("сільська")>0)
+                    {
+                        city.setTypeCity(TypeCity.country);
+                    }
+                    if (str_city.indexOf("селищна")>0)
+                    {
+                        city.setTypeCity(TypeCity.city_country);
                     }
                     else
+                        city.setTypeCity(TypeCity.city_all);
+                }
+
+                if (array_city.length == 2) {
+                    System.out.println("city: " + array_city[0] + " " + array_city[1] + " " + "!!!!!!!!!!");
+                    city.setName(array_city[1]);
+                    city.setTypeCity(TypeCity.city);
+
+                }
+                city.setMer(mer);
+                cityRepo.save(city);
+            }
+
+            if (!deputats.getStringCellValue().equals(null)) {
+                Deputat deputat=new Deputat();
+
+                if (dilnizia.getCellType() == Cell.CELL_TYPE_STRING) {
+
+                    str_dilnizia = dilnizia.getStringCellValue();
+
+                    long_okrug = okruge.getNumericCellValue();
+
+                    okrug=new OkrugCity();
+
+                    okrug.setCity(city);
+
+                    okrug.setRegion(str_dilnizia);
+
+                    okrug.setNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
+
+                    okrugCityRepo.save(okrug);
+
+                    System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug);
+
+                    str_dilnizia = WriteDilnizia(str_dilnizia);
+
+                    for (String str:str_dilnizia.split(" "))
                     {
-                     okrugCity.setCity(citys);
+                        Dilnizia dilnizia1=new Dilnizia();
+                        try {
+                            Long number=Long.valueOf(str.trim());
+
+                            dilnizia1= dilniziaRepo.findByNumber(number);
+
+                            dilnizia1.setOkrugCity(okrug);
+
+                            dilniziaRepo.saveAndFlush(dilnizia1);
+
+                        }catch (Exception e){}
+
+
                     }
-                       if (!row.getCell(20).getStringCellValue().equals(null) &&
-                           !row.getCell(20).getStringCellValue().equals("")   &&
-                           !row.getCell(20).getStringCellValue().contains("-")   ){
 
-                           String []arr=row.getCell(20).getStringCellValue().split(" ");
-                           Deputat deputat=new Deputat(arr[1],arr[0],arr[2]);
-                           if (arr.length>3&&arr.length<5) {
-                               deputat.setPartia(setPartiaSearch(arr[3]
-                                       .split("\\(")[1]
-                                       .split("\\)")[0]));
-                           }else
-                           {
-                               deputat.setPartia(setPartiaSearch(" "));
-                           }
-                           deputat.setTypeOk(TypeOk.CITY);
-                           deputatRepo.saveAndFlush(deputat);
-                           okrugCity.setDeputat(deputat);
+                }
+                if (dilnizia.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 
-                           if (row.getCell(37).getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                               okrugCity.setRegion(String.valueOf(row.getCell(37).getNumericCellValue()).split("\\.")[0]);
-                               System.out.println(city + "|||||||||" + Integer.valueOf(String.valueOf(row.getCell(18).getNumericCellValue()).split("\\.")[0])
-                                       + "__________" + row.getCell(20).getStringCellValue() + "||" + row.getCell(37).getNumericCellValue());
+                    long_okrug = okruge.getNumericCellValue();
 
-                           } else {
-                               String str =String.valueOf(row.getCell(37).getStringCellValue());
-                               okrugCity.setRegion(WriteDilnizia(str));
-                               System.out.println(city + "|||||||||" + Integer.valueOf(String.valueOf(row.getCell(18).getNumericCellValue()).split("\\.")[0])
-                                       + "__________" + row.getCell(20).getStringCellValue() + "||" + row.getCell(37).getStringCellValue());
-                           }
-                           okrugCityRepo.saveAndFlush(okrugCity);
-                       }else {
+                    okrug=new OkrugCity();
 
-                       }
+                    okrug.setCity(city);
+
+                    okrug.setRegion(str_dilnizia);
+
+                    okrug.setNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
+
+                    okrugCityRepo.save(okrug);
+
+                    str_dilnizia = String.valueOf(dilnizia.getNumericCellValue()).split("\\.")[0];
+
+                    Dilnizia dilnizia1=new Dilnizia();
+
+                    dilnizia1=dilniziaRepo.findByNumber(Long.valueOf(str_dilnizia.trim()));
+
+                    dilniziaRepo.saveAndFlush(dilnizia1);
+
+                    System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug);
+
+
+                }
+                if (!str_dilnizia.equals("") && !str_dilnizia.equals(null)) {
+                    str_deputat = deputats.getStringCellValue();
+                    String [] array_deputat=str_deputat.split(" ");
+                    if (array_deputat.length>2)
+                    {
+                        deputat.setSurname(array_deputat[0]);
+
+                        deputat.setName(array_deputat[1]);
+
+                        deputat.setPartion(array_deputat[2]);
+
+                        deputat.setTypeOk(TypeOk.CITY);
+
+                        if (array_deputat.length>3&array_deputat.length<5)
+                            deputat.setPartia(setPartiaSearch(array_deputat[3]));
+                        else deputat.setPartia((setPartiaSearch(" ")));
+
+                        System.out.println("deputat: " + array_deputat[0] + " " + array_deputat[1] + " " + array_deputat[2]);
+
+                        deputat.setOkrugCity(okrug);
+
+                        deputatRepo.save(deputat);
+
+                    }
+
+
+                }
+
+
+
             }
-
         }
 
     }
 
-    public  void ParserExelOBL(OkrugOblRepo okrugOblRepo,DeputatRepo deputatRepo) throws IOException
-    {
-        File myFile = new File("src/main/resources/testfile.xls");
-        FileInputStream fis = new FileInputStream(myFile);
-
-        // Finds the workbook instance for XLSX file
-        HSSFWorkbook myWorkBook = new HSSFWorkbook (fis);
-
-        // Return first sheet from the XLSX workbook
-        HSSFSheet mySheet = myWorkBook.getSheetAt(0);
-
-        // Get iterator to all the rows in current sheet
-        Iterator<Row> rowIterator = mySheet.iterator();
-
-        // Traversi ng over each row of XLSX file
-
-        Row rows = rowIterator.next();
-        Row rowe = rowIterator.next();
-        Row rowr = rowIterator.next();
-        Row rowy = rowIterator.next();
-        Map<Integer,String>  okrugobl=new HashMap<Integer, String>();
-        String city="";
-        while (rowIterator.hasNext()) {
-            Row row = rowIterator.next();
-
-            if (row.getCell(13).getCellType()==Cell.CELL_TYPE_NUMERIC) {
-                // For each row, iterate through each columns
-                OkrugObl okrugObl = new OkrugObl();
-                okrugObl.setNumber(Integer.valueOf(
-                        String.valueOf(
-                                row.getCell(13)
-                                        .getNumericCellValue())
-                                .split("\\.")[0]));
-                String[] arr = row.getCell(15).getStringCellValue().split(" ");
-                Deputat deputat;
-                if (arr.length>2)
-                {
-                 deputat = new Deputat(
-                arr[1],arr[0],arr[2]);
-                }
-                else
-                {
-                    arr=row.getCell(14).getStringCellValue().split(" ");
-                     deputat = new Deputat(
-                            arr[1],arr[0],arr[2]);
-                }
-
-
-                deputat.setTypeOk(TypeOk.OBLAST);
-
-                if (arr.length > 3 && arr.length < 5) {
-                    deputat.setPartia(setPartiaSearch(arr[3]
-                            .split("\\(")[1]
-                            .split("\\)")[0]));
-                } else {
-                    deputat.setPartia(setPartiaSearch(" "));
-                }
-                deputatRepo.saveAndFlush(deputat);
-                okrugObl.setDeputat(deputat);
-                if (row.getCell(34).getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                    okrugObl.setRegion(String.valueOf(row.getCell(34).getNumericCellValue()).split("\\.")[0]);
-                    System.out.println(city + "|||||||||" + Integer.valueOf(String.valueOf(row.getCell(13).getNumericCellValue()).split("\\.")[0])
-                            + "__________" + row.getCell(15).getStringCellValue() + "||" + row.getCell(34).getNumericCellValue());
-                } else {
-                String str =String.valueOf(row.getCell(34).getStringCellValue());
-                    okrugObl.setRegion(WriteDilnizia(str));
-                    System.out.println(city + "|||||||||" + Integer.valueOf(String.valueOf(row.getCell(13).getNumericCellValue()).split("\\.")[0])
-                            + "__________" + row.getCell(15).getStringCellValue() + "||" + row.getCell(34).getStringCellValue());
-                }
-
-                okrugOblRepo.saveAndFlush(okrugObl);
-            }
-        }
-//13,15,35
-
-    }
-    public   String WriteDilnizia(String region)
-    {String str="";
+    public   String WriteDilnizia(String dilnizias) {String str="";
         System.out.println("11");
-        String [] koma=region.split(",");
+        String [] koma=dilnizias.split(",");
 
         for (String ar: koma)
         {System.out.println("22");
@@ -529,38 +580,7 @@ public class Parser {
 
         return str;
     }
-    public void ParserDilnuzia_Okrugs(OkrugOblRepo okrugOblRepo,OkrugCityRepo okrugCityRepo, DilniziaRepo dilniziaRepo)
-    {
 
-        List <Dilnizia> dilnizias=dilniziaRepo.findAll();
-        for (Dilnizia dilnizia: dilnizias ) {
-         try{
-             OkrugObl okrugObl=  okrugOblRepo.findByRegionContaining(dilnizia.getNumber().toString());
-            dilnizia.setOkrugObl(okrugObl);
-             dilniziaRepo.saveAndFlush(dilnizia);
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-
-        }
-      dilnizias=dilniziaRepo.findAll();
-        for (Dilnizia dilnizia: dilnizias ) {
-         try {
-             OkrugCity okrugCity = okrugCityRepo.findByRegionContaining(dilnizia.getNumber().toString());
-
-             dilnizia.setOkrugCity(okrugCity);
-             dilniziaRepo.saveAndFlush(dilnizia);
-         }catch (Exception e)
-         {
-             e.printStackTrace();
-         }
-
-
-        }
-
-    }
 
 }
 /*spring.datasource.url=jdbc:postgres://scimigdnkpbyzr:3a3320c57b1d16ca45b49f5a6f0bdd8cfe8daf92577544b1cd689620e04d6331@ec2-54-228-243-238.eu-west-1.compute.amazonaws.com:5432/dcku3g1n2qlfrp
