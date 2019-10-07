@@ -20,44 +20,8 @@ public class Application {
 
     public static void main (String...args) throws IOException {
 
-            ApiContextInitializer.init();
-            SpringApplication.run(Application.class,args);
-
-
-        final ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
-        ses.scheduleWithFixedDelay(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-                    Test();
-
-                }catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-                System.out.println("1111111111111111111111111111");
-            }
-        }, 0, 20, TimeUnit.MINUTES);
-
-
-
-    }
-    public static void Test()
-    {
-
-
-        String title = "";
-
-        Document doc;
-        try {
-            doc = Jsoup.connect("https://deputatbot.herokuapp.com/").get();
-            title = doc.title();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("Jsoup Can read HTML page from URL, title : " + title);
+        ApiContextInitializer.init();
+        SpringApplication.run(Application.class, args);
 
 
     }
