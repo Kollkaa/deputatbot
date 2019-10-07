@@ -14,7 +14,9 @@ public interface DeputatRepo extends JpaRepository<Deputat, Long> {
     List<Deputat> findAllByPartia(Partia partia);
     List<Deputat> findAllByName(String name);
     List<Deputat> findAllByOkrugCity(OkrugCity okrugCity);
+    Deputat findByOkrugCity(OkrugCity okrugCity);
     List<Deputat> findAllByOkrugObl(OkrugObl okrugObl);
+    Deputat findByOkrugObl(OkrugObl okrugObl);
     List<Deputat> findAllBySurnameContaining(String surname);
     Deputat findBySurname(String surname);
 

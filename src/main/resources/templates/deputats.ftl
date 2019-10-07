@@ -26,13 +26,13 @@
                         <div class="card-footer text-muted">
                             <a>${deputat.typeOk}
                                 <#attempt>
-                                    <a>Номер округа - ${okrugNduRepo.findByDeputat(deputat).getNumber()}</a>
+                                    <a>  Номер округа - ${okrugNduRepo.findByDeputat(deputat).getNumber()}</a>
                                     <#recover>
                                         <#attempt>
-                                            <a>Номер округа - ${okrugOblRepo.findByDeputat(deputat).getNumber()}</a>
+                                            <a>Номер округа - ${deputat.getOkrugObl().getNumber()}</a>
                                             <#recover>
                                                 <#attempt>
-                                                    <a>Номер округа - ${okrugCityRepo.findByDeputat(deputat).getNumber()}</a>
+                                                    <a>Номер округа - ${deputat.getOkrugCity().getNumber()}</a>
                                                     <#recover>
                                                         okrug haven`t choose
                                                 </#attempt>

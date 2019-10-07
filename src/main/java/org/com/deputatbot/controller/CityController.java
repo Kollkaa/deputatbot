@@ -50,11 +50,6 @@ public class CityController {
             merRepo.saveAndFlush(mer);
             city.setMer(mer);
             cityRepo.saveAndFlush(city);
-
-
-
-
-
             return "redirect:/cities";
         }
 

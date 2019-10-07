@@ -12,6 +12,6 @@ public interface OkrugCityRepo extends JpaRepository<OkrugCity,Integer> {
     List<OkrugCity> findAllByNumber(Integer number);
     List<OkrugCity> findAllByCity_Name(String name);
     OkrugCity findByRegionContaining(String dilnizia);
-    OkrugCity findByDeputat(Deputat deputat);
+
 
 }

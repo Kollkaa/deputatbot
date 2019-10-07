@@ -39,6 +39,7 @@ public class OkrugOblController {
         {partias.add(r);}
         model.addAttribute("okrugobl", okrugobl);
         model.addAttribute("partias", partias);
+        model.addAttribute("deputats",deputatRepo);
         return "editorObl";
     }
 
@@ -49,20 +50,12 @@ public class OkrugOblController {
                              @RequestParam String deputatpartional,
                              @RequestParam Partia partis,
                              @RequestParam("okrugId") OkrugObl okrugObl ) {
-        Deputat deputat=new Deputat();
-        deputat= deputatRepo.findById(okrugObl.getDeputat().getId()).get();
+        Deputat deputat=deputatRepo.findByOkrugObl(okrugObl);
         deputat.setName(deputatname);
         deputat.setSurname(deputatsurname);
         deputat.setPartion(deputatpartional);
         deputat.setPartia(partis);
         deputatRepo.saveAndFlush(deputat);
-        okrugObl.setDeputat(deputat);
-        okrugOblRepo.saveAndFlush(okrugObl);
-
-
-
-
-
         return "redirect:/okrugobl";
     }
 

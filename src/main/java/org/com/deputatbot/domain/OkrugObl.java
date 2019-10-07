@@ -25,13 +25,7 @@ public class OkrugObl {
         this.region = region;
     }
 
-    public Deputat getDeputat() {
-        return deputat;
-    }
 
-    public void setDeputat(Deputat deputat) {
-        this.deputat=deputat;
-    }
 
 
     public void setNumber(Integer number) {

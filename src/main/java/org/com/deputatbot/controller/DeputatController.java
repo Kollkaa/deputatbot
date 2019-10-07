@@ -49,18 +49,18 @@ public class DeputatController {
     @GetMapping("{deputats}")
     public String editordeputat(@PathVariable Deputat deputats, Model model) {
 
-        if (okrugCityRepo.findByDeputat(deputats)!=null)
-        {
-            model.addAttribute("okrug",okrugCityRepo.findByDeputat(deputats));
-        }else if (okrugNduRepo.findByDeputat(deputats)!=null)
+        if (okrugNduRepo.findByDeputat(deputats)!=null)
         {
             model.addAttribute("okrug",okrugNduRepo.findByDeputat(deputats));
         }
-        else if (okrugOblRepo.findByDeputat(deputats)!=null)
+        else if (deputats.getOkrugObl()!=null)
         {
-            model.addAttribute("okrug",okrugOblRepo.findByDeputat(deputats));
+            model.addAttribute("okrug",deputats.getOkrugObl());
+        }else if (deputats.getOkrugCity()!=null)
+        {
+            model.addAttribute("okrug",deputats.getOkrugCity());
         }
-        List<TypeOk>typeOks=new ArrayList<>();
+            List<TypeOk>typeOks=new ArrayList<>();
         for (TypeOk r:TypeOk.values())
         {typeOks .add(r);}
         List<Partia>partias=new ArrayList<>();
@@ -84,18 +84,11 @@ public class DeputatController {
                             @RequestParam Partia partis,
                             @RequestParam("deputatId") Deputat deputat)
     {
-
-        deputat.setName(depname);
-        deputat.setSurname(depsurname);
-        deputat.setPartion(deppartional);
-        deputat.setPartia(partis);
-        deputat.setTypeOk(typs);
-        deputatRepo.save(deputat);
         if (typs==TypeOk.NDY)
         {
-           OkrugNdu okrug= okrugNduRepo.findByDeputat(deputat);
-           OkrugNdu okruf=okrugNduRepo.findByNumber(number_okrug);
-           Deputat dep= okruf.getDeputat();
+            OkrugNdu okrug= okrugNduRepo.findByDeputat(deputat);
+            OkrugNdu okruf=okrugNduRepo.findByNumber(number_okrug);
+            Deputat dep= okruf.getDeputat();
             okruf.setDeputat(deputat);
             okrug.setDeputat(dep);
             okrugNduRepo.save(okrug);
@@ -103,27 +96,22 @@ public class DeputatController {
         }
         if(typs==TypeOk.OBLAST)
         {
-            OkrugObl okrug= okrugOblRepo.findByDeputat(deputat);
-            OkrugObl okruf= okrugOblRepo.findByNumber(number_okrug);
-            Deputat dep= okruf.getDeputat();
-            okruf.setDeputat(deputat);
-            okrug.setDeputat(dep);
-            okrugOblRepo.save(okrug);
-            okrugOblRepo.save(okruf);
+            OkrugObl okrugObl= deputat.getOkrugObl();
+
 
         }
         if(typs==TypeOk.CITY)
         {
-            OkrugCity okrug= okrugCityRepo.findByDeputat(deputat);
-            OkrugCity okruf=okrugCityRepo.findByNumber(number_okrug);
-            Deputat dep= okruf.getDeputat();
-
-            okruf.setDeputat(deputat);
-            okrug.setDeputat(dep);
-            okrugCityRepo.save(okrug);
-            okrugCityRepo.save(okruf);
+            OkrugCity okrugCity= deputat.getOkrugCity();
 
         }
+        deputat.setName(depname);
+        deputat.setSurname(depsurname);
+        deputat.setPartion(deppartional);
+        deputat.setPartia(partis);
+        deputat.setTypeOk(typs);
+        deputatRepo.save(deputat);
+
 
 
         return "redirect:/deputats";

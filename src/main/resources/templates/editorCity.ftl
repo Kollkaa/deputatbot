@@ -8,9 +8,9 @@
                 <#recover>
 
             </#attempt>
-            <input type="text" name="deputatname" value="${okrugcity.getDeputat().getName()}">
-            <input type="text" name="deputatsurname" value="${okrugcity.getDeputat().getSurname()}">
-            <input type="text" name="deputatpartional" value="${okrugcity.getDeputat().getPartion()}">
+            <input type="text" name="deputatname" value="${deputats.findByOkrugCity(okrugcity).getName()}">
+            <input type="text" name="deputatsurname" value="${deputats.findByOkrugCity(okrugcity).getSurname()}">
+            <input type="text" name="deputatpartional" value="${deputats.findByOkrugCity(okrugcity).getPartion()}">
             <div>
                 <h6>Виберіть Партію</h6>
                 <select  name="partis">
