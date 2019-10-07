@@ -147,12 +147,7 @@ String sorry="Напевно ви мали на увазі :";
                            Deputat deputat;
                             Dilnizia str=new Dilnizia();
                             str=searchDilnizia(update.getMessage().getText(),update.getMessage().getChatId().toString());
-                           String name="";
-                           String number="";
-                           if(str==null){
-
-                           }
-                           else{
+                           if(str!=null){
                            String info = "";
                            okrugNdu=str.getOkrugNdu();
                            okrugObl=str.getOkrugObl();
@@ -287,18 +282,22 @@ String sorry="Напевно ви мали на увазі :";
     {
         Dilnizia numbers;
         str=str.toLowerCase();
-        String [] arr=str.split(",");
-        System.out.println(arr[0]);
-        System.out.println(arr.length);
-        if (arr.length==1)
+        str=allStr(str);
+        String[] allStr=str.split(" ");
+        String name="";
+        String number="";
+        List<Dilnizia>cities=new ArrayList<>();
+        List<Dilnizia>names=new ArrayList<>();
+        String address="";
+        if (allStr.length==1)
         {
-            System.out.println(arr.length);
-           numbers = dilniziaRepo.findByRegionContaining(arr[0]);
+            System.out.println(allStr.length);
+           numbers = dilniziaRepo.findByRegionContaining(allStr[0]);
            if (numbers!=null)
                return numbers;
            else {
                try {
-                   sendApiMethod(new SendMessage().setChatId(chat).setText("Ваша адреса не знайдена, введіть за прикладом:**Верхнеднпровск, Днипровстка-1**\n"+
+                   sendApiMethod(new SendMessage().setChatId(chat).setText("Ваша адреса не знайдена, введіть за прикладом:**Верхньодніпровськ, Дніпровська-1**\n"+
                            "Якщо ви проживаєте в селі або в селищі, скористайтесть таким записом: **Терни**"));
                } catch (TelegramApiException e) {
                    e.printStackTrace();
@@ -306,22 +305,8 @@ String sorry="Напевно ви мали на увазі :";
                return null;
            }
         }
-        String city=arr[0].trim().toLowerCase();
-        String name="";
-        String number="";
-        List<Dilnizia>cities=new ArrayList<>();
-        List<Dilnizia>names=new ArrayList<>();
 
-        String address="";
-        try {
-            String [] street=arr[1].split("-");
-            name=street[0].trim().toLowerCase();
-            number=street[1].trim().toLowerCase();
-        }catch (Exception e)
-        {
-            name=arr[1].trim().toLowerCase();
-        }
-        cities=dilniziaRepo.findAllByRegionContaining(city);
+
         if (cities.size()==1)
         {
             numbers=cities.get(0);
@@ -329,11 +314,9 @@ String sorry="Напевно ви мали на увазі :";
         }
         if (cities.size()==0)
         {
-            System.out.println("null1");
-            System.out.println("null1");
-            System.out.println("null1");
             return null;
         }
+
         for (Dilnizia dilnizia:cities)
         {
             if (dilnizia.getRegion().indexOf(name)>0)
@@ -343,18 +326,11 @@ String sorry="Напевно ви мали на увазі :";
         }
         if (names.size()==1)
         {
-            System.out.println("names==1");
-            System.out.println("names==1");
-            System.out.println("names==1");
-            System.out.println(names.get(0).getNumber());
             numbers=names.get(0);
             return numbers;
         }
         if (names.size()==0)
         {
-            System.out.println("names==0");
-            System.out.println("names==0");
-            System.out.println("names==0");
             numbers=names.get(0);
             return numbers;
         }
@@ -367,12 +343,6 @@ String sorry="Напевно ви мали на увазі :";
                 {
                     if (ad.indexOf(name)>0)
                     {
-                        System.out.println(ad);
-                        System.out.println(ad);
-                        System.out.println(ad);
-                        System.out.println("ad.indexof(name)>0");
-                        System.out.println("ad.indexof(name)>0");
-                        System.out.println("ad.indexof(name)>0");
                        address=ad;
                        address=address.split(":")[1];
                         try {
@@ -455,7 +425,21 @@ String sorry="Напевно ви мали на увазі :";
         return null;
 
     }
+    public String allStr(String request)
+    {
+        String answer="";
+        String[] split1=request.split(",");
+        answer+=split1[0];
+        try {
+            String[]split2=split1[1].split("-");
+            answer+=split2[0];
+            try {
+                answer+=split2[1];
+            }catch (Exception e){}
+        }catch (Exception e){}
 
+        return answer;
+    }
     @Override
     public String getBotUsername() {
         return tokenNameBot;///""@Documents_in_Poland_bot;@warsaww_bot
