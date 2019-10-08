@@ -18,7 +18,6 @@ import java.util.*;
 public class Parser {
 
     public void allNduOkrug(OkrugNduRepo okrugNduRepo, DilniziaRepo dilniziaRepo, DeputatRepo  deputatRepo)  {
-
         for (Integer i=24;i<41;i++)
         {
             ParserSite(i, okrugNduRepo,dilniziaRepo,deputatRepo);
@@ -86,13 +85,13 @@ public class Parser {
         }
         okrugNdu.setRegion(str.substring(0,str.length()-2));
 
-        okrugNduRepo.saveAndFlush(okrugNdu);
+        okrugNduRepo.save(okrugNdu);
         for (Integer l:num)
         {Dilnizia dilnizia=new Dilnizia();
             dilnizia.setNumber(l);
             dilnizia.setRegion(reg.get(con++).toLowerCase());
             dilnizia.setOkrugNdu(okrugNdu);
-            dilniziaRepo.saveAndFlush(dilnizia);
+            dilniziaRepo.save(dilnizia);
         }
 
 
@@ -151,7 +150,7 @@ public class Parser {
                         System.out.println("save2");
 
                     }
-                    okrugNduRepo.saveAndFlush(okrugNdu);
+                    okrugNduRepo.save(okrugNdu);
                 }catch (Exception e){e.printStackTrace();}
             }
 
@@ -302,7 +301,7 @@ public class Parser {
 
                             dilnizia1.setOkrugObl(okrug);
 
-                            dilniziaRepo.saveAndFlush(dilnizia1);
+                            dilniziaRepo.save(dilnizia1);
 
                         }catch (Exception e){}
 
@@ -330,7 +329,7 @@ public class Parser {
 
                     dilnizia1.setOkrugObl(okrug);
 
-                    dilniziaRepo.saveAndFlush(dilnizia1);
+                    dilniziaRepo.save(dilnizia1);
 
                     System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug);
 
@@ -494,7 +493,7 @@ public class Parser {
 
                             dilnizia1.setOkrugCity(okrug);
 
-                            dilniziaRepo.saveAndFlush(dilnizia1);
+                            dilniziaRepo.save(dilnizia1);
 
                         }catch (Exception e){}
 
@@ -522,7 +521,7 @@ public class Parser {
 
                     dilnizia1=dilniziaRepo.findByNumber(Integer.valueOf(str_dilnizia.trim()));
                     if (dilnizia1!=null)
-                    dilniziaRepo.saveAndFlush(dilnizia1);
+                    dilniziaRepo.save(dilnizia1);
 
                     System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug);
 
