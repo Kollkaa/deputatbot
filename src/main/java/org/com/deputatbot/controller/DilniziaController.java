@@ -50,9 +50,9 @@ public class DilniziaController {
                             Model model)
     {
         Iterable<Dilnizia> dilnizias = dilniziaRepo.findAll();
-
+        System.out.println(number);
         if (number != null ) {
-            dilnizias = dilniziaRepo.findAllByNumber(number);
+            dilnizias = dilniziaRepo.findAllByNumber(Integer.valueOf(String.valueOf(number).split("\\.")[0]));
         } else {
             dilnizias = dilniziaRepo.findAll();
         }

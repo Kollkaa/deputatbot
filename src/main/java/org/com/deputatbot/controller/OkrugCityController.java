@@ -31,7 +31,7 @@ public class OkrugCityController {
         }
 
         model.addAttribute("okrugs", okrugCityRepo.findAll());
-
+        model.addAttribute("repoDep",deputatRepo);
         model.addAttribute("number",number);
         return "okrugCity";
     }
@@ -59,12 +59,14 @@ public class OkrugCityController {
                              @RequestParam String deputatpartional,
                              @RequestParam Partia partis,
                              @RequestParam("okrugcityId") OkrugCity okrugCity ) {
-        Deputat deputat=deputatRepo.findByOkrugCity(okrugCity);
-        deputat.setName(deputatname);
-        deputat.setSurname(deputatsurname);
-        deputat.setPartion(deputatpartional);
-        deputat.setPartia(partis);
-        deputatRepo.saveAndFlush(deputat);
+        List<Deputat> deputat=deputatRepo.findAllByOkrugCity(okrugCity);
+        for (Deputat dep: deputat) {
+            dep.setName(deputatname);
+            dep.setSurname(deputatsurname);
+            dep.setPartion(deputatpartional);
+            dep.setPartia(partis);
+            deputatRepo.saveAndFlush(dep);
+        }
         return "redirect:/okrugcity";
     }
 

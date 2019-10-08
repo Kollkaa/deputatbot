@@ -17,13 +17,13 @@ public class Deputat {
     @Enumerated(EnumType.STRING)
     private Partia partia;
 
-    @OneToOne
-    @JoinColumn(name = "deputat_id")
+    @ManyToOne
+    @JoinColumn(name = "okrugCity_id")
     private OkrugCity okrugCity;
 
-    @OneToOne
-    @JoinColumn(name = "deputat_id")
-    private OkrugObl OkrugObl;
+    @ManyToOne
+    @JoinColumn(name = "okrugObl_id")
+    private OkrugObl okrugObl;
 
 
     public Deputat(){}
@@ -35,11 +35,11 @@ public class Deputat {
     }
 
     public org.com.deputatbot.domain.OkrugObl getOkrugObl() {
-        return OkrugObl;
+        return okrugObl;
     }
 
-    public void setOkrugObl(org.com.deputatbot.domain.OkrugObl okrugObl) {
-        OkrugObl = okrugObl;
+    public void setOkrugObl(OkrugObl okrugObl) {
+        this.okrugObl = okrugObl;
     }
 
     public OkrugCity getOkrugCity() {

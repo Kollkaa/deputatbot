@@ -44,7 +44,7 @@ public class Parser {
 
         Element form = doc.getElementById("tab1");
         Map<Long,String>dil=new HashMap<>();
-        ArrayList<Long>num=new ArrayList<>();
+        ArrayList<Integer>num=new ArrayList<>();
         ArrayList<String>reg=new ArrayList<>();
         for (Element el:form.getElementsByTag("tr"))
         {
@@ -54,7 +54,7 @@ public class Parser {
             {
                 if (count<2) {
                     if (count==0) {
-                        num.add(Long.valueOf(al.text()));
+                        num.add(Integer.valueOf(al.text()));
                         System.out.println(al.text());
 
                     }
@@ -79,7 +79,7 @@ public class Parser {
 
         String str="";
         int count=0;
-        for (Long l:num)
+        for (Integer l:num)
         {
 
             str+=l+",";
@@ -87,7 +87,7 @@ public class Parser {
         okrugNdu.setRegion(str.substring(0,str.length()-2));
 
         okrugNduRepo.saveAndFlush(okrugNdu);
-        for (Long l:num)
+        for (Integer l:num)
         {Dilnizia dilnizia=new Dilnizia();
             dilnizia.setNumber(l);
             dilnizia.setRegion(reg.get(con++).toLowerCase());
@@ -126,7 +126,7 @@ public class Parser {
             if (row.getCell(2).getCellType() == Cell.CELL_TYPE_NUMERIC) {
                 try {
                     okrugNdu=okrugNduRepo.findByNumber(Integer.valueOf(String.valueOf(row.getCell(2).getNumericCellValue()).split("\\.")[0]));
-
+                        System.out.println(okrugNdu.getNumber());
                     if (row.getCell(8).getCellType() == Cell.CELL_TYPE_STRING) {
                         System.out.println(row.getCell(2));
                         System.out.println(row.getCell(8));
@@ -145,20 +145,22 @@ public class Parser {
                             deputat.setPartia(setPartiaSearch(" "));
                         }
                         deputat.setTypeOk(TypeOk.NDY);
-                        deputatRepo.saveAndFlush(deputat);
+                        deputatRepo.save(deputat);
+                        System.out.println("save1");
                         okrugNdu.setDeputat(deputat);
+                        System.out.println("save2");
 
                     }
                     okrugNduRepo.saveAndFlush(okrugNdu);
-                }catch (Exception e){}
+                }catch (Exception e){e.printStackTrace();}
             }
 
         }
     }
 
-    public Partia setPartiaSearch(String str){Partia p= Partia.GP;
-      str=str.split("\\(")[1]
-             .split("\\)")[0];
+    public Partia setPartiaSearch(String str){
+        System.out.println(str);
+        Partia p= Partia.GP;
         switch (str)
         {
             case"БПП":
@@ -263,7 +265,7 @@ public class Parser {
             row = rowIterator.next();
 
             Cell okruge = row.getCell(13);
-            Cell deputats = row.getCell(14);
+            Cell deputats = row.getCell(15);
             Cell dilnizia = row.getCell(34);
 
 
@@ -296,7 +298,7 @@ public class Parser {
                         try {
                             Long number=Long.valueOf(str.trim());
 
-                            dilnizia1= dilniziaRepo.findByNumber(number);
+                            dilnizia1= dilniziaRepo.findByNumber(Integer.valueOf(String.valueOf(number).split("\\.")[0]));
 
                             dilnizia1.setOkrugObl(okrug);
 
@@ -324,7 +326,7 @@ public class Parser {
 
                     Dilnizia dilnizia1=new Dilnizia();
 
-                    dilnizia1=dilniziaRepo.findByNumber(Long.valueOf(str_dilnizia.trim()));
+                    dilnizia1=dilniziaRepo.findByNumber(Integer.valueOf(str_dilnizia.trim()));
 
                     dilnizia1.setOkrugObl(okrug);
 
@@ -336,6 +338,8 @@ public class Parser {
                 }
                 if (!str_dilnizia.equals("") && !str_dilnizia.equals(null)) {
                     str_deputat = deputats.getStringCellValue();
+
+
                     String [] array_deputat=str_deputat.split(" ");
                     if (array_deputat.length>2)
                     {
@@ -347,15 +351,20 @@ public class Parser {
 
                         deputat.setTypeOk(TypeOk.OBLAST);
 
-                        if (array_deputat.length>3&array_deputat.length<5)
-                            deputat.setPartia(setPartiaSearch(array_deputat[3]));
-                        else deputat.setPartia((setPartiaSearch(" ")));
+                        try {
+                            if (array_deputat.length>3&array_deputat.length<5)
+                                deputat.setPartia(setPartiaSearch(array_deputat[3]));
+                            else deputat.setPartia((setPartiaSearch(" ")));
+                        }catch (Exception e)
+                        {
+                            deputat.setPartia(Partia.GP);
+                        }
 
-                        System.out.println("deputat: " + array_deputat[0] + " " + array_deputat[1] + " " + array_deputat[2]);
 
                         deputat.setOkrugObl(okrug);
 
                         deputatRepo.save(deputat);
+                        System.out.println("deputat: " + array_deputat[0] + " " + array_deputat[1] + " " + array_deputat[2]);
 
                     }
 
@@ -425,6 +434,7 @@ public class Parser {
                 System.out.println("mer: " + array_mer[0] + " " + array_mer[1] + " " + array_mer[2] + "!!!!!!!!!!");
 
                 if (str_city.indexOf("громада") > 0) {
+                    city=new City();
                     System.out.println("city: " + array_city[0] + " " + array_city[1] + " " + array_city[2] + "!!!!!!!!!!");
 
                     city.setName(array_city[0]);
@@ -480,7 +490,7 @@ public class Parser {
                         try {
                             Long number=Long.valueOf(str.trim());
 
-                            dilnizia1= dilniziaRepo.findByNumber(number);
+                            dilnizia1= dilniziaRepo.findByNumber(Integer.valueOf(String.valueOf(number).split("\\.")[0]));
 
                             dilnizia1.setOkrugCity(okrug);
 
@@ -510,8 +520,8 @@ public class Parser {
 
                     Dilnizia dilnizia1=new Dilnizia();
 
-                    dilnizia1=dilniziaRepo.findByNumber(Long.valueOf(str_dilnizia.trim()));
-
+                    dilnizia1=dilniziaRepo.findByNumber(Integer.valueOf(str_dilnizia.trim()));
+                    if (dilnizia1!=null)
                     dilniziaRepo.saveAndFlush(dilnizia1);
 
                     System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug);
@@ -531,9 +541,14 @@ public class Parser {
 
                         deputat.setTypeOk(TypeOk.CITY);
 
-                        if (array_deputat.length>3&array_deputat.length<5)
-                            deputat.setPartia(setPartiaSearch(array_deputat[3]));
-                        else deputat.setPartia((setPartiaSearch(" ")));
+                        try {
+                            if (array_deputat.length>3&array_deputat.length<5)
+                                deputat.setPartia(setPartiaSearch(array_deputat[3]));
+                            else deputat.setPartia((setPartiaSearch(" ")));
+                        }catch (Exception e)
+                        {
+                            deputat.setPartia(Partia.AP);
+                        }
 
                         System.out.println("deputat: " + array_deputat[0] + " " + array_deputat[1] + " " + array_deputat[2]);
 
@@ -554,13 +569,13 @@ public class Parser {
     }
 
     public   String WriteDilnizia(String dilnizias) {String str="";
-        System.out.println("11");
+
         String [] koma=dilnizias.split(",");
 
         for (String ar: koma)
-        {System.out.println("22");
+        {
             if(ar.contains("-"))
-            {System.out.println("33");
+            {
                 if (ar.split("-").length<1) {
                 }else
                 {
@@ -573,7 +588,6 @@ public class Parser {
             else
             {
                 str+=ar.trim()+" ";
-                System.out.println("44");
             }
         }
 

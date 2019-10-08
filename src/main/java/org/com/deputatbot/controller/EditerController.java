@@ -28,7 +28,7 @@ public class EditerController {
     private OkrugCityRepo okrugCityRepo;
 
     @GetMapping("editer")
-    public String editer(@RequestParam(required = false, defaultValue = " ") Long filter, Model model) {
+    public String editer(@RequestParam(required = false, defaultValue = " ") Integer filter, Model model) {
         Iterable<Dilnizia> dilnizias = dilniziaRepo.findAll();
 
         if (filter != null) {

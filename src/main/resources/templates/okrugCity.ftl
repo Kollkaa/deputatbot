@@ -17,9 +17,12 @@
                 <div class="card my-3 " >
                     <div class="m-2">
                         <a>${okrug.number}</a>
-                        <a>${okrug.deputat.name}</a>
-                        <a>${okrug.deputat.surname}</a>
-                        <a>${okrug.deputat.partion}</a>
+                        <#list repoDep.findAllByOkrugCity(okrug) as deputat>
+                            <div> <a>${deputat.name}</a>
+                                <a>${deputat.surname}</a>
+                                <a>${deputat.partion}</a>
+                            </div>
+                        </#list>
                         <div>
                             <#attempt>
                                 <h1>${okrug.number}</h1>

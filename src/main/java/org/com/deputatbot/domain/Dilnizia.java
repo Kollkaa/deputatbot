@@ -8,7 +8,7 @@ public class Dilnizia {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long number;
+    private Integer number;
 
     @Column(length=3000)
     private String region;
@@ -25,7 +25,7 @@ public class Dilnizia {
     @JoinColumn(name = "okrugcity_id")
     private OkrugCity okrugCity;
     public Dilnizia(){}
-    public Dilnizia(Long number, String region)
+    public Dilnizia(Integer number, String region)
     {
         this.number=number;
         this.region=region;
@@ -67,11 +67,11 @@ public class Dilnizia {
         this.okrugNdu = okrugNdu;
     }
 
-    public Long getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
-    public void setNumber(Long number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 

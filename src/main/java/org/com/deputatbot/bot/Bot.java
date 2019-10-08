@@ -138,21 +138,24 @@ String sorry="Напевно ви мали на увазі :";
                        }else
                        try {
 
-                           OkrugNdu okrugNdu;
-                           OkrugObl okrugObl;
-                           OkrugCity okrugCity;
-                           Mer mer;
-                           City city;
+                           OkrugNdu okrugNdu=new OkrugNdu();
+                           OkrugObl okrugObl=new OkrugObl();
+                           OkrugCity okrugCity=new OkrugCity();
+                           Mer mer=new Mer();
+                           City city=new City();
                            TypeCity typeCity;
                            Deputat deputat;
                             Dilnizia str=new Dilnizia();
                             str=searchDilnizia(update.getMessage().getText(),update.getMessage().getChatId().toString());
                            if(str!=null){
+                               System.out.println(str.getNumber());
                            String info = "";
                            okrugNdu=str.getOkrugNdu();
                            okrugObl=str.getOkrugObl();
                            okrugCity=str.getOkrugCity();
-                           city=okrugCity.getCity();
+                           try {
+                               city=okrugCity.getCity();
+                           }catch (Exception e){}
                            mer=city.getMer();
                            typeCity=city.getTypeCity();
                                 try {
@@ -209,16 +212,17 @@ String sorry="Напевно ви мали на увазі :";
                                             }
                                         } catch (Exception e) {     }
                                         if (typeCity == TypeCity.city||typeCity==TypeCity.city_all) {
-                                        info += "\nТвій мер " +
-                                                "м." + city.getName() + "\n";
+                                        info += "\nТвій депутат міської ради\n" +
+                                                "Округ №" +okrugCity.getNumber()+ "\n";
                                     }
                                         else{
-                                        info += "\nТвій голова селищної ради\n"
-                                                + city.getName() + " " + typeCity.GetTitle() + "\n";
+                                        info += "\nТвій депутат селищної ради\n" +
+                                                "Округ "+okrugCity.getNumber() + "\n";
                                              }
                                         try {
-                                            info += str.getOkrugCity().getNumber() + "\n";
                                             try {
+                                                if(deputatRepo.findAllByOkrugCity(okrugCity).size()<1)
+                                                    Integer.valueOf("asd");
                                                 for (Deputat dep: deputatRepo.findAllByOkrugCity(okrugCity))
                                                 {
                                                     deputat=dep;
@@ -280,105 +284,114 @@ String sorry="Напевно ви мали на увазі :";
     }
     public Dilnizia searchDilnizia(String str,String chat)
     {
-        Dilnizia numbers;
+        Dilnizia dilnizia;
         str=str.toLowerCase();
-        str=allStr(str);
-        String[] allStr=str.split(" ");
+
+
+        if (str.split(" ").length==1)
+        {
+            System.out.println(str.split(" ").length);
+            dilnizia = dilniziaRepo.findByRegionContaining(str.trim().toLowerCase());
+            if (dilnizia!=null)
+                return dilnizia;
+            else {
+                try {
+                    sendApiMethod(new SendMessage().setChatId(chat).setText("Ваша адреса не знайдена, введіть за прикладом:**Верхньодніпровськ, Дніпровська-1**\n"+
+                            "Якщо ви проживаєте в селі або в селищі, скористайтесть таким записом: **Терни**"));
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }
+        String city="";
         String name="";
         String number="";
-        List<Dilnizia>cities=new ArrayList<>();
-        List<Dilnizia>names=new ArrayList<>();
-        String address="";
-        if (allStr.length==1)
+        if (str.split(" ").length==2)
         {
-            System.out.println(allStr.length);
-           numbers = dilniziaRepo.findByRegionContaining(allStr[0]);
-           if (numbers!=null)
-               return numbers;
-           else {
-               try {
-                   sendApiMethod(new SendMessage().setChatId(chat).setText("Ваша адреса не знайдена, введіть за прикладом:**Верхньодніпровськ, Дніпровська-1**\n"+
-                           "Якщо ви проживаєте в селі або в селищі, скористайтесть таким записом: **Терни**"));
-               } catch (TelegramApiException e) {
-                   e.printStackTrace();
-               }
-               return null;
-           }
+            city=str.split(",")[0].trim();
+            name=str.split(",")[1].trim();
         }
 
+        try {
+            String[] allStr=allStr(str);
 
+         city=allStr[0].trim();
+         name=allStr[1].trim();
+         number=allStr[2].trim();
+        }catch (Exception e){}
+        System.out.println(city+" "+name+" "+number);
+        List<Dilnizia>cities=new ArrayList<>();
+        List<Dilnizia>names=new ArrayList<>();
+
+
+        cities=dilniziaRepo.findAllByRegionContaining(city);
         if (cities.size()==1)
         {
-            numbers=cities.get(0);
-         return numbers;
+            dilnizia=cities.get(0);
+         return dilnizia;
         }
         if (cities.size()==0)
         {
             return null;
         }
 
-        for (Dilnizia dilnizia:cities)
+        for (Dilnizia dilnizias:cities)
         {
-            if (dilnizia.getRegion().indexOf(name)>0)
+            if (dilnizias.getRegion().indexOf(name)>0)
             {
-                names.add(dilnizia);
+                names.add(dilnizias);
             }
         }
         if (names.size()==1)
         {
-            numbers=names.get(0);
-            return numbers;
+            dilnizia=names.get(0);
+            return dilnizia;
         }
         if (names.size()==0)
         {
-            numbers=names.get(0);
-            return numbers;
+            return null;
         }
-        for (Dilnizia dilnizia: names)
+        for (Dilnizia dilnizias: names)
         {
-            String regions=dilnizia.getRegion();
+            String regions=dilnizias.getRegion();
             try {
                 String[]adress= regions.split(";");
                 for (String ad:adress)
                 {
                     if (ad.indexOf(name)>0)
-                    {
-                       address=ad;
-                       address=address.split(":")[1];
+                    { System.out.println(dilnizias.getNumber()+" "+ad);
+                      String address=ad;
+                       String adess=address.split(":")[1];
                         try {
+                            if (adess.indexOf(number.trim())>=0){
 
-                            for (String rty:address.split(","))
+                                return dilnizias;
+                            }
+                            for (String rty:adess.split(","))
                             {
-                                System.out.println(rty);
-                                System.out.println(rty);
-                                System.out.println(rty);
+
+
+                                if (rty.indexOf(number.trim())>=0)
+                                    return dilnizias;
                                 try {
-                                    System.out.println("??????????????");
-                                    System.out.println("??????????????");
-                                    System.out.println("??????????????");
                                     String[]ert=rty.trim().split("–");
-                                    System.out.println(number+" "+ert[0]+" "+ert[1]);
                                     int num=Integer.valueOf(number.trim());
                                     int num1=Integer.valueOf(ert[0].trim());
                                     int num2=Integer.valueOf(ert[1].trim());
                                     System.out.println(num+" "+num1+" "+num2);
                                     if(num<num2&&num>num1)
                                     {
-                                        numbers=dilnizia;
-                                        return numbers;
+                                        dilnizia=dilnizias;
+                                        return dilnizia;
                                     }
                                     if (num==num1||num==num2)
                                     {
-                                        numbers=dilnizia;
-                                        return numbers;
+                                        dilnizia=dilnizias;
+                                        return dilnizia;
                                     }
                                 }catch (Exception er)
                                 {
-                                    if(address.indexOf(number.trim())>0)
-                                    {
-                                        numbers=dilnizia;
-                                        return numbers;
-                                    }
                                 }
                             }
                         }catch (Exception e)
@@ -390,55 +403,54 @@ String sorry="Напевно ви мали на увазі :";
                                 int num2=Integer.valueOf(ert[1].trim());
                                 if(num<num2&&num>num1)
                                 {
-                                    numbers=dilnizia;
-                                    return numbers;
+                                    dilnizia=dilnizias;
+                                    return dilnizia;
                                 }
                                 if (num==num1||num==num2)
                                 {
-                                    numbers=dilnizia;
-                                    return numbers;
+                                    dilnizia=dilnizias;
+                                    return dilnizia;
                                 }
                             }catch (Exception er)
                             {
-                             if(address.indexOf(number.trim())>0)
+                             if(address.indexOf(number.trim())>=0)
                              {
-                                 numbers=dilnizia;
-                                 return numbers;
+                                 dilnizia=dilnizias;
+                                 return dilnizia;
                              }
                             }
                         }
                     }
                     else {
                         System.out.println("null2");
-                        System.out.println("null2");
-                        System.out.println("null2");
+
 
                     }
                 }
 
             }catch (Exception e)
             {
-                numbers=dilnizia;
-                return numbers;
+                dilnizia=dilnizias;
+                return dilnizia;
             }
         }
         return null;
 
     }
-    public String allStr(String request)
+    public String[] allStr(String request)
     {
-        String answer="";
-        String[] split1=request.split(",");
-        answer+=split1[0];
-        try {
-            String[]split2=split1[1].split("-");
-            answer+=split2[0];
-            try {
-                answer+=split2[1];
-            }catch (Exception e){}
-        }catch (Exception e){}
 
-        return answer;
+        String[] split1=request.split(",");
+        String[] split2=new String[]{};
+        try {
+            split2=split1[1].split("-");
+
+
+        }catch (Exception e){
+            return new String[]{split1[0],split1[1]};
+        }
+        System.out.println(split1[0]+" "+split2[0] +" "+split2[1]);
+        return new String[]{split1[0],split2[0],split2[1]};
     }
     @Override
     public String getBotUsername() {

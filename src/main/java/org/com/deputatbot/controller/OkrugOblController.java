@@ -25,6 +25,7 @@ public class OkrugOblController {
     @GetMapping
     public String main( Model model) {
         model.addAttribute("okrugs", okrugOblRepo.findAll());
+        model.addAttribute("repoDep",deputatRepo);
         return "okrugObl";
     }
 
@@ -50,12 +51,14 @@ public class OkrugOblController {
                              @RequestParam String deputatpartional,
                              @RequestParam Partia partis,
                              @RequestParam("okrugId") OkrugObl okrugObl ) {
-        Deputat deputat=deputatRepo.findByOkrugObl(okrugObl);
-        deputat.setName(deputatname);
-        deputat.setSurname(deputatsurname);
-        deputat.setPartion(deputatpartional);
-        deputat.setPartia(partis);
-        deputatRepo.saveAndFlush(deputat);
+        List<Deputat> deputat=deputatRepo.findAllByOkrugObl(okrugObl);
+        for (Deputat dep: deputat) {
+            dep.setName(deputatname);
+            dep.setSurname(deputatsurname);
+            dep.setPartion(deputatpartional);
+            dep.setPartia(partis);
+            deputatRepo.saveAndFlush(dep);
+        }
         return "redirect:/okrugobl";
     }
 

@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface DilniziaRepo extends JpaRepository<Dilnizia,Long> {
     List<Dilnizia> findAllByRegionContaining(String region);
-    List<Dilnizia> findAllByNumber(Long number);
+    List<Dilnizia> findAllByNumber(Integer number);
     Dilnizia findByRegionContaining(String region);
     List<Dilnizia> findAllByOkrugNdu(OkrugNdu okrugNdu);
     List<Dilnizia> findAllByOkrugObl(OkrugObl okrugObl);
     List<Dilnizia> findAllByOkrugCity(OkrugCity okrugCity);
-    Dilnizia findByNumber (Long number);
+    Dilnizia findByNumber (Integer number);
 
 }
