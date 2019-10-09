@@ -291,9 +291,10 @@ String sorry="Напевно ви мали на увазі :";
         if (str.split(" ").length==1)
         {
             System.out.println(str.split(" ").length);
-            dilnizia = dilniziaRepo.findByRegionContaining(str.trim().toLowerCase());
-            if (dilnizia!=null)
-                return dilnizia;
+            List<Dilnizia> dilnizias=dilniziaRepo.findAllByRegionContaining(str.trim().toLowerCase());
+
+            if (dilnizias.size()!=0)
+                return dilnizias.get(0);
             else {
                 try {
                     sendApiMethod(new SendMessage().setChatId(chat).setText("Ваша адреса не знайдена, введіть за прикладом:**Верхньодніпровськ, Дніпровська-1**\n"+
