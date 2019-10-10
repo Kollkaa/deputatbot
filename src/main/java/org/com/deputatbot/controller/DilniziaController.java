@@ -72,7 +72,7 @@ public class DilniziaController {
         Iterable<Dilnizia> dilnizias = dilniziaRepo.findAll();
 
         if (number != null ) {
-            dilnizias = dilniziaRepo.findAllByOkrugNdu(okrugNduRepo.findByNumber(number));
+            dilnizias = dilniziaRepo.findAllByOkrugNduNumber(number);
 
 
         } else {
@@ -94,7 +94,7 @@ public class DilniziaController {
         Iterable<Dilnizia> dilnizias = dilniziaRepo.findAll();
 
         if (number != null ) {
-            dilnizias = dilniziaRepo.findAllByOkrugObl(okrugOblRepo.findByNumber(number));
+            dilnizias = dilniziaRepo.findAllByOkrugOblNumber(number);
         } else {
             dilnizias = dilniziaRepo.findAll();
         }
@@ -114,7 +114,7 @@ public class DilniziaController {
         Iterable<Dilnizia> dilnizias = dilniziaRepo.findAll();
 
         if (number != null ) {
-            dilnizias = dilniziaRepo.findAllByOkrugCity(okrugCityRepo.findByNumber(number));
+            dilnizias = dilniziaRepo.findAllByOkrugCityNumber(number);
         } else {
             dilnizias = dilniziaRepo.findAll();
         }

@@ -146,7 +146,8 @@ String sorry="Напевно ви мали на увазі :";
                            TypeCity typeCity;
                            Deputat deputat;
                             Dilnizia str=new Dilnizia();
-                            str=searchDilnizia(update.getMessage().getText(),update.getMessage().getChatId().toString());
+                            String adress=update.getMessage().getText();
+                            str=searchDilnizia(adress,update.getMessage().getChatId().toString());
                            if(str!=null){
                                System.out.println(str.getNumber());
                            String info = "";
@@ -176,14 +177,16 @@ String sorry="Напевно ви мали на увазі :";
                                                         "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
                                             }
                                         } catch (Exception e) {     }
-                                        if (typeCity == TypeCity.city||typeCity==TypeCity.city_all) {
-                                        info += "\nТвій мер " +
-                                                "м." + city.getName() + "\n";
-                                    }
-                                        else{
-                                        info += "\nТвій голова селищної ради\n"
-                                                + city.getName() + " " + typeCity.GetTitle() + "\n";
-                                    }
+                                        try {
+                                            if (typeCity == TypeCity.city||typeCity==TypeCity.city_all) {
+                                                info += "\nТвій мер " +
+                                                        "м." + city.getName() + "\n";
+                                            }
+                                            else{
+                                                info += "\nТвій голова селищної ради\n"
+                                                        + city.getName() + " " + typeCity.GetTitle() + "\n";
+                                            }
+                                        }catch (Exception e){}
                                         try {
                                             info += mer.getSurname().toUpperCase() + " "
                                                     + mer.getName().toUpperCase() + " "
@@ -196,6 +199,8 @@ String sorry="Напевно ви мали на увазі :";
                                         try {
                                             info += okrugObl.getNumber() + "\n";
                                             try {
+                                                if(deputatRepo.findAllByOkrugObl(okrugObl).size()<1)
+                                                    Integer.valueOf("asd");
                                                 for (Deputat dep: deputatRepo.findAllByOkrugObl(okrugObl)) {
                                                    deputat=dep;
                                                    info += deputat.getSurname().toUpperCase() + " "
@@ -214,7 +219,7 @@ String sorry="Напевно ви мали на увазі :";
                                         if (typeCity == TypeCity.city||typeCity==TypeCity.city_all) {
                                         info += "\nТвій депутат міської ради\n" +
                                                 "Округ №" +okrugCity.getNumber()+ "\n";
-                                    }
+                                             }
                                         else{
                                         info += "\nТвій депутат селищної ради\n" +
                                                 "Округ "+okrugCity.getNumber() + "\n";
@@ -244,10 +249,24 @@ String sorry="Напевно ви мали на увазі :";
 
                                 }catch (Exception er)
                                 {
-
+                                    er.printStackTrace();
                                 }
                                 sendApiMethod(new SendMessage().setText(info).setChatId(update.getMessage().getChatId()));
                             }
+                           else if(str==null)
+                           {
+                               String answer="";
+                               String[] adres;
+                               try {
+                                   adres=adress.split(",");
+                                  List<Dilnizia>dilniziaList= dilniziaRepo.findAllByRegionContaining(adres[0]);
+                                   try {
+
+                                   }catch (Exception e){}
+                               }catch (Exception e){}
+
+
+                           }
 
                        }catch (Exception e)
                        {e.printStackTrace();
@@ -286,15 +305,25 @@ String sorry="Напевно ви мали на увазі :";
     {
         Dilnizia dilnizia;
         str=str.toLowerCase();
-
-
-        if (str.split(" ").length==1)
-        {
+        String[] strings=allStr(str);
+        String city=strings[0].trim();
+        if(strings.length==1) {
+            System.out.println("1");
             System.out.println(str.split(" ").length);
-            List<Dilnizia> dilnizias=dilniziaRepo.findAllByRegionContaining(str.trim().toLowerCase());
-
-            if (dilnizias.size()!=0)
-                return dilnizias.get(0);
+            List<Dilnizia> dilnizias = dilniziaRepo.findAllByRegionContaining(str.trim().toLowerCase());
+            List<Dilnizia> del = new ArrayList<>();
+            if (dilnizias.size() != 0)
+            {for (Dilnizia dilnizia1 : dilnizias) {
+                    try {
+                        dilnizia1.getOkrugCity().getNumber();
+                        del.add(dilnizia1);
+                    } catch (Exception e) {
+                    }
+                }
+                if (del.size()!=0)
+                return del.get(0);
+                else return dilnizias.get(0);
+            }
             else {
                 try {
                     sendApiMethod(new SendMessage().setChatId(chat).setText("Ваша адреса не знайдена, введіть за прикладом:**Верхньодніпровськ, Дніпровська-1**\n"+
@@ -302,156 +331,209 @@ String sorry="Напевно ви мали на увазі :";
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
+
+
                 return null;
             }
         }
-        String city="";
+
         String name="";
         String number="";
-        if (str.split(" ").length==2)
-        {
-            city=str.split(",")[0].trim();
-            name=str.split(",")[1].trim();
-        }
-
-        try {
-            String[] allStr=allStr(str);
-
-         city=allStr[0].trim();
-         name=allStr[1].trim();
-         number=allStr[2].trim();
-        }catch (Exception e){}
-        System.out.println(city+" "+name+" "+number);
-        List<Dilnizia>cities=new ArrayList<>();
-        List<Dilnizia>names=new ArrayList<>();
-
-
-        cities=dilniziaRepo.findAllByRegionContaining(city);
-        if (cities.size()==1)
-        {
-            dilnizia=cities.get(0);
-         return dilnizia;
-        }
-        if (cities.size()==0)
-        {
-            return null;
-        }
-
-        for (Dilnizia dilnizias:cities)
-        {
-            if (dilnizias.getRegion().indexOf(name)>0)
+        if (strings.length==2)
+        {   System.out.println("2");
+           name=strings[1].trim();
+            List<Dilnizia>cities=new ArrayList<>();
+            List<Dilnizia>names=new ArrayList<>();
+            cities=dilniziaRepo.findAllByRegionContaining(city);
+            if (cities.size()==1)
             {
-                names.add(dilnizias);
-            }
-        }
-        if (names.size()==1)
-        {
-            dilnizia=names.get(0);
-            return dilnizia;
-        }
-        if (names.size()==0)
-        {
-            return null;
-        }
-        for (Dilnizia dilnizias: names)
-        {
-            String regions=dilnizias.getRegion();
-            try {
-                String[]adress= regions.split(";");
-                for (String ad:adress)
-                {
-                    if (ad.indexOf(name)>0)
-                    { System.out.println(dilnizias.getNumber()+" "+ad);
-                      String address=ad;
-                       String adess=address.split(":")[1];
-                        try {
-                            if (adess.indexOf(number.trim())>=0){
-
-                                return dilnizias;
-                            }
-                            for (String rty:adess.split(","))
-                            {
-
-
-                                if (rty.indexOf(number.trim())>=0)
-                                    return dilnizias;
-                                try {
-                                    String[]ert=rty.trim().split("–");
-                                    int num=Integer.valueOf(number.trim());
-                                    int num1=Integer.valueOf(ert[0].trim());
-                                    int num2=Integer.valueOf(ert[1].trim());
-                                    System.out.println(num+" "+num1+" "+num2);
-                                    if(num<num2&&num>num1)
-                                    {
-                                        dilnizia=dilnizias;
-                                        return dilnizia;
-                                    }
-                                    if (num==num1||num==num2)
-                                    {
-                                        dilnizia=dilnizias;
-                                        return dilnizia;
-                                    }
-                                }catch (Exception er)
-                                {
-                                }
-                            }
-                        }catch (Exception e)
-                        {
-                            try {
-                                String[]ert=address.split("-");
-                                int num=Integer.valueOf(number.trim());
-                                int num1=Integer.valueOf(ert[0].trim());
-                                int num2=Integer.valueOf(ert[1].trim());
-                                if(num<num2&&num>num1)
-                                {
-                                    dilnizia=dilnizias;
-                                    return dilnizia;
-                                }
-                                if (num==num1||num==num2)
-                                {
-                                    dilnizia=dilnizias;
-                                    return dilnizia;
-                                }
-                            }catch (Exception er)
-                            {
-                             if(address.indexOf(number.trim())>=0)
-                             {
-                                 dilnizia=dilnizias;
-                                 return dilnizia;
-                             }
-                            }
-                        }
-                    }
-                    else {
-                        System.out.println("null2");
-
-
-                    }
-                }
-
-            }catch (Exception e)
-            {
-                dilnizia=dilnizias;
+                dilnizia=cities.get(0);
                 return dilnizia;
             }
+            if (cities.size()==0)
+            {
+                return null;
+            }
+
+            for (Dilnizia dilnizias:cities)
+            {
+                if (dilnizias.getRegion().indexOf(name)>0)
+                {
+                    names.add(dilnizias);
+                }
+            }
+            if (names.size()==1)
+            {
+                dilnizia=names.get(0);
+                return dilnizia;
+            }
+            else if (names.size()==0)
+            {
+                return null;
+            }
+            else if(names.size()>0){
+                List<Dilnizia> del = new ArrayList<>();
+                for (Dilnizia dilnizia1 : names) {
+                    try {
+                        dilnizia1.getOkrugCity().getNumber();
+                        del.add(dilnizia1);
+                    } catch (Exception e) {
+                    }
+                }
+                    if (del.size()!=0)
+                        return del.get(0);
+                    else return names.get(0);
+                }
+                else {
+                    try {
+                        sendApiMethod(new SendMessage().setChatId(chat).setText("Ваша адреса не знайдена, введіть за прикладом:**Верхньодніпровськ, Дніпровська-1**\n"+
+                                "Якщо ви проживаєте в селі або в селищі, скористайтесть таким записом: **Терни**"));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    return null;
+                }
+            }
+        if (strings.length==3) {
+            System.out.println("3");
+            try {
+                city=strings[0].trim();
+                name=strings[1].trim();
+                number = strings[2].trim();
+            } catch (Exception e) {
+            }
+            System.out.println(city + " " + name + " " + number);
+
+            List<Dilnizia> cities = new ArrayList<>();
+            List<Dilnizia> names = new ArrayList<>();
+
+            cities = dilniziaRepo.findAllByRegionContaining(city);
+            if (cities.size() == 1) {
+                dilnizia = cities.get(0);
+                return dilnizia;
+            }
+            if (cities.size() == 0) {
+                return null;
+            }
+
+            for (Dilnizia dilnizias : cities) {
+                if (dilnizias.getRegion().contains(name)) {
+                    names.add(dilnizias);
+                    System.out.println(dilnizias.getNumber());
+                }
+            }
+            if (names.size() == 1) {
+                dilnizia = names.get(0);
+                return dilnizia;
+            }
+            if (names.size() == 0) {
+                return null;
+            }
+            for (Dilnizia dilnizias : names) {
+                String regions = dilnizias.getRegion();
+                System.out.println(dilnizias.getNumber() + " " + regions);
+                try {
+                    String[] adress = regions.split(";");
+                    for (String ad : adress) {
+                        if (ad.indexOf(name) > 0) {
+
+
+                            String adess = ad.split(":")[1];
+                            try {
+
+                                if (adess.indexOf(number.trim())>=0) {
+                                    System.out.println(number);
+                                    System.out.println(adess+"\n\n");
+                                    return dilnizias;
+                                }else {
+                                    for (String rty : adess.split(",")) {
+                                        if (rty.contains(number.trim()))
+                                            return dilnizias;
+                                        try {
+                                            String[] ert = rty.trim().split("–");
+                                            int num = Integer.valueOf(number.trim());
+                                            int num1 = Integer.valueOf(ert[0].trim());
+                                            int num2 = Integer.valueOf(ert[1].trim());
+                                            System.out.println(num + " " + num1 + " " + num2);
+                                            if (num < num2 && num > num1) {
+                                                dilnizia = dilnizias;
+                                                return dilnizia;
+                                            }
+                                            if (num == num1 || num == num2) {
+                                                dilnizia = dilnizias;
+                                                return dilnizia;
+                                            }
+                                            } catch (Exception er) {
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) {
+                                try {
+                                    String[] ert = ad.split("-");
+                                    int num = Integer.valueOf(number.trim());
+                                    int num1 = Integer.valueOf(ert[0].trim());
+                                    int num2 = Integer.valueOf(ert[1].trim());
+                                    if (num < num2 && num > num1) {
+                                        dilnizia = dilnizias;
+                                        return dilnizia;
+                                    }
+                                    if (num == num1 || num == num2) {
+                                        dilnizia = dilnizias;
+                                        return dilnizia;
+                                    }
+                                } catch (Exception er) {
+                                    if (ad.indexOf(number.trim()) >= 0) {
+                                        dilnizia = dilnizias;
+                                        return dilnizia;
+                                    }
+                                }
+                            }
+                        } else {
+
+
+
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    dilnizia = dilnizias;
+                    return dilnizia;
+                }
+            }
+        }
+        else {
+            return null;
         }
         return null;
-
     }
     public String[] allStr(String request)
     {
-
-        String[] split1=request.split(",");
+        String city="";
+        String street="";
+        String number="";
+        String[] split1=new String[]{};
+        try {
+            split1=request.split(",");
+            city=split1[0];
+        }catch (Exception e)
+        {
+            return new String[]{city};
+        }
         String[] split2=new String[]{};
         try {
-            split2=split1[1].split("-");
-
-
+            split2 = split1[1].split("-");
+        }catch (Exception e){return new String[]{city};}
+            street=split2[0];
+        try {
+            number=split2[1];
         }catch (Exception e){
             return new String[]{split1[0],split1[1]};
         }
-        System.out.println(split1[0]+" "+split2[0] +" "+split2[1]);
-        return new String[]{split1[0],split2[0],split2[1]};
+        System.out.println(city+" "+street+" "+number);
+        return new String[]{city,street,number};
     }
     @Override
     public String getBotUsername() {

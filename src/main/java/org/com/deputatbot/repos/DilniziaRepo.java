@@ -13,9 +13,9 @@ public interface DilniziaRepo extends JpaRepository<Dilnizia,Long> {
     List<Dilnizia> findAllByRegionContaining(String region);
     List<Dilnizia> findAllByNumber(Integer number);
     Dilnizia findByRegionContaining(String region);
-    List<Dilnizia> findAllByOkrugNdu(OkrugNdu okrugNdu);
-    List<Dilnizia> findAllByOkrugObl(OkrugObl okrugObl);
-    List<Dilnizia> findAllByOkrugCity(OkrugCity okrugCity);
+    List<Dilnizia> findAllByOkrugNduNumber(Integer number);
+    List<Dilnizia> findAllByOkrugOblNumber(Integer number);
+    List<Dilnizia> findAllByOkrugCityNumber(Integer number);
     Dilnizia findByNumber (Integer number);
 
 }
