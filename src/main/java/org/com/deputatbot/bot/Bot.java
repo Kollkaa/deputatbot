@@ -172,11 +172,12 @@ String sorry="Напевно ви мали на увазі :";
                                                         "\n /id_" + deputat.getId() + "\n";
 
                                             } catch (Exception e) {
+                                                e.printStackTrace();
                                                 info += "Депутата не обрано \uD83D\uDE22 \n" +
                                                         "/ссылка на Закон України «Про місцеві вибори» \n" +
                                                         "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
                                             }
-                                        } catch (Exception e) {     }
+                                        } catch (Exception e) { e.printStackTrace();    }
                                         try {
                                             if (typeCity == TypeCity.city||typeCity==TypeCity.city_all) {
                                                 info += "\nТвій мер " +
@@ -186,14 +187,14 @@ String sorry="Напевно ви мали на увазі :";
                                                 info += "\nТвій голова селищної ради\n"
                                                         + city.getName() + " " + typeCity.GetTitle() + "\n";
                                             }
-                                        }catch (Exception e){}
+                                        }catch (Exception e){e.printStackTrace();  }
                                         try {
                                             info += mer.getSurname().toUpperCase() + " "
                                                     + mer.getName().toUpperCase() + " "
                                                     + mer.getPartion().toUpperCase() +
                                                     "\n /id_" + mer.getId() + "\n";
                                             ;
-                                        } catch (Exception e) {      }
+                                        } catch (Exception e) {  e.printStackTrace();      }
                                         info += "\nТвій депутат обласної ради\n" +
                                                 "Округ № - ";
                                         try {
@@ -209,13 +210,13 @@ String sorry="Напевно ви мали на увазі :";
                                                          "\n /id_" + deputat.getId() + "\n";
                                                 }
 
-                                            } catch (Exception e) {
+                                            } catch (Exception e) {e.printStackTrace();
                                                 if (deputatRepo.findAllByOkrugObl(okrugObl).size()==0)
                                                     info += "Депутата не обрано \uD83D\uDE22 \n" +
                                                         "/ссылка на Закон України «Про місцеві вибори» \n" +
                                                         "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
                                             }
-                                        } catch (Exception e) {     }
+                                        } catch (Exception e) {    e.printStackTrace();   }
                                         if (typeCity == TypeCity.city||typeCity==TypeCity.city_all) {
                                         info += "\nТвій депутат міської ради\n" +
                                                 "Округ №" +okrugCity.getNumber()+ "\n";
@@ -236,13 +237,13 @@ String sorry="Напевно ви мали на увазі :";
                                                             + deputat.getPartion().toUpperCase() +
                                                             "\n /id_" + deputat.getId() + "\n";
                                                 }
-                                            } catch (Exception e) {
+                                            } catch (Exception e) {e.printStackTrace();
                                                 if (deputatRepo.findAllByOkrugCity(okrugCity).size()==0)
                                                 info += "Депутата не обрано \uD83D\uDE22 \n" +
                                                         "/ссылка на Закон України «Про місцеві вибори» \n" +
                                                         "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
                                             }
-                                        } catch (Exception e) {       }
+                                        } catch (Exception e) {   e.printStackTrace();      }
 
 
 

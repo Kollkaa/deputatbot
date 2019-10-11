@@ -16,7 +16,7 @@ import java.io.*;
 import java.util.*;
 @Service
 public class Parser {
-
+        private int counte=0;
     public void allNduOkrug(OkrugNduRepo okrugNduRepo, DilniziaRepo dilniziaRepo, DeputatRepo  deputatRepo)  {
         for (Integer i=24;i<41;i++)
         {
@@ -402,6 +402,7 @@ public class Parser {
         row = rowIterator.next();
         row = rowIterator.next();
         row = rowIterator.next();;
+        int coun=0;
 
         while (rowIterator.hasNext()) {
             row = rowIterator.next();
@@ -432,25 +433,25 @@ public class Parser {
 
                 System.out.println("mer: " + array_mer[0] + " " + array_mer[1] + " " + array_mer[2] + "!!!!!!!!!!");
 
-                if (str_city.indexOf("громада") > 0) {
+                if (str_city.contains("громада")) {
                     city=new City();
                     System.out.println("city: " + array_city[0] + " " + array_city[1] + " " + array_city[2] + "!!!!!!!!!!");
 
                     city.setName(array_city[0]);
 
                     if (str_city.indexOf("сільська")>0)
-                    {
+                    {coun+=1;
                         city.setTypeCity(TypeCity.country);
                     }
                     if (str_city.indexOf("селищна")>0)
-                    {
+                    {coun+=1;
                         city.setTypeCity(TypeCity.city_country);
                     }
                     else
                         city.setTypeCity(TypeCity.city_all);
                 }
-
-                if (array_city.length == 2) {
+                else if (array_city.length >= 2) {
+                    coun+=1;
                     System.out.println("city: " + array_city[0] + " " + array_city[1] + " " + "!!!!!!!!!!");
                     city.setName(array_city[1]);
                     city.setTypeCity(TypeCity.city);
@@ -479,7 +480,7 @@ public class Parser {
 
                     okrugCityRepo.save(okrug);
 
-                    System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug);
+                    System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug+"::::"+city.getName());
 
                     str_dilnizia = WriteDilnizia(str_dilnizia);
 
@@ -489,7 +490,7 @@ public class Parser {
                         try {
                             Long number=Long.valueOf(str.trim());
 
-                            dilnizia1= dilniziaRepo.findByNumber(Integer.valueOf(String.valueOf(number).split("\\.")[0]));
+                            dilnizia1= dilniziaRepo.findByNumber(Integer.valueOf(String.valueOf(number).split("\\.")[0].trim()));
 
                             dilnizia1.setOkrugCity(okrug);
 
@@ -502,7 +503,7 @@ public class Parser {
 
                 }
                 if (dilnizia.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-
+                    counte++;
                     long_okrug = okruge.getNumericCellValue();
 
                     okrug=new OkrugCity();
@@ -523,7 +524,7 @@ public class Parser {
                     if (dilnizia1!=null)
                     dilniziaRepo.save(dilnizia1);
 
-                    System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug);
+                    System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug+"::::"+city.getName());
 
 
                 }
@@ -549,22 +550,20 @@ public class Parser {
                             deputat.setPartia(Partia.AP);
                         }
 
-                        System.out.println("deputat: " + array_deputat[0] + " " + array_deputat[1] + " " + array_deputat[2]);
+                        System.out.println("deputat: " + array_deputat[0] + " " + array_deputat[1] + " " + array_deputat[2]+"::::"+city.getName());
 
                         deputat.setOkrugCity(okrug);
 
                         deputatRepo.save(deputat);
-
                     }
-
-
                 }
-
-
-
             }
-        }
 
+        }
+        System.out.println(coun);
+        System.out.println(cityRepo.findAll().size());
+        System.out.println(counte);
+        System.out.println(dilniziaRepo.findAll().size());
     }
 
     public   String WriteDilnizia(String dilnizias) {String str="";
@@ -580,6 +579,7 @@ public class Parser {
                 {
                     for (Integer i=Integer.valueOf(ar.split("-")[0].trim());i<=Integer.valueOf(ar.split("-")[1].trim());i++)
                     {
+                        counte++;
                         str+=i+" ";
                     }
                  }
