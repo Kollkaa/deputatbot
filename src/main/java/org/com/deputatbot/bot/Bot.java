@@ -176,7 +176,7 @@ String sorry="Напевно ви мали на увазі :";
                                                 e.printStackTrace();
                                                 info += "Депутата не обрано \uD83D\uDE22 \n" +
                                                         "/ссылка на Закон України «Про місцеві вибори» \n" +
-                                                        "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
+                                                        "https://goo-gl.su/yO1fx";
                                             }
                                         } catch (Exception e) { e.printStackTrace();    }
                                         try {
@@ -217,7 +217,7 @@ String sorry="Напевно ви мали на увазі :";
                                                 if (deputatRepo.findAllByOkrugObl(okrugObl).size()==0)
                                                     info += "Депутата не обрано \uD83D\uDE22 \n" +
                                                         "/ссылка на Закон України «Про місцеві вибори» \n" +
-                                                        "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
+                                                        "https://goo-gl.su/yO1fx";
                                             }
                                         } catch (Exception e) {    e.printStackTrace();   }
                                         try {
@@ -250,7 +250,7 @@ String sorry="Напевно ви мали на увазі :";
                                                 if (deputatRepo.findAllByOkrugCity(okrugCity).size()==0)
                                                 info += "Депутата не обрано \uD83D\uDE22 \n" +
                                                         "/ссылка на Закон України «Про місцеві вибори» \n" +
-                                                        "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
+                                                        "https://goo-gl.su/yO1fx";
                                             }
                                         } catch (Exception e) {   e.printStackTrace();      }
 
