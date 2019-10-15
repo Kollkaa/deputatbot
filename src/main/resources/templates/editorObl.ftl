@@ -4,11 +4,11 @@
     <div>
         <form action="/okrugobl" method="post">
             <#attempt>
-                <div><a>-- Номер округа НДУ ${okrugobl.getNumber()}</a></div><
+                <div><a>-- Номер округа бласті ${okrugobl.getNumber()}</a></div><
                 <#recover>
 
             </#attempt>
-            <#list deputats.findAllByOkrugCity(okrugobl)as dep>
+            <#list deputats.findAllByOkrugObl(okrugobl)as dep>
                 <input type="text" name="deputatname" value="${dep.getName()}">
                 <input type="text" name="deputatsurname" value="${dep.getSurname()}">
                 <input type="text" name="deputatpartional" value="${dep.getPartion()}">

@@ -32,6 +32,10 @@ public class OkrugCityController {
 
         model.addAttribute("okrugs", okrugCityRepo.findAll());
         model.addAttribute("repoDep",deputatRepo);
+        List<Partia>partias=new ArrayList<>();
+        for (Partia r:Partia.values())
+        {partias.add(r);}
+        model.addAttribute("partias",partias);
         model.addAttribute("number",number);
         return "okrugCity";
     }

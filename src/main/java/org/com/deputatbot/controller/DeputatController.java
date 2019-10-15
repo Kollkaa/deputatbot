@@ -117,4 +117,24 @@ public class DeputatController {
         return "redirect:/deputats";
     }
 
+    @PostMapping("addDep")
+    public String AddDep( Deputat deputat,
+                          @RequestParam String name,
+                          @RequestParam String surname,
+                          @RequestParam String partion,
+                          @RequestParam Partia partia,
+                          @RequestParam Long id)
+    {
+
+
+        deputat.setName(name);
+        deputat.setSurname(surname);
+        deputat.setPartion(partion);
+        deputat.setPartia(partia);
+        deputat.setOkrugCity(okrugCityRepo.findById(id).get());
+        deputat.setTypeOk(TypeOk.CITY);
+        deputatRepo.save(deputat);
+
+        return "redirect:/deputats";
+    }
 }

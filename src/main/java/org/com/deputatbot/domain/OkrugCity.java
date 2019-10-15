@@ -5,11 +5,11 @@ import javax.persistence.*;
 public class OkrugCity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     private Integer number;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

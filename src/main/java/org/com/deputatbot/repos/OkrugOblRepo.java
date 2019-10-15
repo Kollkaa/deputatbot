@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface OkrugOblRepo extends JpaRepository<OkrugObl,Integer> {
+public interface OkrugOblRepo extends JpaRepository<OkrugObl,Long> {
    OkrugObl findByNumber(Integer number);
    List<OkrugObl> findAllByNumber(Integer number);
    OkrugObl findByRegionContaining(String dilnizia);

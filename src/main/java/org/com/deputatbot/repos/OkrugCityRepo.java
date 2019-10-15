@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface OkrugCityRepo extends JpaRepository<OkrugCity,Integer> {
+public interface OkrugCityRepo extends JpaRepository<OkrugCity,Long> {
     OkrugCity findByNumber(Integer number);
     List<OkrugCity> findAllByNumber(Integer number);
     List<OkrugCity> findAllByCity_Name(String name);

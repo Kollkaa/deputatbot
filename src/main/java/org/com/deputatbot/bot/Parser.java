@@ -435,8 +435,8 @@ public class Parser {
 
                 if (str_city.contains("громада")) {
                     city=new City();
+                    city.setMer(mer);
                     System.out.println("city: " + array_city[0] + " " + array_city[1] + " " + array_city[2] + "!!!!!!!!!!");
-
                     city.setName(array_city[0]);
 
                     if (str_city.indexOf("сільська")>0)
@@ -451,6 +451,8 @@ public class Parser {
                         city.setTypeCity(TypeCity.city_all);
                 }
                 else if (array_city.length >= 2) {
+                    city=new City();
+                    city.setMer(mer);
                     String te="";
                     coun+=1;
                     for (int i =1;i<array_city.length;i++)
@@ -462,7 +464,6 @@ public class Parser {
                     city.setTypeCity(TypeCity.city);
 
                 }
-                city.setMer(mer);
                 cityRepo.save(city);
             }
 
@@ -523,13 +524,14 @@ public class Parser {
 
                     str_dilnizia = String.valueOf(dilnizia.getNumericCellValue()).split("\\.")[0];
 
-                    Dilnizia dilnizia1=new Dilnizia();
-
-                    dilnizia1=dilniziaRepo.findByNumber(Integer.valueOf(str_dilnizia.trim()));
-                    if (dilnizia1!=null)
-                    dilniziaRepo.save(dilnizia1);
-
-                    System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug+"::::"+city.getName());
+                    Dilnizia dilnizia1=dilniziaRepo.findByNumber(Integer.valueOf(str_dilnizia.trim()));
+                    if (dilnizia1!=null) {
+                        dilnizia1.setOkrugCity(okrug);
+                        dilniziaRepo.save(dilnizia1);
+                    }
+                    try {
+                        System.out.println("dilnizia:-" + dilnizia1.getNumber() + "-okrug: " + okrug.getNumber()+"::::"+city.getName());
+                    }catch (Exception e){}
 
 
                 }

@@ -158,6 +158,7 @@ String sorry="Напевно ви мали на увазі :";
                                city=okrugCity.getCity();
                            }catch (Exception e){}
                            mer=city.getMer();
+                           boolean mees=false;
                            typeCity=city.getTypeCity();
                                 try {
                                         info += "Твій депутат Верховної Ради\n" +
@@ -182,10 +183,12 @@ String sorry="Напевно ви мали на увазі :";
                                             if (typeCity == TypeCity.city||typeCity==TypeCity.city_all) {
                                                 info += "\nТвій мер " +
                                                         "м." + city.getName() + "\n";
+                                                mees=true;
                                             }
                                             else{
                                                 info += "\nТвій голова селищної ради\n"
                                                         + city.getName() + " " + typeCity.GetTitle() + "\n";
+                                            mees=true;
                                             }
                                         }catch (Exception e){e.printStackTrace();  info += "\nТвій мер - в розробці"; }
                                         try {
@@ -218,14 +221,14 @@ String sorry="Напевно ви мали на увазі :";
                                             }
                                         } catch (Exception e) {    e.printStackTrace();   }
                                         try {
-                                            if (typeCity == TypeCity.city||typeCity==TypeCity.city_all) {
+                                            if (typeCity == TypeCity.city || typeCity == TypeCity.city_all) {
                                                 info += "\nТвій депутат міської ради\n" +
-                                                        "Округ №" +okrugCity.getNumber()+ "\n";
-                                            }
-                                            else{
+                                                        "Округ №" + okrugCity.getNumber() + "\n";
+                                            } else {
                                                 info += "\nТвій депутат селищної ради\n" +
-                                                        "Округ "+okrugCity.getNumber() + "\n";
-                                            }
+                                                        "Округ " + okrugCity.getNumber() + "\n";
+
+                                        }
                                         }catch (Exception e)
                                         {info += "\nТвій депутат міської ради\n" +
                                                 "Округ № - врозробці ";}
@@ -235,11 +238,13 @@ String sorry="Напевно ви мали на увазі :";
                                                     Integer.valueOf("asd");
                                                 for (Deputat dep: deputatRepo.findAllByOkrugCity(okrugCity))
                                                 {
-                                                    deputat=dep;
-                                                    info += deputat.getSurname().toUpperCase() + " "
-                                                            + deputat.getName().toUpperCase() + " "
-                                                            + deputat.getPartion().toUpperCase() +
-                                                            "\n /id_" + deputat.getId() + "\n";
+                                                    if (city==dep.getOkrugCity().getCity()) {
+                                                        deputat = dep;
+                                                        info += deputat.getSurname().toUpperCase() + " "
+                                                                + deputat.getName().toUpperCase() + " "
+                                                                + deputat.getPartion().toUpperCase() +
+                                                                "\n /id_" + deputat.getId() + "\n";
+                                                    }
                                                 }
                                             } catch (Exception e) {e.printStackTrace();
                                                 if (deputatRepo.findAllByOkrugCity(okrugCity).size()==0)
@@ -256,6 +261,7 @@ String sorry="Напевно ви мали на увазі :";
                                 {
                                     er.printStackTrace();
                                 }
+                                System.out.println(info);
                                 sendApiMethod(new SendMessage().setText(info).setChatId(update.getMessage().getChatId()));
                             }
                            else if(str==null)

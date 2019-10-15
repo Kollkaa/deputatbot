@@ -7,7 +7,7 @@ import java.util.Set;
 public class OkrugNdu {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     private Integer number;
     @OneToOne
@@ -18,7 +18,7 @@ public class OkrugNdu {
     private String region;
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
