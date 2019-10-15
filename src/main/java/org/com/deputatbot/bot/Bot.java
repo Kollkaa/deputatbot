@@ -187,13 +187,13 @@ String sorry="Напевно ви мали на увазі :";
                                                 info += "\nТвій голова селищної ради\n"
                                                         + city.getName() + " " + typeCity.GetTitle() + "\n";
                                             }
-                                        }catch (Exception e){e.printStackTrace();  }
+                                        }catch (Exception e){e.printStackTrace();  info += "\nТвій мер - в розробці"; }
                                         try {
                                             info += mer.getSurname().toUpperCase() + " "
                                                     + mer.getName().toUpperCase() + " "
                                                     + mer.getPartion().toUpperCase() +
                                                     "\n /id_" + mer.getId() + "\n";
-                                            ;
+
                                         } catch (Exception e) {  e.printStackTrace();      }
                                         info += "\nТвій депутат обласної ради\n" +
                                                 "Округ № - ";
@@ -217,14 +217,18 @@ String sorry="Напевно ви мали на увазі :";
                                                         "https://zakon.rada.gov.ua/laws/show/595-19#n102 (https://zakon.rada.gov.ua/laws/show/595-19#n102)";
                                             }
                                         } catch (Exception e) {    e.printStackTrace();   }
-                                        if (typeCity == TypeCity.city||typeCity==TypeCity.city_all) {
-                                        info += "\nТвій депутат міської ради\n" +
-                                                "Округ №" +okrugCity.getNumber()+ "\n";
-                                             }
-                                        else{
-                                        info += "\nТвій депутат селищної ради\n" +
-                                                "Округ "+okrugCity.getNumber() + "\n";
-                                             }
+                                        try {
+                                            if (typeCity == TypeCity.city||typeCity==TypeCity.city_all) {
+                                                info += "\nТвій депутат міської ради\n" +
+                                                        "Округ №" +okrugCity.getNumber()+ "\n";
+                                            }
+                                            else{
+                                                info += "\nТвій депутат селищної ради\n" +
+                                                        "Округ "+okrugCity.getNumber() + "\n";
+                                            }
+                                        }catch (Exception e)
+                                        {info += "\nТвій депутат міської ради\n" +
+                                                "Округ № - врозробці ";}
                                         try {
                                             try {
                                                 if(deputatRepo.findAllByOkrugCity(okrugCity).size()<1)

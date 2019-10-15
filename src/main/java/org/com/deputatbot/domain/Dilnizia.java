@@ -24,6 +24,7 @@ public class Dilnizia {
     @ManyToOne
     @JoinColumn(name = "okrugcity_id")
     private OkrugCity okrugCity;
+
     public Dilnizia(){}
     public Dilnizia(Integer number, String region)
     {

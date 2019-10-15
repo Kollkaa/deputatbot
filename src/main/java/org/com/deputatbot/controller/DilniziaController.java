@@ -1,17 +1,13 @@
 package org.com.deputatbot.controller;
 
-import org.com.deputatbot.domain.Dilnizia;
-import org.com.deputatbot.domain.OkrugCity;
-import org.com.deputatbot.domain.OkrugNdu;
-import org.com.deputatbot.domain.OkrugObl;
-import org.com.deputatbot.repos.DilniziaRepo;
-import org.com.deputatbot.repos.OkrugCityRepo;
-import org.com.deputatbot.repos.OkrugNduRepo;
-import org.com.deputatbot.repos.OkrugOblRepo;
+import org.com.deputatbot.domain.*;
+import org.com.deputatbot.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/dilnizias")
@@ -25,6 +21,8 @@ public class DilniziaController {
     private OkrugOblRepo okrugOblRepo;
     @Autowired
     private OkrugCityRepo okrugCityRepo;
+    @Autowired
+    private CityRepo cityRepo;
     @GetMapping
     public String dil(Model model)
     {
@@ -131,6 +129,7 @@ public class DilniziaController {
     public String getDelnizia(@PathVariable Dilnizia dilnizia,Model model)
     {
         model.addAttribute("dilnizias",dilnizia);
+        model.addAttribute("cities",cityRepo.findAll());
         return "editorDilnizia";
     }
     @PostMapping
@@ -138,11 +137,29 @@ public class DilniziaController {
                                @RequestParam Integer oblnumber,
                                @RequestParam Integer citynumber,
                                @RequestParam String region,
+                               @RequestParam String city,
                                @RequestParam("dilniziaId")Dilnizia dilnizia)
     {
         OkrugNdu okrugNdu=okrugNduRepo.findByNumber(ndunumber);
         OkrugObl okrugObl=okrugOblRepo.findByNumber(oblnumber);
-        OkrugCity okrugCity=okrugCityRepo.findByNumber(citynumber);
+        City city1=cityRepo.findByName(city);
+        List<OkrugCity> okrugCitys=okrugCityRepo.findAllByCity_Name(city);
+        OkrugCity okrugCity=new OkrugCity();
+        for (OkrugCity okrugCity1 : okrugCitys)
+        {
+            if (okrugCity1.getNumber()==citynumber)
+            {
+                okrugCity=okrugCity1;
+            }
+        }
+        if (okrugCity.getCity()==null)
+        {
+
+            okrugCity.setCity(city1);
+            okrugCity.setNumber(citynumber);
+            okrugCityRepo.save(okrugCity);
+        }
+
         try {
             dilnizia.setRegion(region);
         }catch (Exception e){}

@@ -451,9 +451,14 @@ public class Parser {
                         city.setTypeCity(TypeCity.city_all);
                 }
                 else if (array_city.length >= 2) {
+                    String te="";
                     coun+=1;
+                    for (int i =1;i<array_city.length;i++)
+                    {
+                        te+=array_city[i];
+                    }
                     System.out.println("city: " + array_city[0] + " " + array_city[1] + " " + "!!!!!!!!!!");
-                    city.setName(array_city[1]);
+                    city.setName(te.trim());
                     city.setTypeCity(TypeCity.city);
 
                 }
