@@ -13,35 +13,17 @@
             </div>
         </div>
         <div class="card-columns " >
-            <#list okrugs as okrug>
-                <div class="card my-3 " >
-                    <div class="m-2">
-                        <a>${okrug.number}</a>
-                        <#list repoDep.findAllByOkrugCity(okrug) as deputat>
-                            <div> <a>${deputat.name}</a>
-                                <a>${deputat.surname}</a>
-                                <a>${deputat.partion}</a>
-                            </div>
-                        </#list>
-                        <div>
-                            <#attempt>
-                                <h1>${okrug.number}</h1>
-                                <td><a href="/okrugcity/${okrug.getId()?c}">edit</a></td>
 
-                                <#recover>
-                                    okrug haven`t choose
-                            </#attempt>
-                        </div>
-                    </div>
-                    <div class="card my-1">
-                        <a>${okrug.getRegion()}</a>
-                    </div>
+            <form method="get" action="/okrugcity/getokrugs">
+                <select name="city">
+                    <#list cities as city>
+                        <option value="${city.getName()}">${city.getName()}</option>
+                    </#list>
+                </select>
 
-                </div>
+                <button type="submit">Вибрать</button>
+            </form>
 
-            <#else>
-                No message
-            </#list>
         </div>
     </div>
 </@c.page>

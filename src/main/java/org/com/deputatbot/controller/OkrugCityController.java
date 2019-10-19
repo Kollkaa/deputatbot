@@ -1,6 +1,7 @@
 package org.com.deputatbot.controller;
 
 import org.com.deputatbot.domain.*;
+import org.com.deputatbot.repos.CityRepo;
 import org.com.deputatbot.repos.DeputatRepo;
 import org.com.deputatbot.repos.OkrugCityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,21 @@ public class OkrugCityController {
 
     @Autowired
     private DeputatRepo deputatRepo;
+    @Autowired
+    private CityRepo cityRepo;
+
+
+    @GetMapping("/getokrugs")
+    public String okrugs( Model model,@RequestParam("city") String city) {
+        model.addAttribute("okrugs", okrugCityRepo.findAllByCity_Name(city));
+        model.addAttribute("repoDep",deputatRepo);
+        List<Partia>partias=new ArrayList<>();
+        for (Partia r:Partia.values())
+        {partias.add(r);}
+        model.addAttribute("partias",partias);
+
+        return "okrugs";
+    }
 
     @GetMapping
     public String main( Model model,Integer number) {
@@ -29,7 +45,7 @@ public class OkrugCityController {
         } else {
             messages = okrugCityRepo.findAll();
         }
-
+        model.addAttribute("cities",cityRepo.findAll());
         model.addAttribute("okrugs", okrugCityRepo.findAll());
         model.addAttribute("repoDep",deputatRepo);
         List<Partia>partias=new ArrayList<>();

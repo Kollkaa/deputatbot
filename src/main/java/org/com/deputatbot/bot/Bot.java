@@ -190,7 +190,7 @@ String sorry="Напевно ви мали на увазі :";
                                                         + city.getName() + " " + typeCity.GetTitle() + "\n";
                                             mees=true;
                                             }
-                                        }catch (Exception e){e.printStackTrace();  info += "\nТвій мер - в розробці"; }
+
                                         try {
                                             info += mer.getSurname().toUpperCase() + " "
                                                     + mer.getName().toUpperCase() + " "
@@ -198,6 +198,7 @@ String sorry="Напевно ви мали на увазі :";
                                                     "\n /id_" + mer.getId() + "\n";
 
                                         } catch (Exception e) {  e.printStackTrace();      }
+                                        }catch (Exception e){e.printStackTrace();  }
                                         info += "\nТвій депутат обласної ради\n" +
                                                 "Округ № - ";
                                         try {
@@ -207,10 +208,12 @@ String sorry="Напевно ви мали на увазі :";
                                                     Integer.valueOf("asd");
                                                 for (Deputat dep: deputatRepo.findAllByOkrugObl(okrugObl)) {
                                                    deputat=dep;
-                                                   info += deputat.getSurname().toUpperCase() + " "
-                                                         + deputat.getName().toUpperCase() + " "
-                                                         + deputat.getPartion().toUpperCase() +
-                                                         "\n /id_" + deputat.getId() + "\n";
+                                                   try {
+                                                       info += deputat.getSurname().toUpperCase() + " "
+                                                               + deputat.getName().toUpperCase() + " "
+                                                               + deputat.getPartion().toUpperCase() +
+                                                               "\n /id_" + deputat.getId() + "\n";
+                                                   }catch (Exception e){}
                                                 }
 
                                             } catch (Exception e) {e.printStackTrace();
@@ -229,22 +232,20 @@ String sorry="Напевно ви мали на увазі :";
                                                         "Округ " + okrugCity.getNumber() + "\n";
 
                                         }
-                                        }catch (Exception e)
-                                        {info += "\nТвій депутат міської ради\n" +
-                                                "Округ № - врозробці ";}
+
                                         try {
                                             try {
                                                 if(deputatRepo.findAllByOkrugCity(okrugCity).size()<1)
                                                     Integer.valueOf("asd");
                                                 for (Deputat dep: deputatRepo.findAllByOkrugCity(okrugCity))
                                                 {
-                                                    if (city==dep.getOkrugCity().getCity()) {
-                                                        deputat = dep;
-                                                        info += deputat.getSurname().toUpperCase() + " "
-                                                                + deputat.getName().toUpperCase() + " "
-                                                                + deputat.getPartion().toUpperCase() +
-                                                                "\n /id_" + deputat.getId() + "\n";
-                                                    }
+                                                            deputat = dep;
+                                                            info += deputat.getSurname().toUpperCase() + " "
+                                                                    + deputat.getName().toUpperCase() + " "
+                                                                    + deputat.getPartion().toUpperCase() +
+                                                                    "\n /id_" + deputat.getId() + "\n";
+
+
                                                 }
                                             } catch (Exception e) {e.printStackTrace();
                                                 if (deputatRepo.findAllByOkrugCity(okrugCity).size()==0)
@@ -253,7 +254,10 @@ String sorry="Напевно ви мали на увазі :";
                                                         "https://goo-gl.su/yO1fx";
                                             }
                                         } catch (Exception e) {   e.printStackTrace();      }
-
+                                        }catch (Exception e)
+                                        {
+                                            e.printStackTrace();
+                                        }
 
 
 
@@ -422,10 +426,12 @@ String sorry="Напевно ви мали на увазі :";
 
             cities = dilniziaRepo.findAllByRegionContaining(city);
             if (cities.size() == 1) {
+                System.out.println("size==1");
                 dilnizia = cities.get(0);
                 return dilnizia;
             }
             if (cities.size() == 0) {
+                System.out.println("size==0");
                 return null;
             }
 
@@ -435,11 +441,14 @@ String sorry="Напевно ви мали на увазі :";
                     System.out.println(dilnizias.getNumber());
                 }
             }
+            System.out.println("size>1");
             if (names.size() == 1) {
+                System.out.println("size==1");
                 dilnizia = names.get(0);
                 return dilnizia;
             }
             if (names.size() == 0) {
+                System.out.println("size==0");
                 return null;
             }
             for (Dilnizia dilnizias : names) {
