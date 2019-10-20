@@ -30,17 +30,17 @@ public class FeedbackController {
     }
     @GetMapping("/notCorect")
     public String NotCorectFeedback(Model model) {
-        model.addAttribute("feedbacks",feedbackRepo.findAllByTypeFeedback(TypeFeedback.notFound));
+        model.addAttribute("feedbacks",feedbackRepo.findAllByTypeFeedback(TypeFeedback.notCorect));
         return "feedback";
     }
     @GetMapping("/likeBot")
     public String LikeBotFeedback(Model model) {
-        model.addAttribute("feedbacks",feedbackRepo.findAllByTypeFeedback(TypeFeedback.notFound));
+        model.addAttribute("feedbacks",feedbackRepo.findAllByTypeFeedback(TypeFeedback.likeBot));
         return "feedback";
     }
     @GetMapping("/anything")
     public String AbythingFeedback(Model model) {
-        model.addAttribute("feedbacks",feedbackRepo.findAllByTypeFeedback(TypeFeedback.notFound));
+        model.addAttribute("feedbacks",feedbackRepo.findAllByTypeFeedback(TypeFeedback.anythingFeedback));
         return "feedback";
     }
 

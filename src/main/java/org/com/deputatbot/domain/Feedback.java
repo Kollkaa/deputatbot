@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Entity
@@ -18,13 +19,13 @@ public class Feedback {
     @Enumerated(EnumType.STRING)
     private  TypeFeedback typeFeedback;
 
-    private LocalDate date;
+    private String date;
 
     public String getDate() {
-        return date.toString();
+        return this.date.toString();
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

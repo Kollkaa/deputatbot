@@ -91,6 +91,7 @@ String sorry="Напевно ви мали на увазі :";
 
     }
 
+    Feedback feedback1=new Feedback();
 
 
     @Override
@@ -123,10 +124,31 @@ String sorry="Напевно ви мали на увазі :";
                         e.printStackTrace();
                     }
                     break;
+                case "назад":
+                    List<KeyboardRow> arre=new ArrayList<>();
+                    KeyboardRow le=new KeyboardRow();
+                    le.add(new KeyboardButton("@ObranetsBot скажи, хто мій депутат?"));
+                    KeyboardRow aere=new KeyboardRow();
+                    aere.add("Відправити відгук");
+                    arre.add(aere);
+                    arre.add(le);
+                    ReplyKeyboardMarkup jee=new ReplyKeyboardMarkup();
+                    jee      .setKeyboard(arre)
+                            .setSelective(true)
+                            .setResizeKeyboard(true)
+                            .setOneTimeKeyboard(true);
+                    try {
+                        sendApiMethod(new SendMessage()
+                                .setChatId(update.getMessage().getChatId())
+                                .setText(start).setReplyMarkup(jee));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 case "Відправити відгук":
                     List<KeyboardRow> arrayListr=new ArrayList<>();
-                    KeyboardRow le=new KeyboardRow();
-                    le.add(new KeyboardButton("назад"));
+                    KeyboardRow lee=new KeyboardRow();
+                    lee.add(new KeyboardButton("назад"));
                     KeyboardRow aeer=new KeyboardRow();
                     aeer.add("не знайшов адрес");
                     aeer.add("неправильна інформація");
@@ -135,7 +157,7 @@ String sorry="Напевно ви мали на увазі :";
                     aeer.add("мені сподобалося");
                     aeer.add("інше");
                     arrayListr.add(aeer);
-                    arrayListr.add(le);
+                    arrayListr.add(lee);
                     ReplyKeyboardMarkup jr=new ReplyKeyboardMarkup();
                     jr      .setKeyboard(arrayListr)
                             .setSelective(true)
@@ -173,8 +195,7 @@ String sorry="Напевно ви мали на увазі :";
                     }
                     break;
                     default:
-                        Feedback feedback1=new Feedback();
-                        if (update.getMessage().getText().contains("не знайшов адрес")){
+                        if (update.getMessage().getText().equals("не знайшов адрес")){
                             try {
                                 sendApiMethod(new SendMessage().setText("Напишіть відгук")
                                         .setChatId(update.getMessage().getChatId()));
@@ -182,10 +203,11 @@ String sorry="Напевно ви мали на увазі :";
                                 e.printStackTrace();
                             }
                             feedback=true;
-                            feedback1.setDate(LocalDate.now());
+                            feedback1.setDate(LocalDate.now().toString());
                             feedback1.setTypeFeedback(TypeFeedback.notFound);
+                            System.out.println(TypeFeedback.notFound);
                         }
-                        else if(update.getMessage().getText().contains("неправильна інформація")){
+                        else if(update.getMessage().getText().equals("неправильна інформація")){
                             try {
                                 sendApiMethod(new SendMessage().setText("Напишіть відгук")
                                         .setChatId(update.getMessage().getChatId()));
@@ -193,10 +215,11 @@ String sorry="Напевно ви мали на увазі :";
                                 e.printStackTrace();
                             }
                             feedback=true;
-                            feedback1.setDate(LocalDate.now());
+                            feedback1.setDate(LocalDate.now().toString());
                             feedback1.setTypeFeedback(TypeFeedback.notCorect);
+                            System.out.println(TypeFeedback.notCorect);
                         }
-                       else if(update.getMessage().getText().contains("мені сподобалося")){
+                       else if(update.getMessage().getText().equals("мені сподобалося")){
                             try {
                                 sendApiMethod(new SendMessage().setText("Напишіть відгук")
                                         .setChatId(update.getMessage().getChatId()));
@@ -204,10 +227,11 @@ String sorry="Напевно ви мали на увазі :";
                                 e.printStackTrace();
                             }
                             feedback=true;
-                            feedback1.setDate(LocalDate.now());
+                            feedback1.setDate(LocalDate.now().toString());
                             feedback1.setTypeFeedback(TypeFeedback.likeBot);
+                            System.out.println(TypeFeedback.likeBot);
                         }
-                        else if(update.getMessage().getText().contains("інше")){
+                        else if(update.getMessage().getText().equals("інше")){
                             try {
                                 sendApiMethod(new SendMessage().setText("Напишіть відгук")
                                         .setChatId(update.getMessage().getChatId()));
@@ -215,16 +239,29 @@ String sorry="Напевно ви мали на увазі :";
                                 e.printStackTrace();
                             }
                             feedback=true;
-                            feedback1.setDate(LocalDate.now());
+                            feedback1.setDate(LocalDate.now().toString());
                             feedback1.setTypeFeedback(TypeFeedback.anythingFeedback);
+                            System.out.println(TypeFeedback.anythingFeedback);
                         }
                         else if(feedback&&update.getMessage().getText()!=null){
                             feedback=false;
                             feedback1.setFeedback(update.getMessage().getText());
+                            System.out.println(LocalDate.now());
+                            feedback1.setDate(LocalDate.now().toString());
                             feedbackRepo.save(feedback1);
+                            System.out.println(feedback1.getDate());
+                            System.out.println(feedback1.getFeedback());
+                            System.out.println(feedback1.getTypeFeedback().GetTypeFeedback());
+                            feedback1=new Feedback();
+                            try {
+                                sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText("Дякуємо за відгук"));
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
                         }
                         else if (update.getMessage().getText().indexOf("/id_")>=0)
                        {
+
                             try {
                                 sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText("в розробці"));
                             } catch (TelegramApiException e) {

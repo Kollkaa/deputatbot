@@ -10,7 +10,10 @@ notFound("не знайшов що шукав"),
             anythingFeedback("інша відповідь");
 
     private String feedback;
-
+    public String GetTypeFeedback()
+    {
+        return this.feedback;
+    }
     TypeFeedback(String feedback) {
         this.feedback = feedback;
     }
