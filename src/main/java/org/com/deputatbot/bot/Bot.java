@@ -123,7 +123,7 @@ String sorry="Напевно ви мали на увазі :";
                         e.printStackTrace();
                     }
                     break;
-                case "Отправить отзив":
+                case "Відправити відгук":
                     List<KeyboardRow> arrayListr=new ArrayList<>();
                     KeyboardRow le=new KeyboardRow();
                     le.add(new KeyboardButton("назад"));
