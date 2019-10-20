@@ -47,6 +47,12 @@
             <input type="hidden" value="${_csrf.token}" name="_csrf">
             <button type="submit">Сохранить</button>
         </form>
+
+        <form method="post" action="/deputats/delDep">
+            <input type="hidden" value="${deputat.getId()?c}" name="deputatId">
+            <input type="hidden" value="${_csrf.token}" name="_csrf">
+            <button type="submit">Delete</button>
+        </form>
     </div>
 
 </@c.page>

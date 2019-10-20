@@ -20,6 +20,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 /*
@@ -35,20 +36,21 @@ public class Bot extends TelegramLongPollingBot {
     private String tokenBot;
     @Value(("${tokenname.bot}"))
     private String tokenNameBot;
-private String info="Щоб з’ясувати, які депутати представляють " +
-        "твій населений пункт в Верховній Раді, а " +
-        "також в місцевих радах - міській, обласній, " +
-        "сільській або селищній раді, потрібно " +
-        "вказати свою адресу за формою: місто, село " +
-        "або ж смт, а також вулицю. **Наприклад, " +
-        "Верхньодніпровськ, Дніпровська-1**" +
-        "\n" +
-        "Після цього я надішлю ФІО народного " +
-        "депутата України від твого округу, а також " +
-        "депутата обласної, міської, селищної чи " +
-        "сільської ради, в залежності від твого місця " +
-        "проживання. Крім того, ти дізнаєшся, хто " +
-        "очолює твоє місто чи то ОТГ, або ж село.";
+private String info1="Щоб з’ясувати, які депутати представляють" +
+        " твій населений пункт в Верховній Раді," +
+        " а також в місцевих радах - міській, обласній, " +
+        "сільській або селищній раді, потрібно вказати " +
+        "свою адресу за формою: місто, село або ж смт," +
+        " а також вулицю.";
+    private String info2="Наприклад ⤵️\n" +
+            "**Верхньодніпровськ, Дніпровська-1**\n";
+    private String info3="Після цього я надішлю ФІО " +
+            "народного депутата України від твого округу," +
+            " а також депутата обласної, міської," +
+            " селищної чи сільської ради, в залежності" +
+            " від твого місця проживання. Крім того, ти" +
+            " дізнаєшся, хто очолює твоє місто чи то ОТГ," +
+            " або ж село";
 private String start="Привіт, друже, я бот. Допоможу знайти твого депутата \uD83D\uDE0E";
 
 String sorry="Напевно ви мали на увазі :";
@@ -69,7 +71,9 @@ String sorry="Напевно ви мали на увазі :";
     private OkrugCityRepo okrugCityRepo;
     @Autowired
     private OkrugOblRepo okrugOblRepo;
-
+    @Autowired
+    private FeedbackRepo feedbackRepo;
+    private boolean feedback=false;
     private boolean support_admin =false;
     @PostConstruct
     public void construct() throws IOException { TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
@@ -102,10 +106,12 @@ String sorry="Напевно ви мали на увазі :";
                     List<KeyboardRow> arr=new ArrayList<>();
                     KeyboardRow l=new KeyboardRow();
                     l.add(new KeyboardButton("@ObranetsBot скажи, хто мій депутат?"));
+                    KeyboardRow aer=new KeyboardRow();
+                    aer.add("Відправити відгук");
+                    arr.add(aer);
                     arr.add(l);
-                    ReplyKeyboard j=new ReplyKeyboardMarkup();
-                    ((ReplyKeyboardMarkup) j)
-                            .setKeyboard(arr)
+                    ReplyKeyboardMarkup j=new ReplyKeyboardMarkup();
+                     j      .setKeyboard(arr)
                             .setSelective(true)
                             .setResizeKeyboard(true)
                             .setOneTimeKeyboard(true);
@@ -117,18 +123,107 @@ String sorry="Напевно ви мали на увазі :";
                         e.printStackTrace();
                     }
                     break;
+                case "Отправить отзив":
+                    List<KeyboardRow> arrayListr=new ArrayList<>();
+                    KeyboardRow le=new KeyboardRow();
+                    le.add(new KeyboardButton("назад"));
+                    KeyboardRow aeer=new KeyboardRow();
+                    aeer.add("не знайшов адрес");
+                    aeer.add("неправильна інформація");
+                    arrayListr.add(aeer);
+                    aeer=new KeyboardRow();
+                    aeer.add("мені сподобалося");
+                    aeer.add("інше");
+                    arrayListr.add(aeer);
+                    arrayListr.add(le);
+                    ReplyKeyboardMarkup jr=new ReplyKeyboardMarkup();
+                    jr      .setKeyboard(arrayListr)
+                            .setSelective(true)
+                            .setResizeKeyboard(true)
+                            .setOneTimeKeyboard(true);
+                    try {
+                        sendApiMethod(new SendMessage()
+                                .setChatId(update.getMessage().getChatId())
+                                .setText("Виберіть тип відгука ▌↓▌").setReplyMarkup(jr));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                        break;
                 case "@ObranetsBot скажи, хто мій депутат?":
                     try {
                         sendApiMethod(new SendMessage()
                                 .setChatId(update.getMessage().getChatId())
-                                .setText(info));
+                                .setText(info1));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        sendApiMethod(new SendMessage()
+                                .setChatId(update.getMessage().getChatId())
+                                .setText(info2));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        sendApiMethod(new SendMessage()
+                                .setChatId(update.getMessage().getChatId())
+                                .setText(info3));
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                     break;
                     default:
-
-                       if (update.getMessage().getText().indexOf("/id_")>=0)
+                        Feedback feedback1=new Feedback();
+                        if (update.getMessage().getText().contains("не знайшов адрес")){
+                            try {
+                                sendApiMethod(new SendMessage().setText("Напишіть відгук")
+                                        .setChatId(update.getMessage().getChatId()));
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
+                            feedback=true;
+                            feedback1.setDate(LocalDate.now());
+                            feedback1.setTypeFeedback(TypeFeedback.notFound);
+                        }
+                        else if(update.getMessage().getText().contains("неправильна інформація")){
+                            try {
+                                sendApiMethod(new SendMessage().setText("Напишіть відгук")
+                                        .setChatId(update.getMessage().getChatId()));
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
+                            feedback=true;
+                            feedback1.setDate(LocalDate.now());
+                            feedback1.setTypeFeedback(TypeFeedback.notCorect);
+                        }
+                       else if(update.getMessage().getText().contains("мені сподобалося")){
+                            try {
+                                sendApiMethod(new SendMessage().setText("Напишіть відгук")
+                                        .setChatId(update.getMessage().getChatId()));
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
+                            feedback=true;
+                            feedback1.setDate(LocalDate.now());
+                            feedback1.setTypeFeedback(TypeFeedback.likeBot);
+                        }
+                        else if(update.getMessage().getText().contains("інше")){
+                            try {
+                                sendApiMethod(new SendMessage().setText("Напишіть відгук")
+                                        .setChatId(update.getMessage().getChatId()));
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
+                            feedback=true;
+                            feedback1.setDate(LocalDate.now());
+                            feedback1.setTypeFeedback(TypeFeedback.anythingFeedback);
+                        }
+                        else if(feedback&&update.getMessage().getText()!=null){
+                            feedback=false;
+                            feedback1.setFeedback(update.getMessage().getText());
+                            feedbackRepo.save(feedback1);
+                        }
+                        else if (update.getMessage().getText().indexOf("/id_")>=0)
                        {
                             try {
                                 sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText("в розробці"));

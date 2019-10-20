@@ -603,20 +603,21 @@ public class Parser {
 
 
 }
-/*spring.datasource.url=jdbc:postgres://scimigdnkpbyzr:3a3320c57b1d16ca45b49f5a6f0bdd8cfe8daf92577544b1cd689620e04d6331@ec2-54-228-243-238.eu-west-1.compute.amazonaws.com:5432/dcku3g1n2qlfrp
+/*
+spring.datasource.url=jdbc:postgresql://localhost/lions
 
-
-spring.datasource.username=scimigdnkpbyzr
-spring.datasource.password=3a3320c57b1d16ca45b49f5a6f0bdd8cfe8daf92577544b1cd689620e04d6331
+spring.datasource.username=postgres
+spring.datasource.password=1234
 spring.jpa.generate-ddl=true
-
 spring.jpa.hibernate.ddl-auto=create
-
 spring.freemarker.expose-request-attributes=true
+
+spring.jpa.properties.hibernate.jdbs.lob.non_contextual_creation=true
 
 
 
 upload.path=src/main/resources/photos
-token.bot=874198635:AAHJYsciMaxQQOA3R96IsBc4ZWfszSXTop4
-tokenname.bot=@ObranetsBot
+token.bot=851210991:AAEJhjujEK7z5e_SfmPevHeWLP0KiK0AHmA
+tokenname.bot=@Polled_bot
+
 */

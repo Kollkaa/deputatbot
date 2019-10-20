@@ -137,4 +137,10 @@ public class DeputatController {
 
         return "redirect:/deputats";
     }
+    @PostMapping("delDep")
+    public String DellDep(@RequestParam("deputatId") Long deputatId)
+    {
+        deputatRepo.deleteById(deputatId);
+        return "redirect:/deputats";
+    }
 }
