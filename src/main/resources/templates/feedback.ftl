@@ -19,7 +19,7 @@
     </form>
 
         <#list feedbacks as feedback>
-            <div><label>--${feedback.getFeedback()}    :      ${feedback.getDate() }</label></div>
+            <div><label>--${feedback.getFeedback()}  :   ${feedback.getDate()}---${feedback.getTypeFeedback().GetTypeFeedback()}</label></div>
             <#else >
             пока ещё отзывов нету
         </#list>

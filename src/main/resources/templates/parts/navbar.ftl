@@ -29,6 +29,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/dilnizias">Дільниці</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/feedback">Відгуки</a>
+            </li>
 
 
             <#if isAdmin>
