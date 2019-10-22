@@ -24,7 +24,7 @@ public class OkrugOblController {
 
     @GetMapping
     public String main( Model model) {
-        model.addAttribute("okrugs", okrugOblRepo.findAll());
+        model.addAttribute("okrugs", okrugOblRepo.findByOrderByNumber());
         model.addAttribute("repoDep",deputatRepo);
         return "okrugObl";
     }

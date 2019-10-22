@@ -306,9 +306,7 @@ String sorry="Напевно ви мали на увазі :";
 
                                             } catch (Exception e) {
                                                 e.printStackTrace();
-                                                info += "Депутата не обрано \uD83D\uDE22 \n" +
-                                                        "/ссылка на Закон України «Про місцеві вибори» \n" +
-                                                        "https://goo-gl.su/yO1fx";
+                                                info += "Депутата не обрано \uD83D\uDE22 \n";
                                             }
                                         } catch (Exception e) { e.printStackTrace();    }
                                         try {
@@ -350,11 +348,10 @@ String sorry="Напевно ви мали на увазі :";
 
                                             } catch (Exception e) {e.printStackTrace();
                                                 if (deputatRepo.findAllByOkrugObl(okrugObl).size()==0)
-                                                    info += "Депутата не обрано \uD83D\uDE22 \n" +
-                                                        "/ссылка на Закон України «Про місцеві вибори» \n" +
-                                                        "https://goo-gl.su/yO1fx";
+                                                    info += "Депутата не обрано \uD83D\uDE22 \n";
+
                                             }
-                                        } catch (Exception e) {    e.printStackTrace();   }
+                                        } catch (Exception e) {    e.printStackTrace();  info += "Депутата не обрано \uD83D\uDE22 \n"; }
                                         try {
                                             if (typeCity == TypeCity.city || typeCity == TypeCity.city_all) {
                                                 info += "\nТвій депутат міської ради\n" +
@@ -381,9 +378,7 @@ String sorry="Напевно ви мали на увазі :";
                                                 }
                                             } catch (Exception e) {e.printStackTrace();
                                                 if (deputatRepo.findAllByOkrugCity(okrugCity).size()==0)
-                                                info += "Депутата не обрано \uD83D\uDE22 \n" +
-                                                        "/ссылка на Закон України «Про місцеві вибори» \n" +
-                                                        "https://goo-gl.su/yO1fx";
+                                                    info += "Депутата не обрано \uD83D\uDE22 \n";
                                             }
                                         } catch (Exception e) {   e.printStackTrace();      }
                                         }catch (Exception e)
@@ -583,6 +578,7 @@ String sorry="Напевно ви мали на увазі :";
                 System.out.println("size==0");
                 return null;
             }
+            List<Dilnizia>list=new ArrayList<>();
             for (Dilnizia dilnizias : names) {
                 String regions = dilnizias.getRegion();
                 System.out.println(dilnizias.getNumber() + " " + regions);
@@ -590,21 +586,62 @@ String sorry="Напевно ви мали на увазі :";
                     String[] adress = regions.split(";");
                     for (String ad : adress) {
                         if (ad.indexOf(name) > 0) {
-
+                            System.out.println(ad+"\n");
 
                             String adess = ad.split(":")[1];
                             try {
 
                                 if (adess.indexOf(number.trim())>=0) {
-                                    System.out.println(number);
-                                    System.out.println(adess+"\n\n");
-                                    return dilnizias;
-                                }else {
-                                    for (String rty : adess.split(",")) {
-                                        if (rty.contains(number.trim()))
+                                    System.out.println(number.trim()+"||||"+adess.trim());
+
+                                    try {
+                                        int num= Integer.valueOf(number.trim());
+                                        int rt=Integer.valueOf(adess.trim());
+                                        if (num==rt)
                                             return dilnizias;
+                                    }catch (Exception e){}
+                                    for (String rty : adess.split(",")) {
+                                        try {
+                                            int num= Integer.valueOf(number.trim());
+                                            int rt=Integer.valueOf(rty.trim());
+                                            if (num==rt){
+                                            System.out.println(num+"====="+rt);
+                                                return dilnizias;
+                                            }
+                                        }catch (Exception e){}
                                         try {
                                             String[] ert = rty.trim().split("–");
+                                            System.out.println("split(--)");
+                                            int num = Integer.valueOf(number.trim());
+                                            int num1 = Integer.valueOf(ert[0].trim());
+                                            if (num1==num)
+                                                return dilnizias;
+                                            int num2 = Integer.valueOf(ert[1].trim());
+                                            if (num2==num)
+                                                return dilnizias;
+                                            System.out.println(num + " " + num1 + " " + num2);
+                                            if (num < num2 && num > num1) {
+                                                return dilnizias;
+                                            }
+
+                                            } catch (Exception er) {
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    for (String rty : adess.split(",")) {
+                                        try {
+                                            int num= Integer.valueOf(number.trim());
+                                            int rt=Integer.valueOf(rty.trim());
+                                            if (num==rt){
+                                                System.out.println(num+"====="+rt);
+                                                return dilnizias;
+                                            }
+                                        }catch (Exception e){}
+                                        try {
+                                            String[] ert = rty.trim().split("–");
+                                            System.out.println("split(--)");
                                             int num = Integer.valueOf(number.trim());
                                             int num1 = Integer.valueOf(ert[0].trim());
                                             int num2 = Integer.valueOf(ert[1].trim());
@@ -617,7 +654,7 @@ String sorry="Напевно ви мали на увазі :";
                                                 dilnizia = dilnizias;
                                                 return dilnizia;
                                             }
-                                            } catch (Exception er) {
+                                        } catch (Exception er) {
                                         }
                                     }
                                 }
@@ -626,22 +663,23 @@ String sorry="Напевно ви мали на увазі :";
                                     String[] ert = ad.split("-");
                                     int num = Integer.valueOf(number.trim());
                                     int num1 = Integer.valueOf(ert[0].trim());
+                                    if (num1==num)
+                                        return dilnizias;
                                     int num2 = Integer.valueOf(ert[1].trim());
+                                    if (num2==num)
+                                        return dilnizias;
                                     if (num < num2 && num > num1) {
-                                        dilnizia = dilnizias;
-                                        return dilnizia;
+                                        return dilnizias;
                                     }
-                                    if (num == num1 || num == num2) {
-                                        dilnizia = dilnizias;
-                                        return dilnizia;
-                                    }
+
+
                                 } catch (Exception er) {
                                     if (ad.indexOf(number.trim()) >= 0) {
-                                        dilnizia = dilnizias;
-                                        return dilnizia;
+                                        return dilnizias;
                                     }
                                 }
                             }
+
                         } else {
 
 
@@ -655,11 +693,12 @@ String sorry="Напевно ви мали на увазі :";
                     return dilnizia;
                 }
             }
+            return list.get(0);
         }
         else {
             return null;
         }
-        return null;
+
     }
     public String[] allStr(String request)
     {

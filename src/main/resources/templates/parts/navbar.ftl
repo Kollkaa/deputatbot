@@ -9,6 +9,7 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
+            <#if isAdmin>
 
             <li class="nav-item">
                 <a class="nav-link" href="/deputats">Депутати по округам</a>
@@ -34,7 +35,6 @@
             </li>
 
 
-            <#if isAdmin>
                 <li class="nav-item">
                     <a class="nav-link" href="/user">Пользователи</a>
                 </li>

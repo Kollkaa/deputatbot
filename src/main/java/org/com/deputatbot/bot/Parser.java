@@ -22,6 +22,10 @@ public class Parser {
         {
             ParserSite(i, okrugNduRepo,dilniziaRepo,deputatRepo);
         }
+        for (Integer i=211;i<223;i++)
+        {
+            ParserSite(i, okrugNduRepo,dilniziaRepo,deputatRepo);
+        }
     }
 
     public  void ParserSite (Integer number_nduokrug, OkrugNduRepo okrugNduRepo, DilniziaRepo dilniziaRepo, DeputatRepo deputatRepo)  {
@@ -279,12 +283,19 @@ public class Parser {
 
                     long_okrug = okruge.getNumericCellValue();
 
-                    okrug=new OkrugObl();
+                    okrug=okrugOblRepo.findByNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
 
-                    okrug.setRegion(str_dilnizia);
+                   if (okrug!=null) {
+                       okrug.setRegion(okrug.getRegion()+str_dilnizia);
 
-                    okrug.setNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
+                       okrug.setNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
+                   }
+                   else {
+                       okrug=new OkrugObl();
+                       okrug.setRegion(str_dilnizia);
 
+                       okrug.setNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
+                   }
                     okrugOblRepo.save(okrug);
 
                     System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug);
@@ -313,12 +324,20 @@ public class Parser {
 
                     long_okrug = okruge.getNumericCellValue();
 
-                    okrug=new OkrugObl();
 
-                    okrug.setRegion(str_dilnizia);
+                    okrug=okrugOblRepo.findByNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
 
-                    okrug.setNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
+                    if (okrug!=null) {
+                        okrug.setRegion(okrug.getRegion()+str_dilnizia);
 
+                        okrug.setNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
+                    }
+                    else {
+                        okrug=new OkrugObl();
+                        okrug.setRegion(str_dilnizia);
+
+                        okrug.setNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
+                    }
                     okrugOblRepo.save(okrug);
 
                     str_dilnizia = String.valueOf(dilnizia.getNumericCellValue()).split("\\.")[0];
@@ -359,7 +378,14 @@ public class Parser {
                             deputat.setPartia(Partia.GP);
                         }
 
-
+                        for (Deputat dep:deputatRepo.findAllByOkrugObl(okrug))
+                        {
+                            if (dep.getSurname()==deputat.getSurname())
+                            {}
+                            else{
+                            }
+                        }
+                        if (deputatRepo.findAllByOkrugObl(okrug).size()==0)
                         deputat.setOkrugObl(okrug);
 
                         deputatRepo.save(deputat);

@@ -12,5 +12,5 @@ public interface OkrugOblRepo extends JpaRepository<OkrugObl,Long> {
    OkrugObl findByNumber(Integer number);
    List<OkrugObl> findAllByNumber(Integer number);
    OkrugObl findByRegionContaining(String dilnizia);
-
+   List<OkrugObl>findByOrderByNumber();
 }

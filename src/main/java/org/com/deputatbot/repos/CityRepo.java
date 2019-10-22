@@ -8,6 +8,5 @@ import java.util.List;
 
 public interface CityRepo extends JpaRepository<City, Long> {
     List<City>findAllByName(String name);
-
     City findByName(String name);
 }
