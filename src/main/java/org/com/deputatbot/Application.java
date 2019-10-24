@@ -29,14 +29,8 @@ private UserRepo userRepo;
 
         ApiContextInitializer.init();
         SpringApplication.run(Application.class, args);
-        User user=new User();
-        user.setUsername("obranetc");
-        user.setPassword("2019");
-        user.setActive(true);
-        Set<Role> roles=new HashSet<>();
-        roles.add(Role.ADMIN);
-        roles.add(Role.USER);
-        user.setRoles(new HashSet<Role>(){});
+
+
 
     }
 

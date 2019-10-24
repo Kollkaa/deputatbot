@@ -88,7 +88,15 @@ String sorry="Напевно ви мали на увазі :";
     parser.ParserExelNDU(okrugNduRepo,deputatRepo);
     parser.ParserExelOBL(okrugOblRepo,deputatRepo,dilniziaRepo);
     parser.ParserExelCITY(cityRepo,okrugCityRepo,deputatRepo,merRepo,dilniziaRepo);
-
+        User user=new User();
+        user.setUsername("obranetc");
+        user.setPassword("2019");
+        user.setActive(true);
+        Set<Role> roles=new HashSet<>();
+        roles.add(Role.ADMIN);
+        roles.add(Role.USER);
+        user.setRoles(roles);
+        userRepo.save(user);
     }
 
     Feedback feedback1=new Feedback();
