@@ -355,7 +355,7 @@ String sorry="Напевно ви мали на увазі :";
                                         } catch (Exception e) {  e.printStackTrace();      }
                                         }catch (Exception e){e.printStackTrace();  }
                                         try {
-                                            if (okrugCity.getCity().getName()=="Київ")
+                                            if (okrugCity.getCity().getName().toLowerCase()=="київ")
                                             {}else
                                             {info += "\nТвій депутат обласної ради\n" +
                                                     "Округ № - ";
