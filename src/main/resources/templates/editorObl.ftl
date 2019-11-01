@@ -27,6 +27,26 @@
                     </select>
                 </div>
             </#list>
+            <#if deputats.findAllByOkrugCity(okrugcity).size()==0>
+                <form method="post" action="/deputats/addDepo">
+                    <input type="text" name="name" value="name">
+                    <input type="text" name="surname" value="surname">
+                    <input type="text" name="partional" value="partion">
+                    <div>
+                        <h6>Виберіть Партію</h6>
+                        <select  name="partia">
+                            Виберіть потрібний партію
+                            <#list partias as partia >
+                                <option value="${partia}">${partia.GetPartiaName()}</option>
+                            </#list>
+                        </select>
+                    </div>
+                    <input type="hidden" value="${okrugobl.getId()?c}" name="id">
+                    <input type="hidden" value="${_csrf.token}" name="_csrf">
+                    <button type="submit">Сохранить</button>
+                </form>
+
+            </#if>
 
 
             <input type="hidden" value="${okrugobl.getId()?c}" name="okrugId">

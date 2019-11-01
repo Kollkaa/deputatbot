@@ -30,7 +30,7 @@
                     <a href="/deputats/${dep.getId()?c}">Редагувати</a>
                 </#list>
                 <#if deputats.findAllByOkrugCity(okrugcity).size()==0>
-                    <form method="post" action="/deputats/addDep">
+                    <form method="post" action="/deputats/addDepc">
                         <input type="text" name="name" value="name">
                         <input type="text" name="surname" value="surname">
                         <input type="text" name="partional" value="partion">
@@ -55,7 +55,7 @@
         </form>
                 <#recover>
                     ew
-                        <form method="post" action="/deputats/addDep">
+                        <form method="post" action="/deputats/addDepc">
                             <input type="text" name="name" value="name">
                             <input type="text" name="surname" value="surname">
                             <input type="text" name="partion" value="partion">

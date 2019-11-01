@@ -76,27 +76,36 @@ String sorry="Напевно ви мали на увазі :";
     private boolean feedback=false;
     private boolean support_admin =false;
     @PostConstruct
-    public void construct() throws IOException { TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
+    public void construct() throws IOException {
+        TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
             telegramBotsApi.registerBot(this);
         } catch (TelegramApiRequestException e) {
             e.printStackTrace();
         }
-    Parser parser =new Parser();
+        if (okrugNduRepo.findAll().size() > 1) {
+        }else
+        {
+            Parser parser = new Parser();
 
-    parser.allNduOkrug(okrugNduRepo,dilniziaRepo,deputatRepo);
-    parser.ParserExelNDU(okrugNduRepo,deputatRepo);
-    parser.ParserExelOBL(okrugOblRepo,deputatRepo,dilniziaRepo);
-    parser.ParserExelCITY(cityRepo,okrugCityRepo,deputatRepo,merRepo,dilniziaRepo);
-        User user=new User();
-        user.setUsername("obranetc");
-        user.setPassword("2019");
-        user.setActive(true);
-        Set<Role> roles=new HashSet<>();
-        roles.add(Role.ADMIN);
-        roles.add(Role.USER);
-        user.setRoles(roles);
-        userRepo.save(user);
+            parser.allNduOkrug(okrugNduRepo, dilniziaRepo, deputatRepo);
+            parser.ParserExelNDU(okrugNduRepo, deputatRepo);
+            parser.ParserExelOBL(okrugOblRepo, deputatRepo, dilniziaRepo);
+            parser.ParserExelCITY(cityRepo, okrugCityRepo, deputatRepo, merRepo, dilniziaRepo);
+
+            parser.ParserExelNDUKuev(okrugNduRepo, deputatRepo);
+            parser.ParserExelCITYKuev(cityRepo, okrugCityRepo, deputatRepo, merRepo, dilniziaRepo);
+
+            User user = new User();
+            user.setUsername("obranetc");
+            user.setPassword("2019");
+            user.setActive(true);
+            Set<Role> roles = new HashSet<>();
+            roles.add(Role.ADMIN);
+            roles.add(Role.USER);
+            user.setRoles(roles);
+            userRepo.save(user);
+        }
     }
 
     Feedback feedback1=new Feedback();
@@ -318,15 +327,23 @@ String sorry="Напевно ви мали на увазі :";
                                             }
                                         } catch (Exception e) { e.printStackTrace();    }
                                         try {
-                                            if (typeCity == TypeCity.city||typeCity==TypeCity.city_all) {
+                                            if (typeCity == TypeCity.city) {
                                                 info += "\nТвій мер " +
                                                         "м." + city.getName() + "\n";
                                                 mees=true;
                                             }
-                                            else{
+                                            else if (typeCity == TypeCity.city_country){
                                                 info += "\nТвій голова селищної ради\n"
                                                         + city.getName() + " " + typeCity.GetTitle() + "\n";
                                             mees=true;
+                                            }else if (typeCity == TypeCity.country){
+                                                info += "\nТвій голова сільської ради\n"
+                                                        + city.getName() + " " + typeCity.GetTitle() + "\n";
+                                                mees=true;
+                                            }else if (typeCity==TypeCity.city_all){
+                                                info += "\nТвій голова міської ради\n"
+                                                        + city.getName() + " " + typeCity.GetTitle() + "\n";
+                                                mees=true;
                                             }
 
                                         try {
@@ -337,43 +354,84 @@ String sorry="Напевно ви мали на увазі :";
 
                                         } catch (Exception e) {  e.printStackTrace();      }
                                         }catch (Exception e){e.printStackTrace();  }
-                                        info += "\nТвій депутат обласної ради\n" +
-                                                "Округ № - ";
                                         try {
-                                            info += okrugObl.getNumber() + "\n";
-                                            try {
-                                                if(deputatRepo.findAllByOkrugObl(okrugObl).size()<1)
-                                                    Integer.valueOf("asd");
-                                                for (Deputat dep: deputatRepo.findAllByOkrugObl(okrugObl)) {
-                                                   deputat=dep;
-                                                   try {
-                                                       info += deputat.getSurname().toUpperCase() + " "
-                                                               + deputat.getName().toUpperCase() + " "
-                                                               + deputat.getPartion().toUpperCase() +
-                                                               "\n /id_" + deputat.getId() + "\n";
-                                                   }catch (Exception e){}
-                                                }
+                                            if (okrugCity.getCity().getName()=="Київ")
+                                            {}else
+                                            {info += "\nТвій депутат обласної ради\n" +
+                                                    "Округ № - ";
+                                                try {
+                                                    info += okrugObl.getNumber() + "\n";
+                                                    try {
+                                                        if(deputatRepo.findAllByOkrugObl(okrugObl).size()<1)
+                                                            Integer.valueOf("asd");
+                                                        for (Deputat dep: deputatRepo.findAllByOkrugObl(okrugObl)) {
+                                                            deputat=dep;
+                                                            try {
+                                                                info += deputat.getSurname().toUpperCase() + " "
+                                                                        + deputat.getName().toUpperCase() + " "
+                                                                        + deputat.getPartion().toUpperCase() +
+                                                                        "\n /id_" + deputat.getId() + "\n";
+                                                            }catch (Exception e){}
+                                                        }
 
-                                            } catch (Exception e) {e.printStackTrace();
-                                                if (deputatRepo.findAllByOkrugObl(okrugObl).size()==0)
-                                                    info += "Депутата не обрано \uD83D\uDE22 \n";
+                                                    } catch (Exception e) {e.printStackTrace();
+                                                        if (deputatRepo.findAllByOkrugObl(okrugObl).size()==0)
+                                                            info += "Депутата не обрано \uD83D\uDE22 \n";
 
+                                                    }
+                                                } catch (Exception e) {    e.printStackTrace();  info += "Депутата не обрано \uD83D\uDE22 \n"; }
                                             }
-                                        } catch (Exception e) {    e.printStackTrace();  info += "Депутата не обрано \uD83D\uDE22 \n"; }
-                                        try {
-                                            if (typeCity == TypeCity.city || typeCity == TypeCity.city_all) {
-                                                info += "\nТвій депутат міської ради\n" +
-                                                        "Округ №" + okrugCity.getNumber() + "\n";
-                                            } else {
-                                                info += "\nТвій депутат селищної ради\n" +
-                                                        "Округ " + okrugCity.getNumber() + "\n";
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                            info += "\nТвій депутат обласної ради\n" +
+                                                    "Округ № - ";
+                                            try {
+                                                info += okrugObl.getNumber() + "\n";
+                                                try {
+                                                    if(deputatRepo.findAllByOkrugObl(okrugObl).size()<1)
+                                                        Integer.valueOf("asd");
+                                                    for (Deputat dep: deputatRepo.findAllByOkrugObl(okrugObl)) {
+                                                        deputat=dep;
+                                                        try {
+                                                            info += deputat.getSurname().toUpperCase() + " "
+                                                                    + deputat.getName().toUpperCase() + " "
+                                                                    + deputat.getPartion().toUpperCase() +
+                                                                    "\n /id_" + deputat.getId() + "\n";
+                                                        }catch (Exception e1){}
+                                                    }
 
+                                                } catch (Exception e1) {e1.printStackTrace();
+                                                    if (deputatRepo.findAllByOkrugObl(okrugObl).size()==0)
+                                                        info += "Депутата не обрано \uD83D\uDE22 \n";
+
+                                                }
+                                            } catch (Exception e1) {    e1.printStackTrace();  info += "Депутата не обрано \uD83D\uDE22 \n"; }
                                         }
-
+                                        try {
                                         try {
                                             try {
                                                 if(deputatRepo.findAllByOkrugCity(okrugCity).size()<1)
-                                                    Integer.valueOf("asd");
+                                                {       Integer.valueOf("asd");
+
+                                                 }else if (deputatRepo.findAllByOkrugCity(okrugCity).size()>=1)
+                                                { if (typeCity == TypeCity.city) {
+                                                    info += "\nТвій депутат міської ради" +
+                                                            "Округ № " + city.getName() + "\n";
+                                                    mees=true;
+                                                }
+                                                else if (typeCity == TypeCity.city_country){
+                                                    info += "\nТвій депутат селищної ради\n"
+                                                           + "Округ №  " +okrugCity.getNumber() + "\n";
+                                                    mees=true;
+                                                }else if (typeCity == TypeCity.country){
+                                                    info += "\nТвій депутат сільської ради\n"
+                                                            + " Округ № " + okrugCity.getNumber() + "\n";
+                                                    mees=true;
+                                                }else if (typeCity==TypeCity.city_all){
+                                                    info += "\nТвій депутат міської ради\n"
+                                                           + "Округ №  " + okrugCity.getNumber() + "\n";
+                                                    mees=true;
+                                                }}
                                                 for (Deputat dep: deputatRepo.findAllByOkrugCity(okrugCity))
                                                 {
                                                             deputat = dep;
@@ -385,8 +443,7 @@ String sorry="Напевно ви мали на увазі :";
 
                                                 }
                                             } catch (Exception e) {e.printStackTrace();
-                                                if (deputatRepo.findAllByOkrugCity(okrugCity).size()==0)
-                                                    info += "Депутата не обрано \uD83D\uDE22 \n";
+
                                             }
                                         } catch (Exception e) {   e.printStackTrace();      }
                                         }catch (Exception e)
