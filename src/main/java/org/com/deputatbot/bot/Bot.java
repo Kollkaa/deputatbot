@@ -416,8 +416,25 @@ String sorry="Напевно ви мали на увазі :";
                                         try {
                                             try {
                                                 if(deputatRepo.findAllByOkrugCity(okrugCity).size()<1)
-                                                {       Integer.valueOf("asd");
-
+                                                {   if (typeCity == TypeCity.city) {
+                                                        info += "\nТвій депутат міської ради\n" +
+                                                                "Округ № " + okrugCity.getNumber() + "\n";
+                                                        mees=true;
+                                                    }
+                                                    else if (typeCity == TypeCity.city_country){
+                                                        info += "\nТвій депутат селищної ради\n"
+                                                                + "Округ №  " +okrugCity.getNumber() + "\n";
+                                                        mees=true;
+                                                    }else if (typeCity == TypeCity.country){
+                                                        info += "\nТвій депутат сільської ради\n"
+                                                                + " Округ № " + okrugCity.getNumber() + "\n";
+                                                        mees=true;
+                                                    }else if (typeCity==TypeCity.city_all){
+                                                        info += "\nТвій депутат міської ради\n"
+                                                                + "Округ №  " + okrugCity.getNumber() + "\n";
+                                                        mees=true;
+                                                    }
+                                                    info+="\nДепутата не обрано \uD83D\uDE22";
                                                  }else if (deputatRepo.findAllByOkrugCity(okrugCity).size()>=1)
                                                 { if (typeCity == TypeCity.city) {
                                                     info += "\nТвій депутат міської ради\n" +
@@ -426,7 +443,7 @@ String sorry="Напевно ви мали на увазі :";
                                                 }
                                                 else if (typeCity == TypeCity.city_country){
                                                     info += "\nТвій депутат селищної ради\n"
-                                                           + "Округ №  " +okrugCity.getNumber() + "\n";
+                                                            + "Округ №  " +okrugCity.getNumber() + "\n";
                                                     mees=true;
                                                 }else if (typeCity == TypeCity.country){
                                                     info += "\nТвій депутат сільської ради\n"
@@ -434,10 +451,10 @@ String sorry="Напевно ви мали на увазі :";
                                                     mees=true;
                                                 }else if (typeCity==TypeCity.city_all){
                                                     info += "\nТвій депутат міської ради\n"
-                                                           + "Округ №  " + okrugCity.getNumber() + "\n";
+                                                            + "Округ №  " + okrugCity.getNumber() + "\n";
                                                     mees=true;
                                                 }}
-                                                for (Deputat dep: deputatRepo.findAllByOkrugCity(okrugCity))
+                                            for (Deputat dep: deputatRepo.findAllByOkrugCity(okrugCity))
                                                 {
                                                             deputat = dep;
                                                             info += deputat.getSurname().toUpperCase() + " "
