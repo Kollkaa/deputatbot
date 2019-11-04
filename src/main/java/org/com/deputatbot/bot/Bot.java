@@ -2,6 +2,7 @@ package org.com.deputatbot.bot;
 
 
 
+import org.apache.poi.util.SystemOutLogger;
 import org.com.deputatbot.domain.*;
 import org.com.deputatbot.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -355,9 +356,11 @@ String sorry="Напевно ви мали на увазі :";
                                         } catch (Exception e) {  e.printStackTrace();      }
                                         }catch (Exception e){e.printStackTrace();  }
                                         try {
-                                            if (okrugCity.getCity().getName().toLowerCase()=="київ")
+                                            if (okrugCity.getCity().getName().toLowerCase().equals("київ"))
                                             {}else
-                                            {info += "\nТвій депутат обласної ради\n" +
+                                            {
+                                                System.out.println("1");
+                                                info += "\nТвій депутат обласної ради\n" +
                                                     "Округ № - ";
                                                 try {
                                                     info += okrugObl.getNumber() + "\n";
@@ -382,6 +385,8 @@ String sorry="Напевно ви мали на увазі :";
                                                 } catch (Exception e) {    e.printStackTrace();  info += "Депутата не обрано \uD83D\uDE22 \n"; }
                                             }
                                         }catch (Exception e){
+                                            System.out.println("2");
+
                                             e.printStackTrace();
                                             info += "\nТвій депутат обласної ради\n" +
                                                     "Округ № - ";
@@ -415,7 +420,7 @@ String sorry="Напевно ви мали на увазі :";
 
                                                  }else if (deputatRepo.findAllByOkrugCity(okrugCity).size()>=1)
                                                 { if (typeCity == TypeCity.city) {
-                                                    info += "\nТвій депутат міської ради" +
+                                                    info += "\nТвій депутат міської ради\n" +
                                                             "Округ № " + city.getName() + "\n";
                                                     mees=true;
                                                 }

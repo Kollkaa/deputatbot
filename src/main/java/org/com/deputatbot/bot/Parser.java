@@ -497,7 +497,7 @@ public class Parser {
 
 
             if (!cities.getStringCellValue().equals("") && !cities.getStringCellValue().equals(null)) {
-
+                city=new City();
                 System.out.println("#################################");
 
                 count++;
@@ -555,10 +555,8 @@ public class Parser {
                 cityRepo.save(city);
             }
 
-            if (!deputats.getStringCellValue().equals(null)) {
-                Deputat deputat=new Deputat();
 
-                if (dilnizia.getCellType() == Cell.CELL_TYPE_STRING) {
+                if (okruge.getCellType()==Cell.CELL_TYPE_NUMERIC&&dilnizia.getCellType() == Cell.CELL_TYPE_STRING) {
 
                     str_dilnizia = dilnizia.getStringCellValue();
 
@@ -596,7 +594,7 @@ public class Parser {
                     }
 
                 }
-                if (dilnizia.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                else if (okruge.getCellType()==Cell.CELL_TYPE_NUMERIC&&dilnizia.getCellType() == Cell.CELL_TYPE_NUMERIC) {
                     counte++;
                     long_okrug = okruge.getNumericCellValue();
 
@@ -623,36 +621,48 @@ public class Parser {
 
 
                 }
+                if (okruge.getCellType()==Cell.CELL_TYPE_NUMERIC)
+                {if (Integer.valueOf(String.valueOf(okruge.getNumericCellValue()).split("\\.")[0])==0)
+                {
+                    okrug=new OkrugCity();
+                }}
                 if (!str_dilnizia.equals("") && !str_dilnizia.equals(null)) {
-                    str_deputat = deputats.getStringCellValue();
-                    String [] array_deputat=str_deputat.split(" ");
-                    if (array_deputat.length>2)
-                    {
-                        deputat.setSurname(array_deputat[0]);
+                    try {
+                        okrug.getNumber();
+                        if (!deputats.getStringCellValue().equals(null)) {
+                            Deputat deputat=new Deputat();
+                            str_deputat = deputats.getStringCellValue();
+                            String [] array_deputat=str_deputat.split(" ");
+                            if (array_deputat.length>2) {
+                                deputat.setSurname(array_deputat[0]);
 
-                        deputat.setName(array_deputat[1]);
+                                deputat.setName(array_deputat[1]);
 
-                        deputat.setPartion(array_deputat[2]);
+                                deputat.setPartion(array_deputat[2]);
 
-                        deputat.setTypeOk(TypeOk.CITY);
+                                deputat.setTypeOk(TypeOk.CITY);
 
-                        try {
-                            if (array_deputat.length>3&array_deputat.length<5)
-                                deputat.setPartia(setPartiaSearch(array_deputat[3]));
-                            else deputat.setPartia((setPartiaSearch(" ")));
-                        }catch (Exception e)
-                        {
-                            deputat.setPartia(Partia.AP);
+                                try {
+                                    if (array_deputat.length > 3 & array_deputat.length < 5)
+                                        deputat.setPartia(setPartiaSearch(array_deputat[3]));
+                                    else deputat.setPartia((setPartiaSearch(" ")));
+                                } catch (Exception e) {
+                                    deputat.setPartia(Partia.AP);
+                                }
+
+                                System.out.println("deputat: " + array_deputat[0] + " " + array_deputat[1] + " " + array_deputat[2] + "::::" + city.getName());
+
+                                deputat.setOkrugCity(okrug);
+
+                                deputatRepo.save(deputat);
+                            }
                         }
+                    }catch (Exception e){
 
-                        System.out.println("deputat: " + array_deputat[0] + " " + array_deputat[1] + " " + array_deputat[2]+"::::"+city.getName());
-
-                        deputat.setOkrugCity(okrug);
-
-                        deputatRepo.save(deputat);
                     }
+
                 }
-            }
+
 
         }
         System.out.println(coun);
@@ -861,11 +871,11 @@ upload.path=src/main/resources/photos
 token.bot=851210991:AAEJhjujEK7z5e_SfmPevHeWLP0KiK0AHmA
 tokenname.bot=@Polled_bot
 
+spring.datasource.url=jdbc:postgres://fprmgdvzfmwmpn:c7f8034eb9078dcbd430cad1c4ae14d35f1cf7c2afd70675b348458bf9c1afc0@ec2-54-75-230-253.eu-west-1.compute.amazonaws.com:5432/d6ggrl973ges34
 
-spring.datasource.url=jdbc:postgresql://localhost/lions
 
-spring.datasource.username=postgres
-spring.datasource.password=1234
+spring.datasource.username=fprmgdvzfmwmpn
+spring.datasource.password=c7f8034eb9078dcbd430cad1c4ae14d35f1cf7c2afd70675b348458bf9c1afc0
 spring.jpa.generate-ddl=true
 spring.freemarker.expose-request-attributes=true
 
