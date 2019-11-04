@@ -421,7 +421,7 @@ String sorry="Напевно ви мали на увазі :";
                                                  }else if (deputatRepo.findAllByOkrugCity(okrugCity).size()>=1)
                                                 { if (typeCity == TypeCity.city) {
                                                     info += "\nТвій депутат міської ради\n" +
-                                                            "Округ № " + city.getName() + "\n";
+                                                            "Округ № " + okrugCity.getNumber() + "\n";
                                                     mees=true;
                                                 }
                                                 else if (typeCity == TypeCity.city_country){
