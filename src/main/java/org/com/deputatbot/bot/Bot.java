@@ -434,7 +434,7 @@ String sorry="Напевно ви мали на увазі :";
                                                                 + "Округ №  " + okrugCity.getNumber() + "\n";
                                                         mees=true;
                                                     }
-                                                    info+="\nДепутата не обрано \uD83D\uDE22";
+                                                    info+="Депутата не обрано \uD83D\uDE22";
                                                  }else if (deputatRepo.findAllByOkrugCity(okrugCity).size()>=1)
                                                 { if (typeCity == TypeCity.city) {
                                                     info += "\nТвій депутат міської ради\n" +
