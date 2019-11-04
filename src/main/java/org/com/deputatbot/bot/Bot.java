@@ -419,6 +419,7 @@ String sorry="Напевно ви мали на увазі :";
                                                 {   if (typeCity == TypeCity.city) {
                                                         info += "\nТвій депутат міської ради\n" +
                                                                 "Округ № " + okrugCity.getNumber() + "\n";
+                                                    info+="Депутата не обрано \uD83D\uDE22";
                                                         mees=true;
                                                     }
                                                     else if (typeCity == TypeCity.city_country){
@@ -433,8 +434,9 @@ String sorry="Напевно ви мали на увазі :";
                                                         info += "\nТвій депутат міської ради\n"
                                                                 + "Округ №  " + okrugCity.getNumber() + "\n";
                                                         mees=true;
-                                                    }
                                                     info+="Депутата не обрано \uD83D\uDE22";
+                                                    }
+
                                                  }else if (deputatRepo.findAllByOkrugCity(okrugCity).size()>=1)
                                                 { if (typeCity == TypeCity.city) {
                                                     info += "\nТвій депутат міської ради\n" +
