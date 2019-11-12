@@ -494,7 +494,7 @@ public class Parser {
             Cell okruge = row.getCell(7);
             Cell deputats = row.getCell(8);
             Cell dilnizia = row.getCell(14);
-
+            String string=cities.getStringCellValue();
 
             if (!cities.getStringCellValue().equals("") && !cities.getStringCellValue().equals(null)) {
                 city=new City();
@@ -555,6 +555,79 @@ public class Parser {
                 cityRepo.save(city);
             }
 
+            if (city!=null)
+            {System.out.println("city!null");
+            if (string.contains("сільська")||string.contains("міська")||string.contains("селищна"))
+            {System.out.println("enter");
+                 dilnizia = row.getCell(16);
+                 System.out.println(okruge);
+                if(okruge.getCellType()!=Cell.CELL_TYPE_NUMERIC)
+                {System.out.println("null");
+                    if (dilnizia.getCellType() == Cell.CELL_TYPE_STRING)
+                    {str_dilnizia = dilnizia.getStringCellValue();
+
+                        long_okrug = 0;
+
+                        okrug=new OkrugCity();
+
+                        okrug.setCity(city);
+
+                        okrug.setRegion(str_dilnizia);
+
+                        okrug.setNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
+
+                        okrugCityRepo.save(okrug);
+
+                        System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug+"::::"+city.getName());
+
+                        str_dilnizia = WriteDilnizia(str_dilnizia);
+
+                        for (String str:str_dilnizia.split(" "))
+                        {
+                            Dilnizia dilnizia1=new Dilnizia();
+                            try {
+                                Long number=Long.valueOf(str.trim());
+
+                                dilnizia1= dilniziaRepo.findByNumber(Integer.valueOf(String.valueOf(number).split("\\.")[0].trim()));
+
+                                dilnizia1.setOkrugCity(okrug);
+
+                                dilniziaRepo.save(dilnizia1);
+
+                            }catch (Exception e){}
+
+
+                        }
+                    }
+                    if (dilnizia.getCellType() == Cell.CELL_TYPE_NUMERIC)
+                    { long_okrug = 0;
+
+                        okrug=new OkrugCity();
+
+                        okrug.setCity(city);
+
+                        okrug.setRegion(str_dilnizia);
+
+                        okrug.setNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
+
+                        okrugCityRepo.save(okrug);
+
+                        str_dilnizia = String.valueOf(dilnizia.getNumericCellValue()).split("\\.")[0];
+
+                        Dilnizia dilnizia1=dilniziaRepo.findByNumber(Integer.valueOf(str_dilnizia.trim()));
+                        if (dilnizia1!=null) {
+                            dilnizia1.setOkrugCity(okrug);
+                            dilniziaRepo.save(dilnizia1);
+                        }
+                        try {
+                            System.out.println("dilnizia:-" + dilnizia1.getNumber() + "-okrug: " + okrug.getNumber()+"::::"+city.getName());
+                        }catch (Exception e){}
+
+                    }
+
+                }
+
+            }
 
                 if (okruge.getCellType()==Cell.CELL_TYPE_NUMERIC&&dilnizia.getCellType() == Cell.CELL_TYPE_STRING) {
 
@@ -662,12 +735,12 @@ public class Parser {
                     }
 
                 }
-
-
+             }
+            okrugCityRepo.save(okrug);
+            if (deputat!=null)
+                deputatRepo.save(deputat);
         }
-        okrugCityRepo.save(okrug);
-        if (deputat!=null)
-        deputatRepo.save(deputat);
+
         System.out.println(coun);
         System.out.println(cityRepo.findAll().size());
         System.out.println(counte);
