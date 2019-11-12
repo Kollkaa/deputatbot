@@ -126,19 +126,19 @@ public class Parser {
             // For each row, iterate through each columns
             Iterator<Cell> cellIterator = row.cellIterator();
 
-            if (row.getCell(2).getCellType() == Cell.CELL_TYPE_NUMERIC) {
+            if (row.getCell(1).getCellType() == Cell.CELL_TYPE_NUMERIC) {
                 try {
                     okrugNdu=okrugNduRepo.findByNumber(Integer.valueOf(String.valueOf(row.getCell(2).getNumericCellValue()).split("\\.")[0]));
                         System.out.println(okrugNdu.getNumber());
-                    if (row.getCell(8).getCellType() == Cell.CELL_TYPE_STRING) {
+                    if (row.getCell(2).getCellType() == Cell.CELL_TYPE_STRING) {
+                        System.out.println(row.getCell(1));
                         System.out.println(row.getCell(2));
-                        System.out.println(row.getCell(8));
 
                         Deputat deputat = new Deputat();
-                        deputat.setName(row.getCell(8).toString().split(" ")[1]);
-                        deputat.setSurname(row.getCell(8).toString().split(" ")[0]);
-                        deputat.setPartion(row.getCell(8).toString().split(" ")[2]);
-                        String []arr= row.getCell(8).toString().split(" ");
+                        deputat.setName(row.getCell(2).toString().split(" ")[1]);
+                        deputat.setSurname(row.getCell(2).toString().split(" ")[0]);
+                        deputat.setPartion(row.getCell(2).toString().split(" ")[2]);
+                        String []arr= row.getCell(2).toString().split(" ");
                         if (arr.length>3&&arr.length<5) {
                             deputat.setPartia(setPartiaSearch(arr[3]
                                     .split("\\(")[1]
@@ -324,9 +324,9 @@ public class Parser {
         while (rowIterator.hasNext()) {
             row = rowIterator.next();
 
-            Cell okruge = row.getCell(13);
-            Cell deputats = row.getCell(15);
-            Cell dilnizia = row.getCell(34);
+            Cell okruge = row.getCell(5);
+            Cell deputats = row.getCell(6);
+            Cell dilnizia = row.getCell(12);
 
 
 
@@ -489,11 +489,11 @@ public class Parser {
 
         while (rowIterator.hasNext()) {
             row = rowIterator.next();
-            Cell mere = row.getCell(11);
-            Cell cities = row.getCell(17);
-            Cell okruge = row.getCell(18);
-            Cell deputats = row.getCell(20);
-            Cell dilnizia = row.getCell(37);
+            Cell mere = row.getCell(4);
+            Cell cities = row.getCell(3);
+            Cell okruge = row.getCell(7);
+            Cell deputats = row.getCell(8);
+            Cell dilnizia = row.getCell(14);
 
 
             if (!cities.getStringCellValue().equals("") && !cities.getStringCellValue().equals(null)) {
@@ -709,9 +709,9 @@ public class Parser {
         cityRepo.save(city);
         while (rowIterator.hasNext()) {
             row = rowIterator.next();
-            Cell okruge = row.getCell(10);
-            Cell deputats = row.getCell(12);
-            Cell dilnizia = row.getCell(20);
+            Cell okruge = row.getCell(4);
+            Cell deputats = row.getCell(5);
+            Cell dilnizia = row.getCell(9);
 
 
 
