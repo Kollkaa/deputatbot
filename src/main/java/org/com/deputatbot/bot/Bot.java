@@ -91,10 +91,11 @@ String sorry="Напевно ви мали на увазі :";
 
             parser.allNduOkrug(okrugNduRepo, dilniziaRepo, deputatRepo);
             parser.ParserExelNDU(okrugNduRepo, deputatRepo);
+            parser.ParserExelNDUKuev(okrugNduRepo, deputatRepo);
             parser.ParserExelOBL(okrugOblRepo, deputatRepo, dilniziaRepo);
             parser.ParserExelCITY(cityRepo, okrugCityRepo, deputatRepo, merRepo, dilniziaRepo);
 
-            parser.ParserExelNDUKuev(okrugNduRepo, deputatRepo);
+
             parser.ParserExelCITYKuev(cityRepo, okrugCityRepo, deputatRepo, merRepo, dilniziaRepo);
 
             User user = new User();
@@ -457,13 +458,13 @@ String sorry="Напевно ви мали на увазі :";
                                                     mees=true;
                                                 }}
                                             for (Deputat dep: deputatRepo.findAllByOkrugCity(okrugCity))
-                                                {
-                                                            deputat = dep;
-                                                            info += deputat.getSurname().toUpperCase() + " "
-                                                                    + deputat.getName().toUpperCase() + " "
-                                                                    + deputat.getPartion().toUpperCase() +
-                                                                    "\n /id_" + deputat.getId() + "\n";
-
+                                                {   if (okrugCity.getCity()==city) {
+                                                    deputat = dep;
+                                                    info += deputat.getSurname().toUpperCase() + " "
+                                                            + deputat.getName().toUpperCase() + " "
+                                                            + deputat.getPartion().toUpperCase() +
+                                                            "\n /id_" + deputat.getId() + "\n";
+                                                }
 
                                                 }
                                             } catch (Exception e) {e.printStackTrace();

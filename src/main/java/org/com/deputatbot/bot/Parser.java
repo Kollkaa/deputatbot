@@ -186,7 +186,7 @@ public class Parser {
 
             if (row.getCell(1).getCellType() == Cell.CELL_TYPE_NUMERIC) {
                 try {
-                    okrugNdu=okrugNduRepo.findByNumber(Integer.valueOf(String.valueOf(row.getCell(2).getNumericCellValue()).split("\\.")[0]));
+                    okrugNdu=okrugNduRepo.findByNumber(Integer.valueOf(String.valueOf(row.getCell(1).getNumericCellValue()).split("\\.")[0]));
                     System.out.println(okrugNdu.getNumber());
                     if (row.getCell(2).getCellType() == Cell.CELL_TYPE_STRING) {
                         System.out.println(row.getCell(2));
@@ -486,7 +486,7 @@ public class Parser {
         row = rowIterator.next();
         row = rowIterator.next();;
         int coun=0;
-
+        Deputat deputat=new Deputat();
         while (rowIterator.hasNext()) {
             row = rowIterator.next();
             Cell mere = row.getCell(4);
@@ -630,7 +630,7 @@ public class Parser {
                     try {
                         okrug.getNumber();
                         if (!deputats.getStringCellValue().equals(null)) {
-                            Deputat deputat=new Deputat();
+                             deputat=new Deputat();
                             str_deputat = deputats.getStringCellValue();
                             String [] array_deputat=str_deputat.split(" ");
                             if (array_deputat.length>2) {
@@ -665,6 +665,9 @@ public class Parser {
 
 
         }
+        okrugCityRepo.save(okrug);
+        if (deputat!=null)
+        deputatRepo.save(deputat);
         System.out.println(coun);
         System.out.println(cityRepo.findAll().size());
         System.out.println(counte);
@@ -857,7 +860,7 @@ public class Parser {
 /*
 spring.datasource.url=jdbc:postgresql://localhost/lions
 
-spring.datasource.username=postgres
+spring.datasource.username=kolia
 spring.datasource.password=1234
 spring.jpa.generate-ddl=true
 spring.jpa.hibernate.ddl-auto=create
