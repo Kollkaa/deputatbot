@@ -128,7 +128,7 @@ public class Parser {
 
             if (row.getCell(1).getCellType() == Cell.CELL_TYPE_NUMERIC) {
                 try {
-                    okrugNdu=okrugNduRepo.findByNumber(Integer.valueOf(String.valueOf(row.getCell(2).getNumericCellValue()).split("\\.")[0]));
+                    okrugNdu=okrugNduRepo.findByNumber(Integer.valueOf(String.valueOf(row.getCell(1).getNumericCellValue()).split("\\.")[0]));
                         System.out.println(okrugNdu.getNumber());
                     if (row.getCell(2).getCellType() == Cell.CELL_TYPE_STRING) {
                         System.out.println(row.getCell(1));
@@ -184,19 +184,19 @@ public class Parser {
             // For each row, iterate through each columns
             Iterator<Cell> cellIterator = row.cellIterator();
 
-            if (row.getCell(2).getCellType() == Cell.CELL_TYPE_NUMERIC) {
+            if (row.getCell(1).getCellType() == Cell.CELL_TYPE_NUMERIC) {
                 try {
                     okrugNdu=okrugNduRepo.findByNumber(Integer.valueOf(String.valueOf(row.getCell(2).getNumericCellValue()).split("\\.")[0]));
                     System.out.println(okrugNdu.getNumber());
-                    if (row.getCell(6).getCellType() == Cell.CELL_TYPE_STRING) {
+                    if (row.getCell(2).getCellType() == Cell.CELL_TYPE_STRING) {
                         System.out.println(row.getCell(2));
-                        System.out.println(row.getCell(6));
+                        System.out.println(row.getCell(1));
 
                         Deputat deputat = new Deputat();
-                        deputat.setName(row.getCell(6).toString().split(" ")[1]);
-                        deputat.setSurname(row.getCell(6).toString().split(" ")[0]);
-                        deputat.setPartion(row.getCell(6).toString().split(" ")[2]);
-                        String []arr= row.getCell(6).toString().split(" ");
+                        deputat.setName(row.getCell(2).toString().split(" ")[1]);
+                        deputat.setSurname(row.getCell(2).toString().split(" ")[0]);
+                        deputat.setPartion(row.getCell(2).toString().split(" ")[2]);
+                        String []arr= row.getCell(2).toString().split(" ");
                         if (arr.length>3&&arr.length<5) {
                             deputat.setPartia(setPartiaSearch(arr[3]
                                     .split("\\(")[1]
