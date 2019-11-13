@@ -49,6 +49,24 @@ public class MainController {
     @GetMapping("/")
     public String greeting(Map<String, Object> model) throws IOException {
 
+
+        return "app";
+    }
+
+    @GetMapping("/main")
+    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) throws IOException {
+
+
+        Iterable<Message> messages = messageRepo.findAll();
+
+        if (filter != null && !filter.isEmpty()) {
+            messages = messageRepo.findByTag(filter);
+        } else {
+            messages = messageRepo.findAll();
+        }
+
+        model.addAttribute("messages", messages);
+        model.addAttribute("filter", filter);
         if (okrugNduRepo.findAll().size() > 1) {
         }else
         {
@@ -73,24 +91,6 @@ public class MainController {
             user.setRoles(roles);
             userRepo.save(user);
         }
-        return "app";
-    }
-
-    @GetMapping("/main")
-    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) throws IOException {
-
-
-        Iterable<Message> messages = messageRepo.findAll();
-
-        if (filter != null && !filter.isEmpty()) {
-            messages = messageRepo.findByTag(filter);
-        } else {
-            messages = messageRepo.findAll();
-        }
-
-        model.addAttribute("messages", messages);
-        model.addAttribute("filter", filter);
-
         return "main";
     }
 
