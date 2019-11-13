@@ -487,6 +487,7 @@ public class Parser {
         row = rowIterator.next();;
         int coun=0;
         Deputat deputat=new Deputat();
+        int counte=0;
         while (rowIterator.hasNext()) {
             row = rowIterator.next();
             Cell mere = row.getCell(4);
@@ -497,6 +498,7 @@ public class Parser {
             String string=cities.getStringCellValue();
 
             if (!cities.getStringCellValue().equals("") && !cities.getStringCellValue().equals(null)) {
+                counte+=1;
                 city=new City();
                 System.out.println("#################################");
 
@@ -517,42 +519,49 @@ public class Parser {
                 System.out.println("mer: " + array_mer[0] + " " + array_mer[1] + " " + array_mer[2] + "!!!!!!!!!!");
 
                 if (str_city.contains("громада")) {
-                    city = new City();
-                    city.setMer(mer);
-                    city.setName(array_city[0]);
+                    city=cityRepo.findByName(array_city[0]);
+                    if (city==null) {
+                        city = new City();
+                        city.setMer(mer);
+                        city.setName(array_city[0]);
 
-                    if (str_city.contains("сільська")) {
-                        coun += 1;
-                        city.setTypeCity(TypeCity.country);
-                        System.out.println("СІльська громада: " + array_city[0] + " " + array_city[1] + " " + array_city[2] + "!!!!!!!!!!");
+                        if (str_city.contains("сільська")) {
+                            coun += 1;
+                            city.setTypeCity(TypeCity.country);
+                            System.out.println("СІльська громада: " + array_city[0] + " " + array_city[1] + " " + array_city[2] + "!!!!!!!!!!");
 
-                    }
-                    if (str_city.contains("селищна")) {
-                        coun += 1;
-                        city.setTypeCity(TypeCity.city_country);
-                        System.out.println("селищна громада: " + array_city[0] + " " + array_city[1] + " " + array_city[2] + "!!!!!!!!!!");
+                        }
+                        if (str_city.contains("селищна")) {
+                            coun += 1;
+                            city.setTypeCity(TypeCity.city_country);
+                            System.out.println("селищна громада: " + array_city[0] + " " + array_city[1] + " " + array_city[2] + "!!!!!!!!!!");
 
-                    } else if (str_city.contains("міська"))
-                    {
-                        System.out.println("міська громада: " + array_city[0] + " " + array_city[1] + " " + array_city[2] + "!!!!!!!!!!");
-                        city.setTypeCity(TypeCity.city_all);
+                        } else if (str_city.contains("міська")) {
+                            System.out.println("міська громада: " + array_city[0] + " " + array_city[1] + " " + array_city[2] + "!!!!!!!!!!");
+                            city.setTypeCity(TypeCity.city_all);
+                        }
+                        cityRepo.save(city);
                     }
                 }
                 else if (array_city.length >= 2) {
-                    city=new City();
-                    city.setMer(mer);
-                    String te="";
-                    coun+=1;
-                    for (int i =1;i<array_city.length;i++)
-                    {
-                        te+=array_city[i];
+                    String te = "";
+                    coun += 1;
+                    for (int i = 1; i < array_city.length; i++) {
+                        te += array_city[i];
                     }
                     System.out.println("city: " + array_city[0] + " " + array_city[1] + " " + "!!!!!!!!!!");
-                    city.setName(te.trim());
-                    city.setTypeCity(TypeCity.city);
+                   city=cityRepo.findByName(te.trim());
+                    if (city==null) {
+                        city = new City();
+                        city.setMer(mer);
 
+                        city.setName(te.trim());
+                        city.setTypeCity(TypeCity.city);
+                        cityRepo.save(city);
+                    }
                 }
-                cityRepo.save(city);
+
+                System.out.println(counte);
             }
 
             if (city!=null)
@@ -736,7 +745,7 @@ public class Parser {
 
                 }
              }
-            okrugCityRepo.save(okrug);
+
             if (deputat!=null)
                 deputatRepo.save(deputat);
         }
