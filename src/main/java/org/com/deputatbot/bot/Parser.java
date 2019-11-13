@@ -637,7 +637,7 @@ public class Parser {
                 }
 
             }
-
+            else{
                 if (okruge.getCellType()==Cell.CELL_TYPE_NUMERIC&&dilnizia.getCellType() == Cell.CELL_TYPE_STRING) {
 
                     str_dilnizia = dilnizia.getStringCellValue();
@@ -745,7 +745,7 @@ public class Parser {
 
                 }
              }
-
+            }
             if (deputat!=null)
                 deputatRepo.save(deputat);
         }
