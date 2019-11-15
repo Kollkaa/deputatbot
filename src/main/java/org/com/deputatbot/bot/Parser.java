@@ -333,7 +333,7 @@ public class Parser {
 
             if (!deputats.getStringCellValue().equals(null)) {
                 Deputat deputat=new Deputat();
-                System.out.println(okrug.getNumber());
+
                 if (dilnizia.getCellType() == Cell.CELL_TYPE_STRING) {
 
                     str_dilnizia = dilnizia.getStringCellValue();
@@ -344,7 +344,8 @@ public class Parser {
 
                    if (okrug!=null) {
                        okrug.setRegion(okrug.getRegion()+str_dilnizia);
-                       okrug.setNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
+                       okrugOblRepo.save(okrug);
+
 
                    }
                    else {
@@ -352,10 +353,11 @@ public class Parser {
                        okrug.setRegion(str_dilnizia);
 
                        okrug.setNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
+                       okrugOblRepo.save(okrug);
                    }
-                    okrugOblRepo.save(okrug);
 
-                    System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug);
+
+                    System.out.println("dilnizia: " + str_dilnizia + " okrug: " + long_okrug );
 
                     str_dilnizia = WriteDilnizia(str_dilnizia);
 
@@ -380,6 +382,7 @@ public class Parser {
                 if (dilnizia.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 
                     long_okrug = okruge.getNumericCellValue();
+                    str_dilnizia = String.valueOf(dilnizia.getNumericCellValue());
 
 
                     okrug=okrugOblRepo.findByNumber(Integer.valueOf(String.valueOf(long_okrug).split("\\.")[0]));
@@ -418,11 +421,11 @@ public class Parser {
                     String [] array_deputat=str_deputat.split(" ");
                     if (array_deputat.length>2)
                     {
-                        deputat.setSurname(array_deputat[0]);
+                        deputat.setSurname(array_deputat[0].trim());
 
-                        deputat.setName(array_deputat[1]);
+                        deputat.setName(array_deputat[1].trim());
 
-                        deputat.setPartion(array_deputat[2]);
+                        deputat.setPartion(array_deputat[2].trim());
 
                         deputat.setTypeOk(TypeOk.OBLAST);
 
@@ -434,19 +437,24 @@ public class Parser {
                         {
                             deputat.setPartia(Partia.GP);
                         }
+                        if (deputatRepo.findAllByOkrugObl(okrug).size()==0){
+                            deputat.setOkrugObl(okrug);
+                            deputatRepo.saveAndFlush(deputat);
+                            System.out.println("deputat: " + array_deputat[0] + " " + array_deputat[1] + " " + array_deputat[2]+" okrug: "+ deputat.getOkrugObl().getNumber());
 
-                        for (Deputat dep:deputatRepo.findAllByOkrugObl(okrug))
-                        {
-                            if (dep.getSurname()==deputat.getSurname())
-                            {}
-                            else{
+                        }else if(deputatRepo.findAllByOkrugObl(okrug).size()>=1){
+                            for (Deputat dep : deputatRepo.findAllByOkrugObl(okrug)) {
+                                if (dep.getSurname().toUpperCase().equals(deputat.getSurname().toUpperCase())) {
+                                } else {
+                                    deputat.setOkrugObl(okrug);
+                                    deputatRepo.saveAndFlush(deputat);
+                                    System.out.println("deputat: " + array_deputat[0] + " " + array_deputat[1] + " " + array_deputat[2]+" okrug: "+ deputat.getOkrugObl().getNumber());
+
+                                }
                             }
-                        }
-                        if (deputatRepo.findAllByOkrugObl(okrug).size()==0)
-                        deputat.setOkrugObl(okrug);
 
-                        deputatRepo.save(deputat);
-                        System.out.println("deputat: " + array_deputat[0] + " " + array_deputat[1] + " " + array_deputat[2]);
+                        }
+
 
                     }
 
@@ -736,7 +744,7 @@ public class Parser {
 
                                 deputat.setOkrugCity(okrug);
 
-                                deputatRepo.save(deputat);
+                                deputatRepo.saveAndFlush(deputat);
                             }
                         }
                     }catch (Exception e){

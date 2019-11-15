@@ -290,7 +290,7 @@ String sorry="Напевно ви мали на увазі :";
                            typeCity=city.getTypeCity();
                                 try {
                                         info += "Твій депутат Верховної Ради\n" +
-                                                "Округ № - ";
+                                                "Округ №  ";
                                         try {
                                             info += str.getOkrugNdu().getNumber() + "\n";
                                             try {
@@ -312,15 +312,15 @@ String sorry="Напевно ви мали на увазі :";
                                                 mees=true;
                                             }
                                             else if (typeCity == TypeCity.city_country){
-                                                info += "\nТвій голова селищної ради\n"
+                                                info += "\nТвій голова \n"
                                                         + city.getName() + " " + typeCity.GetTitle() + "\n";
                                             mees=true;
                                             }else if (typeCity == TypeCity.country){
-                                                info += "\nТвій голова сільської ради\n"
+                                                info += "\nТвій голова \n"
                                                         + city.getName() + " " + typeCity.GetTitle() + "\n";
                                                 mees=true;
                                             }else if (typeCity==TypeCity.city_all){
-                                                info += "\nТвій голова міської ради\n"
+                                                info += "\nТвій голова \n"
                                                         + city.getName() + " " + typeCity.GetTitle() + "\n";
                                                 mees=true;
                                             }
@@ -339,21 +339,29 @@ String sorry="Напевно ви мали на увазі :";
                                             {
                                                 System.out.println("1");
                                                 info += "\nТвій депутат обласної ради\n" +
-                                                    "Округ № - ";
+                                                    "Округ №  ";
                                                 try {
                                                     info += okrugObl.getNumber() + "\n";
                                                     try {
                                                         if(deputatRepo.findAllByOkrugObl(okrugObl).size()<1)
                                                             Integer.valueOf("asd");
+                                                        else
                                                         for (Deputat dep: deputatRepo.findAllByOkrugObl(okrugObl)) {
                                                             deputat=dep;
                                                             try {
-                                                                info += deputat.getSurname().toUpperCase() + " "
-                                                                        + deputat.getName().toUpperCase() + " "
-                                                                        + deputat.getPartion().toUpperCase() +
-                                                                        "\n /id_" + deputat.getId() + "\n";
-                                                            }catch (Exception e){}
-                                                        }
+                                                                if (deputat.getOkrugObl().getNumber()==okrugObl.getNumber())
+                                                                {try {
+                                                                    info += deputat.getSurname().toUpperCase() + " "
+                                                                            + deputat.getName().toUpperCase() + " "
+                                                                            + deputat.getPartion().toUpperCase() +
+                                                                            "\n /id_" + deputat.getId() + "\n";
+                                                                } catch (Exception e) {
+                                                                }}
+                                                                else
+                                                                {}
+                                                            }
+                                                            catch (Exception re){}
+                                                            }
 
                                                     } catch (Exception e) {e.printStackTrace();
                                                         if (deputatRepo.findAllByOkrugObl(okrugObl).size()==0)
@@ -367,7 +375,7 @@ String sorry="Напевно ви мали на увазі :";
 
                                             e.printStackTrace();
                                             info += "\nТвій депутат обласної ради\n" +
-                                                    "Округ № - ";
+                                                    "Округ №  ";
                                             try {
                                                 info += okrugObl.getNumber() + "\n";
                                                 try {
@@ -391,25 +399,26 @@ String sorry="Напевно ви мали на увазі :";
                                             } catch (Exception e1) {    e1.printStackTrace();  info += "Депутата не обрано \uD83D\uDE22 \n"; }
                                         }
                                         try {
-                                        try {
-                                            try {
+                                            if (okrugCity.getNumber()!=0)
+                                              try {
+                                                  try {
                                                 if(deputatRepo.findAllByOkrugCity(okrugCity).size()<1)
                                                 {   if (typeCity == TypeCity.city) {
-                                                        info += "\nТвій депутат міської ради\n" +
+                                                        info += "\nТвій депутат \n" +
                                                                 "Округ № " + okrugCity.getNumber() + "\n";
                                                     info+="Депутата не обрано \uD83D\uDE22";
                                                         mees=true;
                                                     }
                                                     else if (typeCity == TypeCity.city_country){
-                                                        info += "\nТвій депутат селищної ради\n"
+                                                        info += "\nТвій депутат \n"
                                                                 + "Округ №  " +okrugCity.getNumber() + "\n";
                                                         mees=true;
                                                     }else if (typeCity == TypeCity.country){
-                                                        info += "\nТвій депутат сільської ради\n"
+                                                        info += "\nТвій депутат \n"
                                                                 + " Округ № " + okrugCity.getNumber() + "\n";
                                                         mees=true;
                                                     }else if (typeCity==TypeCity.city_all){
-                                                        info += "\nТвій депутат міської ради\n"
+                                                        info += "\nТвій депутат \n"
                                                                 + "Округ №  " + okrugCity.getNumber() + "\n";
                                                         mees=true;
                                                     info+="Депутата не обрано \uD83D\uDE22";
@@ -417,20 +426,20 @@ String sorry="Напевно ви мали на увазі :";
 
                                                  }else if (deputatRepo.findAllByOkrugCity(okrugCity).size()>=1)
                                                 { if (typeCity == TypeCity.city) {
-                                                    info += "\nТвій депутат міської ради\n" +
+                                                    info += "\nТвій депутат \n" +
                                                             "Округ № " + okrugCity.getNumber() + "\n";
                                                     mees=true;
                                                 }
                                                 else if (typeCity == TypeCity.city_country){
-                                                    info += "\nТвій депутат селищної ради\n"
+                                                    info += "\nТвій депутат \n"
                                                             + "Округ №  " +okrugCity.getNumber() + "\n";
                                                     mees=true;
                                                 }else if (typeCity == TypeCity.country){
-                                                    info += "\nТвій депутат сільської ради\n"
+                                                    info += "\nТвій депутат \n"
                                                             + " Округ № " + okrugCity.getNumber() + "\n";
                                                     mees=true;
                                                 }else if (typeCity==TypeCity.city_all){
-                                                    info += "\nТвій депутат міської ради\n"
+                                                    info += "\nТвій депутат \n"
                                                             + "Округ №  " + okrugCity.getNumber() + "\n";
                                                     mees=true;
                                                 }}
@@ -446,8 +455,8 @@ String sorry="Напевно ви мали на увазі :";
                                                 }
                                             } catch (Exception e) {e.printStackTrace();
 
-                                            }
-                                        } catch (Exception e) {   e.printStackTrace();      }
+                                             }
+                                                 } catch (Exception e) {   e.printStackTrace();      }
                                         }catch (Exception e)
                                         {
                                             e.printStackTrace();
